@@ -1,4 +1,12 @@
 import "./globals.css";
+import { Anton } from "next/font/google";
+
+const anton = Anton({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-anton",
+});
 
 export const metadata = {
   title: "FooFest",
@@ -7,10 +15,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body>
-        <header></header>
-        <main>{children}</main>
+    <html lang="en" className={anton.variable}>
+      <body className="text-forest-100">
+        <header className="col-start-2">
+          <h1 className="text-8xl font-display uppercase">FooFest</h1>
+        </header>
+        {children}
         <footer></footer>
       </body>
     </html>
