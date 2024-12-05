@@ -16,7 +16,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={anton.variable}>
-      <body className="text-forest-100">
+      <body className="text-forest-100 text-desk-base">
         <header className="col-start-2 p-12">
           {/* <h1 className="text-8xl font-display uppercase">FooFest</h1> */}
         </header>
