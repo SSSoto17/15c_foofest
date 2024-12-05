@@ -7,7 +7,7 @@ export default function BookingFlow() {
         <header></header>
         <form action="">
           <Fieldset>
-            <Legend className="font-bold">Tickets</Legend>
+            <Legend className=" font-bold">Tickets</Legend>
             <Field>
               <Label>Partout Ticket</Label>
               <Input type="number" />
