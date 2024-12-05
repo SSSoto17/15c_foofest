@@ -1,8 +1,10 @@
-const Input = ({ label, id, name, placeholder }) => {
+import { Input } from "@headlessui/react";
+
+const TextInput = ({ label, id, name, placeholder }) => {
   return (
     <div className="grid gap-y-2">
       <label htmlFor={id}>{label}</label>
-      <input
+      <Input
         id={id}
         name={name}
         type="text"
@@ -13,4 +15,4 @@ const Input = ({ label, id, name, placeholder }) => {
   );
 };
 
-export default Input;
+export default TextInput;
