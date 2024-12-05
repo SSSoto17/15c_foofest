@@ -93,6 +93,10 @@ body {
   > * {
     grid-column: 2;
   }
+
+  > main {
+    grid-row: 2;
+  }
   /* color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif; */
