@@ -17,7 +17,7 @@ export default async function BookingFlow() {
   ];
   return (
     <main>
-      <section className="border border-aztec-700">
+      <section className="border border-border-form">
         <FormHeader data={formSteps} />
         <form action="" className="p-12">
           <div className="grid gap-y-16">
@@ -75,7 +75,7 @@ export default async function BookingFlow() {
 
 export function FormHeader({ data }) {
   return (
-    <header className="border-b border-aztec-700 p-12">
+    <header className="border-b border-border-form p-12">
       <ol className="flex justify-between items-center gap-4 text-aztec-500 font-semibold cursor-default">
         {data.map((step) => (
           <>

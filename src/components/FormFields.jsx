@@ -34,13 +34,13 @@ export function NumberInput({ name, label, price }) {
         {label}{" "}
         <span className="opacity-50 place-self-end mx-8">{price} DKK</span>
       </Label>
-      <div className="bg-aztec-900/50 border border-aztec-900 has-data-focus:border-aztec-600 has-data-focus:bg-aztec-900 rounded-xs p-2 flex items-center w-fit gap-4">
+      <div className="input-field-base gap-4 w-fit">
         <Button
           disabled={!quantity > 0}
           className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
           onClick={() => setQuantity(quantity > 0 && Number(quantity) - 1)}
         >
-          <MdOutlineRemove className="text-forest-100" size="24" />
+          <MdOutlineRemove className="text-text-global" size="24" />
         </Button>
         <Input
           type="number"
@@ -50,14 +50,14 @@ export function NumberInput({ name, label, price }) {
           value={quantity}
           onChange={(e) => setQuantity(e.target.value)}
           onKeyDown={enterQuantity}
-          className="appearance-none text-forest-100 w-6 text-center data-focus:outline-none"
+          className="w-6 text-center data-focus:outline-none"
         />
         <Button
           disabled={quantity >= 10}
           className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
           onClick={() => setQuantity(quantity ? Number(quantity) + 1 : 1)}
         >
-          <MdOutlineAdd className="text-forest-100" size="24" />
+          <MdOutlineAdd className="text-text-global" size="24" />
         </Button>
       </div>
       {quantity > 0 && (
@@ -91,7 +91,7 @@ export function CampingSpots({ availableSpots }) {
             value={spot.area}
             className="group grid grid-cols-[auto_8rem_4rem] gap-3 items-center"
           >
-            <span className="block w-4 h-4 rounded-full border-2 border-aztec-600 group-not-data-disabled:group-hover:bg-aztec-900 group-data-checked:border-forest-600 group-data-checked:border-6 group-data-disabled:border-aztec-900" />
+            <span className="input-radio" />
             <Label className="group-data-disabled:opacity-25 group-not-data-disabled:cursor-pointer">
               {spot.area}
             </Label>
@@ -135,7 +135,7 @@ export function TextInput({ label, name, type, placeholder }) {
         name={name}
         type={type}
         placeholder={placeholder}
-        className="bg-aztec-900/50 border border-aztec-900 data-focus:outline-none data-focus:border-aztec-600 data-focus:bg-aztec-900 rounded-xs p-2"
+        className="input-field-base data-focus:outline-none"
       />
     </Field>
   );
