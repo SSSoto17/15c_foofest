@@ -73,8 +73,11 @@
 
   /* COLOR | SEMANTIC TOKENS */
   --color-text-global: var(--color-forest-100);
+  --color-text-global--disabled: var(--color-aztec-500);
   --color-text-heading: var(--color-forest-300);
   --color-surface-global: #171e1b;
+  --color-surface-action: var(--color-forest-600);
+  --color-surface-action--disabled: var(--color-aztec-500);
   --color-border-global: var(--color-aztec-700);
 
   /* COLOR | SEMANTIC TOKENS | FORMS */
@@ -108,7 +111,7 @@
     @apply text-desk-xl leading-16 font-display font-normal;
   }
   .heading-3 {
-    @apply text-desk-lg leading-9 font-bold;
+    @apply text-desk-lg leading-9 font-semibold;
   }
 
   .heading-4 {

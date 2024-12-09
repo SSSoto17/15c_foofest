@@ -17,6 +17,38 @@ import {
   MdOutlineCheck,
 } from "react-icons/md";
 
+export function FormHeader({ formSteps }) {
+  const [currentStep, setCurrentStep] = useState(1);
+  return (
+    <header className="border-b border-border-form p-12">
+      <ol className="flex justify-between items-center gap-4 font-semibold cursor-default">
+        {formSteps.map((step, id) => (
+          <>
+            <li
+              key={id + "-line"}
+              className="first-of-type:hidden w-10 h-0.5 bg-aztec-800"
+            />
+            <li
+              key={id}
+              {...(currentStep >= step.step && { "data-active": true })}
+              className={`group flex items-center gap-3 justify-between ${
+                currentStep === step.step
+                  ? "text-text-global"
+                  : "text-text-global--disabled"
+              }`}
+            >
+              <span className="grid place-content-center w-8 rounded-full aspect-square text-text-global bg-surface-action--disabled group-data-active:bg-surface-action">
+                {step.step}
+              </span>{" "}
+              {step.title}
+            </li>
+          </>
+        ))}
+      </ol>
+    </header>
+  );
+}
+
 export function NumberInput({ name, label, price }) {
   const [quantity, setQuantity] = useState("");
 
@@ -77,13 +109,16 @@ export function NumberInput({ name, label, price }) {
 }
 
 export function CampingSpots({ availableSpots }) {
-  const [selected, setSelected] = useState(availableSpots[0].area);
+  const currentlyAvailable = availableSpots.filter(
+    (spot) => spot.available > 0
+  );
+  const [selected, setSelected] = useState(currentlyAvailable[0].area);
 
   return (
     <RadioGroup name="area" value={selected} onChange={setSelected}>
-      {availableSpots.map((spot) => (
+      {availableSpots.map((spot, id) => (
         <Field
-          key={spot.area}
+          key={id}
           disabled={spot.available === 0}
           className="flex items-end justify-between max-w-xl gap-8 not-data-disabled:cursor-pointer"
         >
