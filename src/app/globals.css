@@ -1,8 +1,6 @@
 @import "tailwindcss";
-/* @import "tailwindcss/preflight"; */
-/* @tailwind base; */
 @import "tailwindcss/theme";
-
+@layer components;
 @tailwind utilities;
 
 :root {
@@ -72,14 +70,39 @@
   --color-gold-800: #7d4716;
   --color-gold-900: #6b3a18;
   --color-gold-950: #3e1e0a;
+
+  /* COLOR | SEMANTIC TOKENS */
+  --color-text-global: var(--color-forest-100);
+  --color-surface-global: #171e1b;
+  --color-border-global: var(--color-aztec-700);
+
+  /* COLOR | SEMANTIC TOKENS | FORMS */
+  --color-border-form: var(--color-border-global);
+  --color-text-input: var(--color-text-global);
+  --color-surface-input: color-mix(
+    in oklch,
+    var(--color-aztec-900) 50%,
+    transparent
+  );
+  --color-surface-input--focus: var(--color-aztec-900);
+  --color-border-input: var(--color-aztec-900);
+  --color-border-input--focus: var(--color-aztec-600);
+
+  --color-surface-radio--hover: var(--color-aztec-900);
+  --color-border-radio: var(--color-aztec-600);
+  --color-border-radio--checked: var(--color-forest-600);
+  --color-border-radio--disabled: var(--color-aztec-900);
 }
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer components {
+  .input-field-base {
+    @apply flex items-center p-2 border rounded-xs text-text-input bg-surface-input has-data-focus:bg-surface-input--focus border-border-input has-data-focus:border-border-input--focus;
   }
-} */
+
+  .input-radio {
+    @apply block w-4 aspect-square rounded-full group-not-data-disabled:group-hover:bg-surface-radio--hover border-2 border-border-radio group-data-checked:border-6 group-data-checked:border-border-radio--checked group-data-disabled:border-border-radio--disabled;
+  }
+}
 
 body {
   background: #171e1b;
@@ -97,9 +120,6 @@ body {
   > main {
     grid-row: 2;
   }
-  /* color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif; */
 }
 
 input::-webkit-outer-spin-button,
@@ -116,5 +136,11 @@ input[type="number"] {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .flow-space {
+    > * + * {
+      margin-block-start: var(--flow-space, 1em);
+    }
   }
 }
