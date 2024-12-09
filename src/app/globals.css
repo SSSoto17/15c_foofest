@@ -73,6 +73,7 @@
 
   /* COLOR | SEMANTIC TOKENS */
   --color-text-global: var(--color-forest-100);
+  --color-text-heading: var(--color-forest-300);
   --color-surface-global: #171e1b;
   --color-border-global: var(--color-aztec-700);
 
@@ -95,6 +96,38 @@
 }
 
 @layer components {
+  /* TEXT STYLES */
+
+  .heading-title {
+    @apply text-desk-3xl leading-36 font-display font-normal uppercase;
+  }
+  .heading-1 {
+    @apply text-desk-2xl leading-22 font-display font-normal;
+  }
+  .heading-2 {
+    @apply text-desk-xl leading-16 font-display font-normal;
+  }
+  .heading-3 {
+    @apply text-desk-lg leading-9 font-bold;
+  }
+
+  .heading-4 {
+    @apply text-desk-base leading-6 font-bold uppercase text-text-heading;
+  }
+
+  .heading-tagline {
+    @apply text-desk-lg leading-9 uppercase text-text-heading;
+  }
+
+  .body-copy {
+    @apply text-desk-base leading-7 font-normal;
+  }
+
+  .body-copy-small {
+    @apply text-desk-sm leading-5 font-normal;
+  }
+
+  /* FORM ELEMENTS */
   .input-field-base {
     @apply flex items-center p-2 border rounded-xs text-text-input bg-surface-input has-data-focus:bg-surface-input--focus border-border-input has-data-focus:border-border-input--focus;
   }
