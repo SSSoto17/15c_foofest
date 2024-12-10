@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Field,
   Label,
@@ -16,41 +14,18 @@ import {
   MdOutlineDelete,
   MdOutlineCheck,
 } from "react-icons/md";
+import { useTickets } from "@/store/GlobalStore";
 
-export function FormHeader({ formSteps }) {
-  const [currentStep, setCurrentStep] = useState(1);
-  return (
-    <header className="border-b border-border-form p-12">
-      <ol className="flex justify-between items-center gap-4 font-semibold cursor-default">
-        {formSteps.map((step, id) => (
-          <>
-            <li
-              key={id + "-line"}
-              className="first-of-type:hidden w-10 h-0.5 bg-aztec-800"
-            />
-            <li
-              key={id}
-              {...(currentStep >= step.step && { "data-active": true })}
-              className={`group flex items-center gap-3 justify-between ${
-                currentStep === step.step
-                  ? "text-text-global"
-                  : "text-text-global--disabled"
-              }`}
-            >
-              <span className="grid place-content-center w-8 rounded-full aspect-square text-text-global bg-surface-action--disabled group-data-active:bg-surface-action">
-                {step.step}
-              </span>{" "}
-              {step.title}
-            </li>
-          </>
-        ))}
-      </ol>
-    </header>
+export function NumberInput({ label, price }) {
+  const tickets = useTickets((state) => state.totalTickets).filter(
+    (ticket) => ticket === label
   );
-}
-
-export function NumberInput({ name, label, price }) {
-  const [quantity, setQuantity] = useState("");
+  const totalTickets = tickets.length;
+  const addTicket = useTickets((state) => state.addTicket);
+  // const removeTicket = useTickets((state) => state.removeTicket);
+  // const clearTickets = useTickets((state) => state.clearTickets);
+  // const enterTickets = useTickets((state) => state.enterQuantity);
+  const [quantity, setQuantity] = useState(totalTickets);
 
   const enterQuantity = (e) => {
     if (e.key === "Enter") {
@@ -58,6 +33,11 @@ export function NumberInput({ name, label, price }) {
       setQuantity(e.target.value);
       e.target.blur();
     }
+  };
+
+  const plusTicket = (e) => {
+    setQuantity(quantity ? Number(quantity) + 1 : 1);
+    addTicket(label);
   };
 
   return (
@@ -68,35 +48,49 @@ export function NumberInput({ name, label, price }) {
       </Label>
       <div className="input-field-base gap-4 w-fit">
         <Button
-          disabled={!quantity > 0}
+          disabled={!totalTickets > 0}
+          className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
+          onClick={() => removeTicket(label)}
+        >
+          <MdOutlineRemove className="text-text-global" size="24" />
+        </Button>
+        {/* <Button
+          disabled={!tickets > 0}
           className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
           onClick={() => setQuantity(quantity > 0 && Number(quantity) - 1)}
         >
           <MdOutlineRemove className="text-text-global" size="24" />
-        </Button>
+        </Button> */}
         <Input
           type="number"
-          name={name}
+          name={label}
           min={0}
           max={10}
           value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
+          onChange={(e) => enterTickets(label, e.target.value)}
           onKeyDown={enterQuantity}
           className="w-6 text-center data-focus:outline-none"
         />
         <Button
-          disabled={quantity >= 10}
+          disabled={totalTickets >= 10}
+          className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
+          onClick={() => addTicket(label)}
+        >
+          <MdOutlineAdd className="text-text-global" size="24" />
+        </Button>
+        {/* <Button
+          disabled={tickets >= 10}
           className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
           onClick={() => setQuantity(quantity ? Number(quantity) + 1 : 1)}
         >
           <MdOutlineAdd className="text-text-global" size="24" />
-        </Button>
+        </Button> */}
       </div>
-      {quantity > 0 && (
+      {totalTickets > 0 && (
         <Button
           className="cursor-pointer"
           aria-label="Clear quantity"
-          onClick={() => setQuantity("")}
+          onClick={() => clearTickets(label)}
         >
           <MdOutlineDelete
             className="hover:opacity-50 opacity-25 place-self-center"
@@ -140,14 +134,14 @@ export function CampingSpots({ availableSpots }) {
   );
 }
 
-export function Optionals({ name, label, price }) {
+export function Optionals({ label, price }) {
   const [checked, setChecked] = useState(false);
   return (
     <Field className="flex items-center gap-3 max-w-xl group hover:cursor-pointer">
       <Checkbox
+        name={label}
         checked={checked}
         onChange={setChecked}
-        name={name}
         className="border-2 border-aztec-600 rounded-sm data-checked:border-forest-600 data-checked:bg-forest-600 data-focus:outline-none"
       >
         <MdOutlineCheck className={`opacity-0 ${checked && "opacity-100"}`} />
@@ -162,12 +156,12 @@ export function Optionals({ name, label, price }) {
   );
 }
 
-export function TextInput({ label, name, type, placeholder }) {
+export function TextInput({ label, type, placeholder }) {
   return (
     <Field className="grid gap-y-2 max-w-sm">
       <Label>{label}</Label>
       <Input
-        name={name}
+        name={label}
         type={type}
         placeholder={placeholder}
         className="input-field-base data-focus:outline-none"
