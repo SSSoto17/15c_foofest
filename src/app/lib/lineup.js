@@ -17,3 +17,12 @@ export async function getArtistBySlug(slug) {
   const data = await response.json();
   return data;
 }
+
+export async function getStages() {
+  const response = await fetch(`${endpoint}/schedule`, {
+    method: "GET",
+  });
+
+  const data = await response.json();
+  return data;
+}

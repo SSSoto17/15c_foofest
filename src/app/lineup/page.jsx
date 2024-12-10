@@ -1,12 +1,19 @@
 import Accordion from "@/components/lineup/Accordion";
 import ArtistCard from "@/components/lineup/ArtistCard";
 import SortByMenu from "@/components/lineup/SortByMenu";
+import Schedule from "@/components/lineup/Schedule";
 
-import { getArtists } from "../lib/lineup";
+import { getArtists, getStages } from "../lib/lineup";
 
 export default async function Lineup() {
-  const artists = await getArtists();
   const endpoint = process.env.FOO_FEST_API_URL;
+  const artists = await getArtists();
+  const stages = await getStages();
+
+  const Midgard = stages.Midgard;
+  const Vanaheim = stages.Vanaheim;
+  const Jotunheim = stages.Jotunheim;
+  //   console.log("STAGES");
 
   return (
     <main className="grid gap-10">
@@ -23,12 +30,17 @@ export default async function Lineup() {
 
       {/* Stage */}
       <section className="grid gap-4">
-        <Accordion summary="Jotunheim">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quia minima aliquid numquam voluptas enim deleniti commodi laudantium? Accusantium repudiandae sunt ut quo nobis, tenetur quidem recusandae dolore explicabo esse commodi!</Accordion>
-        <Accordion summary="Midgard">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quia minima aliquid numquam voluptas enim deleniti commodi laudantium? Accusantium repudiandae sunt ut quo nobis, tenetur quidem recusandae dolore explicabo esse commodi!</Accordion>
-        <Accordion summary="Vanaheim">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quia minima aliquid numquam voluptas enim deleniti commodi laudantium? Accusantium repudiandae sunt ut quo nobis, tenetur quidem recusandae dolore explicabo esse commodi!</Accordion>
+        <Accordion summary="Jotunheim">
+          <Schedule data={Jotunheim}></Schedule>
+        </Accordion>
+        <Accordion summary="Midgard">
+          <Schedule data={Midgard}></Schedule>
+        </Accordion>
+        <Accordion summary="Vanaheim">
+          <Schedule data={Vanaheim}></Schedule>
+        </Accordion>
       </section>
-      {/* Day */}
-      <section></section>
+
       {/* Artist */}
       <section className="grid grid-cols-4 gap-4">
         <SortByMenu></SortByMenu>
