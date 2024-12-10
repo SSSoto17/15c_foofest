@@ -17,27 +17,40 @@ import {
 import { useTickets } from "@/store/GlobalStore";
 
 export function NumberInput({ label, price }) {
-  const tickets = useTickets((state) => state.totalTickets).filter(
-    (ticket) => ticket === label
-  );
-  const totalTickets = tickets.length;
+  const allTickets = useTickets((state) => state.tickets);
+  const tickets = allTickets.filter((ticket) => ticket.type === label);
   const addTicket = useTickets((state) => state.addTicket);
-  // const removeTicket = useTickets((state) => state.removeTicket);
-  // const clearTickets = useTickets((state) => state.clearTickets);
-  // const enterTickets = useTickets((state) => state.enterQuantity);
-  const [quantity, setQuantity] = useState(totalTickets);
+  const removeTicket = useTickets((state) => state.removeTicket);
+  const clearTickets = useTickets((state) => state.clearTickets);
 
-  const enterQuantity = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      setQuantity(e.target.value);
-      e.target.blur();
+  const [quantity, setQuantity] = useState(0);
+
+  const plusTicket = (label, price) => {
+    if (tickets.length < 10) {
+      addTicket(label, price);
+      setQuantity(tickets.length + 1);
     }
   };
 
-  const plusTicket = (e) => {
-    setQuantity(quantity ? Number(quantity) + 1 : 1);
-    addTicket(label);
+  const minusTicket = (label, price) => {
+    if (tickets.length > 0) {
+      setQuantity(tickets.length - 1);
+      const singleTicket = { type: label, price: price };
+      const updatedTickets = Array(tickets.length - 1).fill(singleTicket);
+      removeTicket(label, updatedTickets);
+    }
+  };
+
+  const clearAll = (label) => {
+    setQuantity(0);
+    clearTickets(label);
+  };
+
+  const manualInput = (label, price, newQuantity) => {
+    setQuantity(newQuantity);
+    const singleTicket = { type: label, price: price };
+    const updatedTickets = Array(Number(newQuantity)).fill(singleTicket);
+    removeTicket(label, updatedTickets);
   };
 
   return (
@@ -48,49 +61,34 @@ export function NumberInput({ label, price }) {
       </Label>
       <div className="input-field-base gap-4 w-fit">
         <Button
-          disabled={!totalTickets > 0}
+          disabled={!quantity > 0}
           className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
-          onClick={() => removeTicket(label)}
+          onClick={() => minusTicket(label, price)}
         >
           <MdOutlineRemove className="text-text-global" size="24" />
         </Button>
-        {/* <Button
-          disabled={!tickets > 0}
-          className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
-          onClick={() => setQuantity(quantity > 0 && Number(quantity) - 1)}
-        >
-          <MdOutlineRemove className="text-text-global" size="24" />
-        </Button> */}
         <Input
           type="number"
           name={label}
           min={0}
           max={10}
           value={quantity}
-          onChange={(e) => enterTickets(label, e.target.value)}
-          onKeyDown={enterQuantity}
+          onChange={(e) => manualInput(label, price, e.target.value)}
           className="w-6 text-center data-focus:outline-none"
         />
         <Button
-          disabled={totalTickets >= 10}
+          disabled={quantity >= 10}
           className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
-          onClick={() => addTicket(label)}
+          onClick={() => plusTicket(label, price)}
         >
           <MdOutlineAdd className="text-text-global" size="24" />
         </Button>
-        {/* <Button
-          disabled={tickets >= 10}
-          className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
-          onClick={() => setQuantity(quantity ? Number(quantity) + 1 : 1)}
-        >
-          <MdOutlineAdd className="text-text-global" size="24" />
-        </Button> */}
       </div>
-      {totalTickets > 0 && (
+      {quantity > 0 && (
         <Button
           className="cursor-pointer"
           aria-label="Clear quantity"
-          onClick={() => clearTickets(label)}
+          onClick={() => clearAll(label)}
         >
           <MdOutlineDelete
             className="hover:opacity-50 opacity-25 place-self-center"
@@ -103,17 +101,21 @@ export function NumberInput({ label, price }) {
 }
 
 export function CampingSpots({ availableSpots }) {
-  const currentlyAvailable = availableSpots.filter(
-    (spot) => spot.available > 0
-  );
-  const [selected, setSelected] = useState(currentlyAvailable[0].area);
+  const ticketQuantity = useTickets((state) => state.tickets);
+  const available =
+    ticketQuantity > 0
+      ? availableSpots.filter((spot) => spot.available >= ticketQuantity.length)
+      : availableSpots.filter((spot) => spot.available > 0);
+  const [selected, setSelected] = useState(available[0].area);
 
   return (
     <RadioGroup name="area" value={selected} onChange={setSelected}>
       {availableSpots.map((spot, id) => (
         <Field
           key={id}
-          disabled={spot.available === 0}
+          disabled={
+            spot.available === 0 || spot.available < ticketQuantity.length
+          }
           className="flex items-end justify-between max-w-xl gap-8 not-data-disabled:cursor-pointer"
         >
           <Radio

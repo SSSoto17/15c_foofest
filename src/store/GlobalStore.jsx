@@ -1,33 +1,20 @@
 import { create } from "zustand";
 
 export const useTickets = create((set) => ({
-  totalTickets: [],
-  addTicket: (ticket) =>
-    set((state) => ({ totalTickets: [...state.totalTickets, ticket] })),
-  enterQuantity: (ticket, quantity) =>
+  tickets: [],
+  addTicket: (ticketType, ticketPrice) =>
     set((state) => ({
-      totalTickets: [
-        ...state.totalTickets.filter((element) => element != ticket),
-        ticket.repeat(Number(quantity)),
+      tickets: [...state.tickets, { type: ticketType, price: ticketPrice }],
+    })),
+  removeTicket: (ticketType, updatedQuantity) =>
+    set((state) => ({
+      tickets: [
+        ...state.tickets.filter((ticket) => ticket.type !== ticketType),
+        ...updatedQuantity,
       ],
     })),
-  removeTicket: (ticket) =>
+  clearTickets: (ticketType) =>
     set((state) => ({
-      totalTickets: state.totalTickets.slice(
-        0,
-        state.totalTickets.findLastIndex((element) => element === ticket)
-      ),
+      tickets: state.tickets.filter((ticket) => ticket.type !== ticketType),
     })),
-  clearTickets: (ticket) =>
-    set((state) => ({
-      totalTickets: state.totalTickets.filter((element) => element != ticket),
-    })),
-}));
-
-export const useFormSteps = create((set) => ({
-  formSteps: [
-    { step: 1, title: "Choose Tickets" },
-    { step: 2, title: "Your Information" },
-    { step: 3, title: "Payment" },
-  ],
 }));

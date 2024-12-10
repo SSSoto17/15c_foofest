@@ -13,8 +13,8 @@ export default async function Page() {
   return (
     <main>
       <section className="border border-border-form">
-        <FormHeader formSteps={formSteps} />
-        <BookingForm availableSpots={availableSpots} />
+        {/* <FormHeader formSteps={formSteps} /> */}
+        <BookingForm formSteps={formSteps} availableSpots={availableSpots} />
       </section>
     </main>
   );
