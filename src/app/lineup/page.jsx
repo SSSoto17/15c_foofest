@@ -33,7 +33,7 @@ export default async function Lineup() {
         <SortByMenu></SortByMenu>
         <ul className="grid grid-cols-subgrid col-start-2 col-span-3 gap-4">
           {artists.map((artist) => (
-            <ArtistCard key={artist.slug} name={artist.name} slug={artist.slug}></ArtistCard>
+            <ArtistCard key={artist.slug} name={artist.name} slug={artist.slug} img={artist.logo}></ArtistCard>
           ))}
         </ul>
       </section>

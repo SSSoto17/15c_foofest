@@ -9,11 +9,11 @@ export async function getArtists() {
   return data;
 }
 
-// export async function getArtistBySlug(slug) {
-//   const response = await fetch(`${endpoint}/${slug}`, {
-//     method: "GET",
-//   });
+export async function getArtistBySlug(slug) {
+  const response = await fetch(`${endpoint}/bands/${slug}`, {
+    method: "GET",
+  });
 
-//    const data = await response.json();
-//    return data;
-// }
+  const data = await response.json();
+  return data;
+}
