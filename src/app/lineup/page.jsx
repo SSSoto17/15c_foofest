@@ -6,6 +6,7 @@ import { getArtists } from "../lib/lineup";
 
 export default async function Lineup() {
   const artists = await getArtists();
+  const endpoint = process.env.FOO_FEST_API_URL;
 
   return (
     <main className="grid gap-10">
@@ -33,7 +34,7 @@ export default async function Lineup() {
         <SortByMenu></SortByMenu>
         <ul className="grid grid-cols-subgrid col-start-2 col-span-3 gap-4">
           {artists.map((artist) => (
-            <ArtistCard key={artist.slug} name={artist.name} slug={artist.slug} img={artist.logo}></ArtistCard>
+            <ArtistCard key={artist.slug} name={artist.name} slug={artist.slug} img={artist.logo.startsWith("https://") ? artist.logo : `${endpoint}/logos/${artist.logo}`}></ArtistCard>
           ))}
         </ul>
       </section>

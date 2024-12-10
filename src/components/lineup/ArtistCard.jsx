@@ -3,6 +3,8 @@ import picture from "../../assets/tester/terminalist.jpg";
 import Link from "next/link";
 
 const ArtistCard = ({ name, slug, img }) => {
+  console.log("IMG:", img);
+
   return (
     <li>
       <Link href={`artist/${slug}`} className="grid aspect-square">
