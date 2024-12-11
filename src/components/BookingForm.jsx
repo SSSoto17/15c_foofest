@@ -8,9 +8,10 @@ import {
   Optionals,
   TextInput,
 } from "@/components/FormFields";
-import { submitTicketReservation } from "@/lib/actions";
-import { useActionState } from "react";
 import Button from "./Button";
+
+import { useActionState } from "react";
+import { submitTicketReservation } from "@/lib/actions";
 
 export default function BookingForm({ formSteps, availableSpots }) {
   const [state, submitReservation, isPending] = useActionState(
@@ -24,6 +25,8 @@ export default function BookingForm({ formSteps, availableSpots }) {
     }
   };
 
+  console.log(state?.errors.tickets);
+
   return (
     <>
       <FormHeader
@@ -31,13 +34,24 @@ export default function BookingForm({ formSteps, availableSpots }) {
         formSteps={formSteps}
       />
       <Form onKeyDown={keyEnter} action="" className="p-12">
-        {!state?.activeStep && (
+        {(!state?.activeStep || state?.activeStep === 1) && (
           <div className="grid gap-y-16">
             <Fieldset className="grid gap-y-4">
               <Legend className="heading-3">Tickets</Legend>
-              <NumberInput label="Partout Ticket" price="799" />
-              <NumberInput label="VIP Ticket" price="1299" />
-              <p> {state?.errors.tickets} </p>
+              <NumberInput
+                label="Partout Ticket"
+                price="799"
+                error={state?.errors.tickets}
+              />
+              <NumberInput
+                label="VIP Ticket"
+                price="1299"
+                error={state?.errors.tickets}
+              />
+              <small className="text-text-global--error italic h-0.5">
+                {" "}
+                {state?.errors.tickets}{" "}
+              </small>
             </Fieldset>
             <Fieldset className="grid gap-y-6">
               <Legend className="heading-3">Camping Spot</Legend>
@@ -47,12 +61,6 @@ export default function BookingForm({ formSteps, availableSpots }) {
               <Optionals label="Green fee" price="+249" />
               <Optionals label="Tent setup" />
             </Fieldset>
-            <button
-              formAction={submitReservation}
-              className="place-self-end cursor-pointer font-bold border-2 border-forest-800 text-aztec-200 py-2 w-full max-w-48"
-            >
-              Next
-            </button>
           </div>
         )}
         {state?.activeStep === 2 && (
@@ -74,7 +82,13 @@ export default function BookingForm({ formSteps, availableSpots }) {
             </Fieldset>
           </div>
         )}
-        <FormFooter />
+        <FormFooter
+          currentStep={state?.activeStep}
+          nextStep={
+            (!state && submitReservation) ||
+            (state?.errors && submitReservation)
+          }
+        />
       </Form>
     </>
   );
@@ -111,11 +125,15 @@ export function FormHeader({ formSteps, currentStep }) {
   );
 }
 
-export function FormFooter() {
+export function FormFooter({ currentStep, nextStep }) {
   return (
-    <footer className="flex justify-between gap-4 items-end">
-      <Button label="Back" />
-      <Button label="Next" />
+    <footer
+      className={`flex ${
+        currentStep > 1 ? "justify-between" : "justify-end"
+      }  gap-4 items-end pt-10`}
+    >
+      {currentStep > 1 && <Button label="Back" variant="form" />}
+      <Button label="Next" variant="form" formAction={nextStep} />
     </footer>
   );
 }

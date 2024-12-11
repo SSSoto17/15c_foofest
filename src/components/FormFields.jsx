@@ -13,10 +13,11 @@ import {
   MdOutlineRemove,
   MdOutlineDelete,
   MdOutlineCheck,
+  MdOutlineError,
 } from "react-icons/md";
 import { useTickets } from "@/store/GlobalStore";
 
-export function NumberInput({ label, price }) {
+export function NumberInput({ label, price, error }) {
   const allTickets = useTickets((state) => state.tickets);
   const tickets = allTickets.filter((ticket) => ticket.type === label);
   const addTicket = useTickets((state) => state.addTicket);
@@ -24,7 +25,9 @@ export function NumberInput({ label, price }) {
   const clearTickets = useTickets((state) => state.clearTickets);
 
   const [quantity, setQuantity] = useState(0);
+  const [errorState, setErrorState] = useState(error ? true : false);
 
+  console.log(errorState);
   const plusTicket = (label, price) => {
     if (tickets.length < 10) {
       addTicket(label, price);
@@ -53,13 +56,23 @@ export function NumberInput({ label, price }) {
     removeTicket(label, updatedTickets);
   };
 
+  const clearError = () => {
+    if (error) {
+      setErrorState(false);
+    }
+  };
+
   return (
     <Field className="grid grid-cols-[1fr_auto_1rem] items-end justify-between max-w-xl gap-4">
       <Label className="flex justify-between">
         {label}{" "}
         <span className="opacity-50 place-self-end mx-8">{price} DKK</span>
       </Label>
-      <div className="input-field-base gap-4 w-fit">
+      <div
+        className={`input-field-base gap-4 w-fit ${
+          errorState && "border-border-global--error bg-surface-input--focus"
+        }`}
+      >
         <Button
           disabled={!quantity > 0}
           className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
@@ -73,6 +86,7 @@ export function NumberInput({ label, price }) {
           min={0}
           max={10}
           value={quantity}
+          onFocus={clearError}
           onChange={(e) => manualInput(label, price, e.target.value)}
           className="w-6 text-center data-focus:outline-none"
         />
@@ -95,6 +109,13 @@ export function NumberInput({ label, price }) {
             size="24"
           />
         </Button>
+      )}
+      {errorState && (
+        <MdOutlineError
+          aria-label="Attention!"
+          className="place-self-center text-text-global--error"
+          size="24"
+        />
       )}
     </Field>
   );

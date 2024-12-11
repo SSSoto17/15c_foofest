@@ -1,6 +1,17 @@
-export default function Button({ label }) {
+export default function Button({ label, variant, formAction, onClick }) {
+  const variants = {
+    primary: "",
+    secondary: "",
+    ghost: "",
+    form: "border-3 border-forest-600 text-aztec-200",
+  };
   return (
-    <button className="place-self-end cursor-pointer font-bold border-2 border-forest-800 text-aztec-200 py-2 w-full max-w-48">
+    <button
+      {...(formAction
+        ? (formAction = { formAction })
+        : (onClick = { onClick }))}
+      className={`button ${variants[variant]}`}
+    >
       {label}
     </button>
   );

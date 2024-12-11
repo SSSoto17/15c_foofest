@@ -17,7 +17,7 @@ export async function submitTicketReservation(prev, formData) {
   }
 
   if (errors.tickets) {
-    return { success: false, errors };
+    return { activeStep: 1, success: false, errors };
   }
 
   const response = await putReservation(data);
@@ -26,6 +26,6 @@ export async function submitTicketReservation(prev, formData) {
     revalidatePath("/");
     return { success: true, errors: {}, activeStep: 2 };
   } else {
-    return { success: false, errors: {} };
+    return { success: false, errors: {}, activeStep: 1 };
   }
 }
