@@ -1,5 +1,5 @@
 import Accordion from "@/components/lineup/Accordion";
-import StageSchedule from "@/components/lineup/StageSchedule";
+import StageSchedule from "@/components/lineup/schedule/StageSchedule";
 
 const ByStage = ({ data }) => {
   const stages = data;

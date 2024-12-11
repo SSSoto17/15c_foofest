@@ -12,7 +12,7 @@ const StageSchedule = ({ data }) => {
 
   return (
     // grid-rows-[repeat(13,_minmax(0,_1fr)
-    <section className="grid grid-cols-4 grid-rows-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr]">
+    <section className="grid grid-cols-[0.5fr_1fr_1fr_1fr] grid-rows-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr]">
       <HeaderSchedule text1="Thursday" dec1="08" text2="Friday" dec2="09" text3="Saturday" dec3="10"></HeaderSchedule>
       <ul className="row-start-2 row-span-full grid grid-cols-1 grid-rows-subgrid">
         {aDay.map((time) => (
