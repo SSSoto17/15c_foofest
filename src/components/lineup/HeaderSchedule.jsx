@@ -1,11 +1,11 @@
 import TitleSchedule from "./TitleSchedule";
 
-const HeaderSchedule = () => {
+const HeaderSchedule = ({ text1, dec1, text2, dec2, text3, dec3 }) => {
   return (
     <header className="col-start-2 col-span-full row-start-1 grid grid-cols-subgrid">
-      <TitleSchedule text="Thursday" decoration="08"></TitleSchedule>
-      <TitleSchedule text="Friday" decoration="09"></TitleSchedule>
-      <TitleSchedule text="Saturday" decoration="10"></TitleSchedule>
+      <TitleSchedule text={text1} decoration={dec1}></TitleSchedule>
+      <TitleSchedule text={text2} decoration={dec2}></TitleSchedule>
+      <TitleSchedule text={text3} decoration={dec3}></TitleSchedule>
     </header>
   );
 };
