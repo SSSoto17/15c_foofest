@@ -24,10 +24,11 @@ export function NumberInput({ label, price, error }) {
   const removeTicket = useTickets((state) => state.removeTicket);
   const clearTickets = useTickets((state) => state.clearTickets);
 
-  const [quantity, setQuantity] = useState(0);
-  const [errorState, setErrorState] = useState(error ? true : false);
+  console.log(Boolean(error));
 
-  console.log(errorState);
+  const [quantity, setQuantity] = useState(0);
+  const [errorState, setErrorState] = useState(Boolean(error));
+
   const plusTicket = (label, price) => {
     if (tickets.length < 10) {
       addTicket(label, price);
@@ -121,17 +122,16 @@ export function NumberInput({ label, price, error }) {
   );
 }
 
-export function CampingSpots({ availableSpots }) {
+export function CampingSpots({ selectionData }) {
   const ticketQuantity = useTickets((state) => state.tickets);
-  const available =
-    ticketQuantity > 0
-      ? availableSpots.filter((spot) => spot.available >= ticketQuantity.length)
-      : availableSpots.filter((spot) => spot.available > 0);
-  const [selected, setSelected] = useState(available[0].area);
+  const availableAreas = selectionData.filter(
+    (spot) => spot.available >= ticketQuantity.length
+  );
+  const [selected, setSelected] = useState(availableAreas[0].area);
 
   return (
     <RadioGroup name="area" value={selected} onChange={setSelected}>
-      {availableSpots.map((spot, id) => (
+      {selectionData.map((spot, id) => (
         <Field
           key={id}
           disabled={
@@ -179,12 +179,12 @@ export function Optionals({ label, price }) {
   );
 }
 
-export function TextInput({ label, type, placeholder }) {
+export function TextInput({ name, type, placeholder }) {
   return (
     <Field className="grid gap-y-2 max-w-sm">
-      <Label>{label}</Label>
+      <Label className="capitalize">{name}</Label>
       <Input
-        name={label}
+        name={name}
         type={type}
         placeholder={placeholder}
         className="input-field-base data-focus:outline-none"

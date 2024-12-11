@@ -17,7 +17,7 @@ export async function submitTicketReservation(prev, formData) {
   }
 
   if (errors.tickets) {
-    return { activeStep: 1, success: false, errors };
+    return { success: false, errors };
   }
 
   const response = await putReservation(data);
