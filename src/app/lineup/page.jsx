@@ -2,26 +2,21 @@ import { getArtists, getStages } from "../lib/lineup";
 import ByArtist from "@/components/lineup/ByArtist";
 import ByDay from "@/components/lineup/ByDay";
 import ByStage from "@/components/lineup/ByStage";
+import LineupNav from "@/components/lineup/LineupNav";
 
-export default async function Lineup() {
+export default async function Lineup({ searchParams }) {
+  const { category } = await searchParams;
+  //   console.log("CATEGORY", category);
+
   const artists = await getArtists();
   const stages = await getStages();
 
-  //   console.log("STAGES",stages);
-
   return (
     <main className="grid gap-10">
-      <h1 className="heading-title text-center">Line up</h1>
-      <section className="te">
-        <ul className="flex gap-8 uppercase font-semibold justify-center">
-          <li className="border-b-2 border-forest-700">Stages</li>
-          <li>Day</li>
-          <li>Artist</li>
-        </ul>
-
-        {/* <ByArtist data={artists}></ByArtist> */}
-        {/* <ByStage data={stages}></ByStage> */}
-        <ByDay data={stages}></ByDay>
+      <section className="flow-space">
+        <h1 className="heading-title text-center">Line up</h1>
+        <LineupNav></LineupNav>
+        {category === "Artist" ? <ByArtist data={artists}></ByArtist> : category === "Stage" ? <ByStage data={stages}></ByStage> : <ByDay data={stages}></ByDay>}
       </section>
     </main>
   );
