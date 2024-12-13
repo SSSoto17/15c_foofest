@@ -15,7 +15,7 @@ export default async function Lineup({ searchParams }) {
     <main className="grid gap-10">
       <section className="flow-space">
         <h1 className="heading-title text-center">Line up</h1>
-        <LineupNav></LineupNav>
+        <LineupNav category={category}></LineupNav>
         {category === "Artist" ? <ByArtist data={artists}></ByArtist> : category === "Stage" ? <ByStage data={stages}></ByStage> : <ByDay data={stages}></ByDay>}
       </section>
     </main>
