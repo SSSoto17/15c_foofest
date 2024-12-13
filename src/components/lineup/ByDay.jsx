@@ -34,25 +34,25 @@ const ByDay = ({ data }) => {
 
   return (
     <section className="grid gap-4">
-      <Accordion summary="Monday">
+      <Accordion summary="Monday" name="day">
         <DaySchedule jotun={JotunMon} mid={MidMon} vana={VanaMon}></DaySchedule>
       </Accordion>
-      <Accordion summary="Tuesday">
+      <Accordion summary="Tuesday" name="day">
         <DaySchedule jotun={JotunTues} mid={MidTues} vana={VanaTues}></DaySchedule>
       </Accordion>
-      <Accordion summary="Wednesday">
+      <Accordion summary="Wednesday" name="day">
         <DaySchedule jotun={JotunWed} mid={MidWed} vana={VanaWed}></DaySchedule>
       </Accordion>
-      <Accordion summary="Thursday">
+      <Accordion summary="Thursday" name="day">
         <DaySchedule jotun={JotunThur} mid={MidThur} vana={VanaThur}></DaySchedule>
       </Accordion>
-      <Accordion summary="Friday">
+      <Accordion summary="Friday" name="day">
         <DaySchedule jotun={JotunFri} mid={MidFri} vana={VanaFri}></DaySchedule>
       </Accordion>
-      <Accordion summary="Saturday">
+      <Accordion summary="Saturday" name="day">
         <DaySchedule jotun={JotunSat} mid={MidSat} vana={VanaSat}></DaySchedule>
       </Accordion>
-      <Accordion summary="Sunday">
+      <Accordion summary="Sunday" name="day">
         <DaySchedule jotun={JotunSun} mid={MidSun} vana={VanaSun}></DaySchedule>
       </Accordion>
     </section>
