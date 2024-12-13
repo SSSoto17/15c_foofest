@@ -12,12 +12,15 @@ import {
 
 import formSteps from "../../data/formsteps";
 
+import React from "react";
 import { Fragment, useActionState } from "react";
 import { submitTicketReservation } from "@/lib/actions";
 
 export default function BookingForm({ areaData }) {
+  const initState = { activeStep: 1, success: false, errors: {} };
   const [state, submitReservation, isPending] = useActionState(
-    submitTicketReservation
+    submitTicketReservation,
+    initState
   );
 
   const keyEnter = (e) => {
@@ -29,26 +32,24 @@ export default function BookingForm({ areaData }) {
 
   return (
     <>
-      <FormHeader currentStep={!state ? 1 : state.activeStep} />
+      <FormHeader activeStep={state?.activeStep} />
       <Form onKeyDown={keyEnter} action="" className="p-12">
         {state?.activeStep === 2 ? (
-          <BookingStepTwo />
+          <BookingStepTwo error={state?.errors} />
         ) : (
-          <BookingStepOne areaData={areaData} error={state} />
+          <BookingStepOne areaData={areaData} error={state?.errors} />
         )}
         <FormFooter
-          currentStep={state?.activeStep}
-          nextStep={
-            (!state && submitReservation) ||
-            (state?.errors && submitReservation)
-          }
+          activeStep={state?.activeStep}
+          nextStep={submitReservation}
+          isPending={isPending}
         />
       </Form>
     </>
   );
 }
 
-export function FormHeader({ currentStep }) {
+export function FormHeader({ activeStep }) {
   return (
     <header className="border-b border-border-form p-12">
       <ol className="flex justify-between items-center gap-4 font-semibold cursor-default">
@@ -60,11 +61,11 @@ export function FormHeader({ currentStep }) {
             />
             <li
               key={id}
-              {...(currentStep >= step.step && {
+              {...(activeStep >= step.step && {
                 "data-active": true,
               })}
               className={`group flex items-center gap-3 justify-between ${
-                currentStep === step.step
+                activeStep === step.step
                   ? "text-text-global"
                   : "text-text-global--disabled"
               }`}
@@ -81,15 +82,19 @@ export function FormHeader({ currentStep }) {
   );
 }
 
-export function FormFooter({ currentStep, nextStep }) {
+export function FormFooter({ activeStep, nextStep, isPending }) {
   return (
     <footer
       className={`flex ${
-        currentStep > 1 ? "justify-between" : "justify-end"
+        activeStep > 1 ? "justify-between" : "justify-end"
       }  gap-4 items-end pt-10`}
     >
-      {currentStep > 1 && <Button label="Back" variant="form" />}
-      <Button label="Next" variant="form" formAction={nextStep} />
+      <Button variant="form" isDisabled={activeStep === 1}>
+        Back
+      </Button>
+      <Button variant="form" formAction={nextStep} isDisabled={isPending}>
+        Next
+      </Button>
     </footer>
   );
 }
@@ -97,17 +102,17 @@ export function FormFooter({ currentStep, nextStep }) {
 export function BookingStepOne({ error, areaData }) {
   return (
     <div className="grid gap-y-16">
-      <TicketSelection error={error} errorMessage={error?.errors.tickets} />
+      <TicketSelection error={error} />
       <AreaSelection data={areaData} />
       <OptionalsSelection />
     </div>
   );
 }
 
-export function BookingStepTwo() {
+export function BookingStepTwo({ error }) {
   return (
     <div className="grid gap-y-16">
-      <EnterBuyerInfo />
+      <EnterBuyerInfo {...error} />
       <EnterGuestInfo />
     </div>
   );

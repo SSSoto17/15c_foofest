@@ -1,3 +1,4 @@
+// COMPONENTS
 import {
   Field,
   Label,
@@ -7,7 +8,6 @@ import {
   Radio,
   Checkbox,
 } from "@headlessui/react";
-import { useState } from "react";
 import {
   MdOutlineAdd,
   MdOutlineRemove,
@@ -15,19 +15,23 @@ import {
   MdOutlineCheck,
   MdOutlineError,
 } from "react-icons/md";
+
+// FUNCTIONS
+import { useState } from "react";
 import { useTickets } from "@/store/GlobalStore";
+import { useShallow } from "zustand/react/shallow";
 
-export function NumberInput({ label, price, error }) {
-  const allTickets = useTickets((state) => state.tickets);
-  const tickets = allTickets.filter((ticket) => ticket.type === label);
-  const addTicket = useTickets((state) => state.addTicket);
-  const removeTicket = useTickets((state) => state.removeTicket);
-  const clearTickets = useTickets((state) => state.clearTickets);
-
-  console.log(Boolean(error));
+export function NumberInput({ label, price, inBasket, error }) {
+  const tickets = inBasket.filter((ticket) => ticket.type === label);
+  const { addTicket, removeTicket, clearTickets } = useTickets(
+    useShallow((state) => ({
+      addTicket: state.addTicket,
+      removeTicket: state.removeTicket,
+      clearTickets: state.clearTickets,
+    }))
+  );
 
   const [quantity, setQuantity] = useState(0);
-  const [errorState, setErrorState] = useState(Boolean(error));
 
   const plusTicket = (label, price) => {
     if (tickets.length < 10) {
@@ -39,8 +43,10 @@ export function NumberInput({ label, price, error }) {
   const minusTicket = (label, price) => {
     if (tickets.length > 0) {
       setQuantity(tickets.length - 1);
-      const singleTicket = { type: label, price: price };
-      const updatedTickets = Array(tickets.length - 1).fill(singleTicket);
+      const updatedTickets = Array(tickets.length - 1).fill({
+        type: label,
+        price: price,
+      });
       removeTicket(label, updatedTickets);
     }
   };
@@ -52,15 +58,11 @@ export function NumberInput({ label, price, error }) {
 
   const manualInput = (label, price, newQuantity) => {
     setQuantity(newQuantity);
-    const singleTicket = { type: label, price: price };
-    const updatedTickets = Array(Number(newQuantity)).fill(singleTicket);
+    const updatedTickets = Array(Number(newQuantity)).fill({
+      type: label,
+      price: price,
+    });
     removeTicket(label, updatedTickets);
-  };
-
-  const clearError = () => {
-    if (error) {
-      setErrorState(false);
-    }
   };
 
   return (
@@ -69,13 +71,16 @@ export function NumberInput({ label, price, error }) {
         {label}{" "}
         <span className="opacity-50 place-self-end mx-8">{price} DKK</span>
       </Label>
+
       <div
-        className={`input-field-base gap-4 w-fit ${
-          errorState && "border-border-global--error bg-surface-input--focus"
+        className={`input-field input-field-number--focus gap-4 w-fit ${
+          error &&
+          !quantity &&
+          "not-has-data-focus:border-border-global--error bg-surface-input--focus"
         }`}
       >
         <Button
-          disabled={!quantity > 0}
+          disabled={!quantity}
           className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
           onClick={() => minusTicket(label, price)}
         >
@@ -85,9 +90,8 @@ export function NumberInput({ label, price, error }) {
           type="number"
           name={label}
           min={0}
-          max={10}
           value={quantity}
-          onFocus={clearError}
+          // {...(error.ticketsMin && { invalid: true })}
           onChange={(e) => manualInput(label, price, e.target.value)}
           className="w-6 text-center data-focus:outline-none"
         />
@@ -111,7 +115,7 @@ export function NumberInput({ label, price, error }) {
           />
         </Button>
       )}
-      {errorState && (
+      {error && !quantity && (
         <MdOutlineError
           aria-label="Attention!"
           className="place-self-center text-text-global--error"
@@ -179,16 +183,29 @@ export function Optionals({ label, price }) {
   );
 }
 
-export function TextInput({ name, type, placeholder }) {
+export function TextInput({ name, type, placeholder, error, children }) {
   return (
     <Field className="grid gap-y-2 max-w-sm">
-      <Label className="capitalize">{name}</Label>
-      <Input
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        className="input-field-base data-focus:outline-none"
-      />
+      <Label className="capitalize">{children}</Label>
+      <div className="flex gap-4">
+        <Input
+          name={name}
+          type={type}
+          placeholder={placeholder}
+          className={`input-field input-field-text--focus ${
+            error &&
+            "not-data-focus:border-border-global--error bg-surface-input--focus"
+          }`}
+        />
+        {error && (
+          <MdOutlineError
+            aria-label="Attention!"
+            className="place-self-center text-text-global--error"
+            size="24"
+          />
+        )}
+      </div>
+      <small className="text-text-global--error italic h-0.5">{error}</small>
     </Field>
   );
 }

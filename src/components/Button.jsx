@@ -1,4 +1,10 @@
-export default function Button({ label, variant, formAction, onClick }) {
+export default function PrimaryButton({
+  variant,
+  formAction,
+  onClick,
+  isDisabled,
+  children,
+}) {
   const variants = {
     primary: "",
     secondary: "",
@@ -7,12 +13,11 @@ export default function Button({ label, variant, formAction, onClick }) {
   };
   return (
     <button
-      {...(formAction
-        ? (formAction = { formAction })
-        : (onClick = { onClick }))}
+      {...(formAction ? { formAction } : { onClick })}
+      disabled={isDisabled}
       className={`button ${variants[variant]}`}
     >
-      {label}
+      {children}
     </button>
   );
 }

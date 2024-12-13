@@ -140,12 +140,19 @@
   /* BASE COMPONENTS */
 
   .button {
-    @apply w-full max-w-48 py-2 cursor-pointer font-bold;
+    @apply w-full max-w-48 py-2 cursor-pointer font-bold disabled:hidden;
   }
 
   /* FORM ELEMENTS */
-  .input-field-base {
-    @apply flex items-center p-2 border rounded-xs text-text-input bg-surface-input has-data-focus:bg-surface-input--focus border-border-input has-data-focus:border-border-input--focus;
+  .input-field {
+    @apply flex items-center p-2 border rounded-xs text-text-input bg-surface-input border-border-input;
+  }
+
+  .input-field-text--focus {
+    @apply data-focus:outline-none data-focus:bg-surface-input--focus data-focus:border-border-input--focus;
+  }
+  .input-field-number--focus {
+    @apply has-data-focus:bg-surface-input--focus has-data-focus:border-border-input--focus;
   }
 
   .input-radio {

@@ -5,22 +5,24 @@ import {
   Optionals,
   TextInput,
 } from "@/components/Booking/FormFields";
+import { useTickets } from "@/store/GlobalStore";
 
 import optionalsListing from "../../data/optionals";
 import buyerInfo from "../../data/buyerfields";
 
-export function TicketSelection({ error, errorMessage }) {
+export function TicketSelection({ error }) {
+  const tickets = useTickets((state) => state.tickets);
+  const inBasket = tickets.length;
+
   const ticketListing = [
-    { label: "Partout Ticket", price: "799", error: error?.errors.tickets },
-    { label: "VIP Ticket", price: "1299", error: error?.errors.tickets },
+    { label: "Partout Ticket", price: "799", error },
+    { label: "VIP Ticket", price: "1299", error },
   ];
-  console.log("arr: ", ticketListing[0].error);
   return (
     <Fieldset className="grid gap-y-4">
       <Legend className="heading-3">Tickets</Legend>
       <small className="text-text-global--error italic h-0.5">
-        {" "}
-        {error?.errors.tickets}{" "}
+        {!inBasket && error.ticketsMin}
       </small>
       {ticketListing.map((ticket, id) => {
         return (
@@ -28,7 +30,8 @@ export function TicketSelection({ error, errorMessage }) {
             key={id}
             label={ticket.label}
             price={ticket.price}
-            error={error?.errors.tickets}
+            inBasket={tickets}
+            error={(!inBasket && error) || (inBasket > 10 && error)}
           />
         );
       })}
@@ -55,32 +58,89 @@ export function OptionalsSelection() {
   );
 }
 
-export function EnterBuyerInfo() {
+export function EnterBuyerInfo({ customerName, customerEmail }) {
   return (
     <Fieldset className="grid gap-y-8">
       <Legend className="heading-3">Your Information</Legend>
       {buyerInfo.map((field, id) => {
-        return <TextInput key={id} {...field} />;
+        return (
+          <TextInput
+            key={id}
+            {...field}
+            error={field.name === "name" ? customerName : customerEmail}
+          >
+            {field.name}
+          </TextInput>
+        );
       })}
     </Fieldset>
   );
 }
 
 export function EnterGuestInfo() {
-  const guests = Array(4).fill("");
+  const tickets = useTickets((state) => state.tickets);
+  const partoutTickets = tickets.filter(
+    (ticket) => ticket.type === "Partout Ticket"
+  );
+  const vipTickets = tickets.filter((ticket) => ticket.type === "VIP Ticket");
+
+  console.log(partoutTickets);
+  const guests = [
+    ...Array(partoutTickets.length).fill("Partout Ticket"),
+    ...Array(vipTickets.length).fill("VIP Ticket"),
+  ];
+
+  const singleType =
+    guests.every((ticket) => ticket === "Partout Ticket") ||
+    guests.every((ticket) => ticket === "vip Ticket");
+
   return (
     <Fieldset className="grid gap-y-8">
       <Legend className="heading-3">Guest Information</Legend>
-      <ul className="grid grid-cols-2 gap-4">
-        {guests.map((guest, id) => {
-          return (
-            <li key={id}>
-              <TextInput name="name" type="text" />
-              {/* <select name="" id=""></select> */}
-            </li>
-          );
-        })}
-      </ul>
+      {singleType ? (
+        <ul className="grid grid-cols-2 gap-4">
+          {guests.map((guest, id) => {
+            return (
+              <li key={id}>
+                <TextInput name={guest + " Guest"} type="text">
+                  Name
+                </TextInput>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <section className="grid grid-cols-2 gap-4">
+          <article className="flow-space">
+            <h3 className="heading-4">Partout Tickets</h3>
+            <ul className="grid gap-4">
+              {partoutTickets.map((guest, id) => {
+                return (
+                  <li key={id}>
+                    <TextInput name={guest.type + " Guest"} type="text">
+                      Name
+                    </TextInput>
+                  </li>
+                );
+              })}
+            </ul>
+          </article>
+          <article className="flow-space">
+            <h3 className="heading-4">VIP Tickets</h3>
+            <ul className="grid gap-4">
+              {vipTickets.map((guest, id) => {
+                return (
+                  <li key={id}>
+                    <TextInput name={guest.type + " Guest"} type="text">
+                      Name
+                    </TextInput>
+                  </li>
+                );
+              })}
+            </ul>
+          </article>
+        </section>
+      )}
     </Fieldset>
   );
 }
