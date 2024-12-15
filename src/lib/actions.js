@@ -14,12 +14,28 @@ export async function submitTicketReservation(prev, formData) {
       Number(formData.get("Partout Ticket")) +
       Number(formData.get("VIP Ticket"));
 
-    if (data.amount < 1) {
-      errors.ticketsMin = "Please select your tickets.";
+    if (!data.amount || data.amount < 1) {
+      errors.tickets = "Please select your tickets.";
     }
 
-    if (Number(formData.get("Partout Ticket")) > 10) {
-      errors.ticketsMax = "Please limit your selection to 10 tickets.";
+    if (
+      Number(formData.get("Partout Ticket")) > 10 ||
+      Number(formData.get("VIP Ticket")) > 10
+    ) {
+      errors.tickets = "Please limit your selection to 10 tickets.";
+    }
+
+    // if (errors.tickets) {
+    //   return { activeStep: prev.activeStep, success: false, errors };
+    // }
+
+    const response = await putReservation(data);
+
+    if (response) {
+      revalidatePath("/");
+      return { activeStep: 2, success: true, errors: {} };
+    } else {
+      return { activeStep: prev.activeStep, success: false, errors: {} };
     }
   }
 
@@ -38,22 +54,29 @@ export async function submitTicketReservation(prev, formData) {
       errors.customerEmail = "Please provide a valid email address.";
     }
 
-    if (!errors) {
-      console.log("no errors in input");
-    }
+    data.ticketHolders.partout.map((guest) => {
+      if (!guest || guest.length <= 1) {
+        errors.ticketGuests = "Please provide the name of each ticket holder.";
+      }
+    });
+    data.ticketHolders.vip.map((guest) => {
+      if (!guest || guest.length <= 1) {
+        errors.ticketGuests = "Please provide the name of each ticket holder.";
+      }
+    });
+
+    // if (errors.customerName || errors.customerEmail || errors.ticketGuests) {
+    //   return { activeStep: prev.activeStep, success: false, errors, data };
+    // } else {
+    return { activeStep: 3, success: true, errors: {}, data };
+    // }
   }
 
-  if (Object.keys(errors).length > 0) {
-    console.log(errors);
-    return { activeStep: prev.activeStep, success: false, errors };
+  if (prev.activeStep === 3) {
   }
 
-  const response = await putReservation(data);
-
-  if (response) {
-    revalidatePath("/");
-    return { activeStep: 2, success: true, errors: {} };
-  } else {
-    return { activeStep: prev.activeStep, success: false, errors: {} };
-  }
+  // if (Object.keys(errors).length > 0) {
+  //   console.log(errors);
+  //   return { activeStep: prev.activeStep, success: false, errors };
+  // }
 }

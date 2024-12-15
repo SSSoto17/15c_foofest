@@ -129,7 +129,7 @@ export function NumberInput({ label, price, inBasket, error }) {
 export function CampingSpots({ selectionData }) {
   const ticketQuantity = useTickets((state) => state.tickets);
   const availableAreas = selectionData.filter(
-    (spot) => spot.available >= ticketQuantity.length
+    (spot) => spot.available > 0 && spot.available >= ticketQuantity.length
   );
   const [selected, setSelected] = useState(availableAreas[0].area);
 
@@ -183,15 +183,31 @@ export function Optionals({ label, price }) {
   );
 }
 
-export function TextInput({ name, type, placeholder, error, children }) {
+export function TextInput({
+  name,
+  type,
+  placeholder,
+  defaultValue,
+  error,
+  children,
+  variant,
+}) {
+  const variants = {
+    CardNo: "col-span-3",
+    CardExp: "col-span-2",
+    CardHolder: "col-span-3",
+  };
   return (
-    <Field className="grid gap-y-2 max-w-sm">
+    <Field
+      className={`grid gap-y-2 ${variant ? variants[variant] : "max-w-sm"}`}
+    >
       <Label className="capitalize">{children}</Label>
       <div className="flex gap-4">
         <Input
           name={name}
           type={type}
           placeholder={placeholder}
+          defaultValue={defaultValue}
           className={`input-field input-field-text--focus ${
             error &&
             "not-data-focus:border-border-global--error bg-surface-input--focus"
@@ -205,7 +221,9 @@ export function TextInput({ name, type, placeholder, error, children }) {
           />
         )}
       </div>
-      <small className="text-text-global--error italic h-0.5">{error}</small>
+      <small className="text-text-global--error italic h-0.5">
+        {!error?.includes("ticket") && error}
+      </small>
     </Field>
   );
 }

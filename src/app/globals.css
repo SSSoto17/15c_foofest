@@ -145,7 +145,7 @@
 
   /* FORM ELEMENTS */
   .input-field {
-    @apply flex items-center p-2 border rounded-xs text-text-input bg-surface-input border-border-input;
+    @apply flex items-center w-full p-2 border rounded-xs text-text-input bg-surface-input border-border-input;
   }
 
   .input-field-text--focus {

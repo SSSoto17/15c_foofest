@@ -22,7 +22,7 @@ export function TicketSelection({ error }) {
     <Fieldset className="grid gap-y-4">
       <Legend className="heading-3">Tickets</Legend>
       <small className="text-text-global--error italic h-0.5">
-        {!inBasket && error.ticketsMin}
+        {!inBasket && error}
       </small>
       {ticketListing.map((ticket, id) => {
         return (
@@ -58,7 +58,12 @@ export function OptionalsSelection() {
   );
 }
 
-export function EnterBuyerInfo({ customerName, customerEmail }) {
+export function EnterBuyerInfo({
+  buyerName,
+  buyerEmail,
+  customerName,
+  customerEmail,
+}) {
   return (
     <Fieldset className="grid gap-y-8">
       <Legend className="heading-3">Your Information</Legend>
@@ -67,6 +72,7 @@ export function EnterBuyerInfo({ customerName, customerEmail }) {
           <TextInput
             key={id}
             {...field}
+            defaultValue={field.name === "name" ? buyerName : buyerEmail}
             error={field.name === "name" ? customerName : customerEmail}
           >
             {field.name}
@@ -77,14 +83,13 @@ export function EnterBuyerInfo({ customerName, customerEmail }) {
   );
 }
 
-export function EnterGuestInfo() {
+export function EnterGuestInfo({ ticketHolders, error }) {
   const tickets = useTickets((state) => state.tickets);
   const partoutTickets = tickets.filter(
     (ticket) => ticket.type === "Partout Ticket"
   );
   const vipTickets = tickets.filter((ticket) => ticket.type === "VIP Ticket");
 
-  console.log(partoutTickets);
   const guests = [
     ...Array(partoutTickets.length).fill("Partout Ticket"),
     ...Array(vipTickets.length).fill("VIP Ticket"),
@@ -92,55 +97,116 @@ export function EnterGuestInfo() {
 
   const singleType =
     guests.every((ticket) => ticket === "Partout Ticket") ||
-    guests.every((ticket) => ticket === "vip Ticket");
+    guests.every((ticket) => ticket === "VIP Ticket");
 
+  console.log(singleType);
   return (
-    <Fieldset className="grid gap-y-8">
+    <Fieldset className="grid gap-y-1">
       <Legend className="heading-3">Guest Information</Legend>
-      {singleType ? (
-        <ul className="grid grid-cols-2 gap-4">
-          {guests.map((guest, id) => {
-            return (
-              <li key={id}>
-                <TextInput name={guest + " Guest"} type="text">
-                  Name
-                </TextInput>
-              </li>
-            );
-          })}
-        </ul>
-      ) : (
-        <section className="grid grid-cols-2 gap-4">
-          <article className="flow-space">
-            <h3 className="heading-4">Partout Tickets</h3>
-            <ul className="grid gap-4">
-              {partoutTickets.map((guest, id) => {
-                return (
-                  <li key={id}>
-                    <TextInput name={guest.type + " Guest"} type="text">
-                      Name
-                    </TextInput>
-                  </li>
-                );
-              })}
-            </ul>
-          </article>
-          <article className="flow-space">
-            <h3 className="heading-4">VIP Tickets</h3>
-            <ul className="grid gap-4">
-              {vipTickets.map((guest, id) => {
-                return (
-                  <li key={id}>
-                    <TextInput name={guest.type + " Guest"} type="text">
-                      Name
-                    </TextInput>
-                  </li>
-                );
-              })}
-            </ul>
-          </article>
-        </section>
-      )}
+      <small className="text-text-global--error italic h-8">{error}</small>
+      <section className="grid gap-x-4">
+        {singleType ? (
+          <ul className="grid grid-cols-2 gap-4">
+            {guests.map((guest, id) => {
+              return (
+                <li key={id}>
+                  <TextInput
+                    name={guest + " Guest"}
+                    type="text"
+                    error={error}
+                    defaultValue={
+                      ticketHolders?.partout[id] || ticketHolders?.vip[id]
+                    }
+                  >
+                    Name
+                  </TextInput>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <div className="grid grid-cols-2 gap-4">
+            <article className="flow-space">
+              <h3 className="heading-4">Partout Tickets</h3>
+              <ul className="grid gap-4">
+                {partoutTickets.map((guest, id) => {
+                  return (
+                    <li key={id}>
+                      <TextInput
+                        name={guest.type + " Guest"}
+                        type="text"
+                        error={error}
+                        defaultValue={ticketHolders?.partout[id]}
+                      >
+                        Name
+                      </TextInput>
+                    </li>
+                  );
+                })}
+              </ul>
+            </article>
+            <article className="flow-space">
+              <h3 className="heading-4">VIP Tickets</h3>
+              <ul className="grid gap-4">
+                {vipTickets.map((guest, id) => {
+                  return (
+                    <li key={id}>
+                      <TextInput
+                        name={guest.type + " Guest"}
+                        type="text"
+                        error={error}
+                        defaultValue={ticketHolders?.vip[id]}
+                      >
+                        Name
+                      </TextInput>
+                    </li>
+                  );
+                })}
+              </ul>
+            </article>
+          </div>
+        )}
+      </section>
+    </Fieldset>
+  );
+}
+
+export function EnterPaymentInfo() {
+  return (
+    <Fieldset className="grid gap-y-6">
+      <Legend className="heading-3">Payment</Legend>
+      <div className="grid grid-cols-3 gap-x-4 max-w-md">
+        <TextInput
+          name="Card number"
+          type="number"
+          placeholder="Card number"
+          variant="CardNo"
+        />
+        <TextInput
+          placeholder="Expiration date ( MM / YY )"
+          variant="CardExp"
+        />
+        <TextInput placeholder="Security code" />
+        <TextInput
+          name="Card holder"
+          type="text"
+          placeholder="Name on card"
+          variant="CardHolder"
+        />
+      </div>
+    </Fieldset>
+  );
+}
+
+export function EnterBillingInfo({ buyerName }) {
+  return (
+    <Fieldset>
+      <Legend>Billing Address</Legend>
+      <TextInput defaultValue={buyerName}>Name</TextInput>
+      <TextInput>Address</TextInput>
+      <TextInput>City</TextInput>
+      <TextInput>Zip Code</TextInput>
+      <TextInput>Phone</TextInput>
     </Fieldset>
   );
 }

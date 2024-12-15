@@ -8,6 +8,8 @@ import {
   OptionalsSelection,
   EnterBuyerInfo,
   EnterGuestInfo,
+  EnterPaymentInfo,
+  EnterBillingInfo,
 } from "./FormSections";
 
 import formSteps from "../../data/formsteps";
@@ -35,7 +37,9 @@ export default function BookingForm({ areaData }) {
       <FormHeader activeStep={state?.activeStep} />
       <Form onKeyDown={keyEnter} action="" className="p-12">
         {state?.activeStep === 2 ? (
-          <BookingStepTwo error={state?.errors} />
+          <BookingStepTwo data={state?.data} error={state?.errors} />
+        ) : state?.activeStep === 3 ? (
+          <BookingStepThree savedData={state?.data} />
         ) : (
           <BookingStepOne areaData={areaData} error={state?.errors} />
         )}
@@ -102,18 +106,27 @@ export function FormFooter({ activeStep, nextStep, isPending }) {
 export function BookingStepOne({ error, areaData }) {
   return (
     <div className="grid gap-y-16">
-      <TicketSelection error={error} />
+      <TicketSelection error={error.tickets} />
       <AreaSelection data={areaData} />
       <OptionalsSelection />
     </div>
   );
 }
 
-export function BookingStepTwo({ error }) {
+export function BookingStepTwo({ data, error }) {
   return (
     <div className="grid gap-y-16">
-      <EnterBuyerInfo {...error} />
-      <EnterGuestInfo />
+      <EnterBuyerInfo {...data} {...error} />
+      <EnterGuestInfo {...data} error={error.ticketGuests} />
+    </div>
+  );
+}
+
+export function BookingStepThree({ savedData }) {
+  return (
+    <div className="grid gap-y-16">
+      <EnterPaymentInfo />
+      <EnterBillingInfo {...savedData} />
     </div>
   );
 }
