@@ -99,7 +99,6 @@ export function EnterGuestInfo({ ticketHolders, error }) {
     guests.every((ticket) => ticket === "Partout Ticket") ||
     guests.every((ticket) => ticket === "VIP Ticket");
 
-  console.log(singleType);
   return (
     <Fieldset className="grid gap-y-1">
       <Legend className="heading-3">Guest Information</Legend>
@@ -173,25 +172,31 @@ export function EnterGuestInfo({ ticketHolders, error }) {
 
 export function EnterPaymentInfo() {
   return (
-    <Fieldset className="grid gap-y-6">
+    <Fieldset className="grid gap-y-6 col-span-2">
       <Legend className="heading-3">Payment</Legend>
       <div className="grid grid-cols-3 gap-x-4 max-w-md">
         <TextInput
-          name="Card number"
+          name="cardNumber"
           type="number"
           placeholder="Card number"
-          variant="CardNo"
+          variant="fullSpan"
         />
         <TextInput
+          name="cardExp"
+          type="number"
           placeholder="Expiration date ( MM / YY )"
-          variant="CardExp"
+          variant="twoSpan"
         />
-        <TextInput placeholder="Security code" />
         <TextInput
-          name="Card holder"
+          name="cardSecurityCode"
+          type="number"
+          placeholder="Security code"
+        />
+        <TextInput
+          name="cardHolder"
           type="text"
           placeholder="Name on card"
-          variant="CardHolder"
+          variant="fullSpan"
         />
       </div>
     </Fieldset>
@@ -200,13 +205,81 @@ export function EnterPaymentInfo() {
 
 export function EnterBillingInfo({ buyerName }) {
   return (
-    <Fieldset>
-      <Legend>Billing Address</Legend>
-      <TextInput defaultValue={buyerName}>Name</TextInput>
-      <TextInput>Address</TextInput>
-      <TextInput>City</TextInput>
-      <TextInput>Zip Code</TextInput>
-      <TextInput>Phone</TextInput>
+    <Fieldset className="grid gap-y-6 col-span-2">
+      <Legend className="heading-3">Billing Address</Legend>
+      <div className="grid grid-cols-3 gap-x-4 max-w-md">
+        <TextInput type="text" defaultValue={buyerName} variant="fullSpan">
+          Name
+        </TextInput>
+        <TextInput type="text" variant="fullSpan">
+          Address
+        </TextInput>
+        <TextInput type="text" variant="twoSpan">
+          City
+        </TextInput>
+        <TextInput type="number">Zip Code</TextInput>
+        <TextInput type="tel" variant="fullSpan">
+          Phone
+        </TextInput>
+      </div>
     </Fieldset>
+  );
+}
+
+export function OrderSummary({ green }) {
+  const productBasket = useTickets((state) => state.tickets);
+  const basketByTicket = [
+    productBasket.filter((ticket) => ticket.type === "Partout Ticket"),
+    productBasket.filter((ticket) => ticket.type === "VIP Ticket"),
+  ];
+  const greenFee = green?.price ? green.price : 0;
+  const totalPrice =
+    productBasket.reduce(
+      (accumulator, currentValue) => accumulator + Number(currentValue.price),
+      0
+    ) + greenFee;
+
+  return (
+    <section className="col-start-3 row-start-1 border border-border-form self-start">
+      <header className="border-b border-border-form p-6">
+        <h3 className="heading-4 w-full text-center">Order Summary</h3>
+      </header>
+      <ul className="p-6">
+        {basketByTicket.map((type, id) => {
+          const totalQuantity = type.length;
+          if (totalQuantity > 0) {
+            const ticketType = type[0].type;
+            console.log(ticketType);
+            const ticketPrice = type.reduce(
+              (accumulator, currentValue) =>
+                accumulator + Number(currentValue.price),
+              0
+            );
+            return (
+              <li key={id} className="flex justify-between items-end gap-2">
+                <p className="flex gap-2 items-end">
+                  <span className="text-desk-sm">{totalQuantity} x</span>
+                  {ticketType}
+                </p>
+                {<p>{ticketPrice},-</p>}
+              </li>
+            );
+          }
+        })}
+        {green?.price && (
+          <li className="flex justify-between items-end gap-2">
+            <p className="flex gap-2 items-end">
+              <span className="text-desk-sm">1 x</span>
+              {green?.name}
+            </p>
+            <p>{green?.price},-</p>
+          </li>
+        )}
+      </ul>
+      <footer className="flex justify-between gap-4 mx-6 pt-2 pb-6 items-end border-t border-border-global font-bold">
+        <p>Total</p>
+        <p>{totalPrice}</p>
+      </footer>
+    </section>
   );
 }

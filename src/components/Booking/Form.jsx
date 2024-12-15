@@ -10,6 +10,7 @@ import {
   EnterGuestInfo,
   EnterPaymentInfo,
   EnterBillingInfo,
+  OrderSummary,
 } from "./FormSections";
 
 import formSteps from "../../data/formsteps";
@@ -124,9 +125,10 @@ export function BookingStepTwo({ data, error }) {
 
 export function BookingStepThree({ savedData }) {
   return (
-    <div className="grid gap-y-16">
+    <div className="grid grid-cols-3 gap-x-4 gap-y-16">
       <EnterPaymentInfo />
       <EnterBillingInfo {...savedData} />
+      <OrderSummary {...savedData.optionals} />
     </div>
   );
 }

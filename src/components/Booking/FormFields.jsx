@@ -193,9 +193,8 @@ export function TextInput({
   variant,
 }) {
   const variants = {
-    CardNo: "col-span-3",
-    CardExp: "col-span-2",
-    CardHolder: "col-span-3",
+    fullSpan: "col-span-3",
+    twoSpan: "col-span-2",
   };
   return (
     <Field

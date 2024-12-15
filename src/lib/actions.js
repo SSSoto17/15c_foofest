@@ -13,6 +13,9 @@ export async function submitTicketReservation(prev, formData) {
     data.amount =
       Number(formData.get("Partout Ticket")) +
       Number(formData.get("VIP Ticket"));
+    data.optionals = {
+      green: formData.get("Green fee") && { name: "Green Fee", price: 249 },
+    };
 
     if (!data.amount || data.amount < 1) {
       errors.tickets = "Please select your tickets.";
@@ -25,15 +28,15 @@ export async function submitTicketReservation(prev, formData) {
       errors.tickets = "Please limit your selection to 10 tickets.";
     }
 
-    // if (errors.tickets) {
-    //   return { activeStep: prev.activeStep, success: false, errors };
-    // }
+    if (errors.tickets) {
+      return { activeStep: prev.activeStep, success: false, errors };
+    }
 
     const response = await putReservation(data);
 
     if (response) {
       revalidatePath("/");
-      return { activeStep: 2, success: true, errors: {} };
+      return { activeStep: 2, success: true, errors: {}, data, response };
     } else {
       return { activeStep: prev.activeStep, success: false, errors: {} };
     }
@@ -46,6 +49,9 @@ export async function submitTicketReservation(prev, formData) {
       partout: formData.getAll("Partout Ticket Guest"),
       vip: formData.getAll("VIP Ticket Guest"),
     };
+    if (prev.data.optionals) {
+      data.optionals = prev.data.optionals;
+    }
 
     if (!data.buyerName || data.buyerName.length <= 1) {
       errors.customerName = "Please provide your name.";
