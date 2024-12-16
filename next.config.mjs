@@ -4,18 +4,17 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "https://innovative-cut-cauliflower.glitch.me",
-        port: "",
-        pathname: "logos/**",
-        search: "",
+        hostname: "innovative-cut-cauliflower.glitch.me",
       },
-      //   {
-      //     protocol: "https",
-      //     hostname: "localhost",
-      //     port: "8080",
-      //     pathname: "/logos/**",
-      //     search: "",
-      //   },
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+      },
+      {
+        protocol: "https",
+        hostname: "localhost",
+        port: "8080",
+      },
     ],
   },
 };
