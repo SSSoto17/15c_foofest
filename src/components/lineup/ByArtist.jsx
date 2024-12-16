@@ -16,11 +16,13 @@ const ByArtist = ({ artists }) => {
       <SortByMenu genreNames={genreNames}></SortByMenu>
 
       <ul className="grid grid-cols-subgrid col-start-2 col-span-3 gap-4">
-        {artists.map((artist, i) => (
-          <ArtistCard key={i} name={artist.name} slug={artist.slug} img={artist.logo.startsWith("https://") ? artist.logo : `${endpoint}/logos/${artist.logo}`}></ArtistCard>
-          // <ArtistCard key={i} name={artist.name} slug={artist.slug} img={artist.logo.startsWith("https://") ? artist.logo : `${endpoint}/logos/Tool_logo_2006.svg`}></ArtistCard>
-          // <ArtistCard key={i} name={artist.name} slug={artist.slug} img="https://picsum.photos/720/720?random=62"></ArtistCard>
-        ))}
+        {artists.map((artist) => {
+          // console.log("URL", `${endpoint}/logos/${artist.logo}`);
+
+          const artistImg = artist.logo.startsWith("https://") ? artist.logo : `${endpoint}/logos/${artist.logo}`;
+          console.log("IMG", artistImg);
+          return <ArtistCard key={artist.slug} name={artist.name} slug={artist.slug} img={artistImg}></ArtistCard>;
+        })}
       </ul>
     </section>
   );
