@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { putReservation, postReservation, postOrder } from "./tickets";
+import { OrderSummary } from "@/components/Booking/FormSections";
 
 export async function submitTicketReservation(prev, formData) {
   const errors = {};
@@ -15,6 +16,16 @@ export async function submitTicketReservation(prev, formData) {
     data.amount =
       Number(formData.get("Partout Ticket")) +
       Number(formData.get("VIP Ticket"));
+
+    // COLLECT ORDER
+    orderDetails.partoutGuests = Array(
+      Number(formData.get("Partout Ticket"))
+    ).fill("partoutGuests");
+    orderDetails.vipGuests = Array(Number(formData.get("VIP Ticket"))).fill(
+      "vipGuests"
+    );
+    orderDetails.campingArea = data.area;
+    orderDetails.greenFee = Boolean(formData.get("Green fee"));
 
     // FORM VALIDATION
     if (!data.amount || data.amount < 1) {
@@ -34,13 +45,12 @@ export async function submitTicketReservation(prev, formData) {
     const response = await putReservation(data);
     if (response) {
       orderDetails.reservationId = response.id;
-      orderDetails.campingArea = data.area;
-      orderDetails.optionals = {
-        greenFee: formData.get("Green fee") && {
-          name: "Green Fee",
-          price: 249,
-        },
-      };
+      // orderDetails.optionals = {
+      //   greenFee: formData.get("Green fee") && {
+      //     name: "Green Fee",
+      //     price: 249,
+      //   },
+      // }
       revalidatePath("/");
       return { activeStep: 2, success: true, errors: {}, orderDetails };
     } else {
@@ -54,10 +64,10 @@ export async function submitTicketReservation(prev, formData) {
     Object.assign(orderDetails, prev.orderDetails);
     orderDetails.customerName = formData.get("name");
     orderDetails.customerEmail = formData.get("email");
-    orderDetails.ticketHolders = {
-      partoutGuests: formData.getAll("Partout Ticket Guest"),
-      vipGuests: formData.getAll("VIP Ticket Guest"),
-    };
+    orderDetails.partoutGuests = formData.getAll("partoutGuests");
+    orderDetails.vipGuests = formData.getAll("vipGuests");
+    orderDetails.tentDouble = formData.get("Double Person Tent");
+    orderDetails.tentTriple = formData.get("Triple Person Tent");
 
     // FORM VALIDATION
     if (!orderDetails.customerName || orderDetails.customerName.length <= 1) {
@@ -69,18 +79,26 @@ export async function submitTicketReservation(prev, formData) {
     ) {
       errors.customerEmail = "Please provide a valid email address.";
     }
-    orderDetails.ticketHolders.partoutGuests.map((guest) => {
+    orderDetails.partoutGuests.map((guest) => {
       if (!guest || guest.length <= 1) {
         errors.ticketGuests = "Please provide the name of each ticket holder.";
       }
     });
-    orderDetails.ticketHolders.vipGuests.map((guest) => {
+    orderDetails.vipGuests.map((guest) => {
       if (!guest || guest.length <= 1) {
         errors.ticketGuests = "Please provide the name of each ticket holder.";
       }
     });
+    if (orderDetails.tentTriple * 3 > orderDetails.partoutGuests.length) {
+      errors.tentSetup = "Please fill up all tent space.";
+    }
 
-    if (errors.customerName || errors.customerEmail || errors.ticketGuests) {
+    if (
+      errors.customerName ||
+      errors.customerEmail ||
+      errors.ticketGuests ||
+      errors.tentSetup
+    ) {
       return {
         activeStep: prev.activeStep,
         success: false,
@@ -96,15 +114,15 @@ export async function submitTicketReservation(prev, formData) {
   if (prev.activeStep === 3) {
     // COLLECT ORDER DETAILS
     Object.assign(orderDetails, prev.orderDetails);
-    orderDetails.partoutGuests = orderDetails.ticketHolders.partoutGuests;
-    orderDetails.vipGuests = orderDetails.ticketHolders.vipGuests;
-    orderDetails.greenFee = Boolean(orderDetails.optionals?.greenFee);
+    // orderDetails.partoutGuests = orderDetails.ticketHolders.partoutGuests;
+    // orderDetails.vipGuests = orderDetails.ticketHolders.vipGuests;
+    // orderDetails.greenFee = Boolean(orderDetails.optionals?.greenFee);
 
     // PRICE SUMUP
-    const partoutPrice = orderDetails.ticketHolders.partoutGuests.length * 799;
-    const vipPrice = orderDetails.ticketHolders.vipGuests.length * 1299;
+    const pricePartout = orderDetails.partoutGuests.length * 799;
+    const priceVip = orderDetails.vipGuests.length * 1299;
     orderDetails.priceTotal =
-      partoutPrice + vipPrice + (orderDetails.greenFee && 249);
+      pricePartout + priceVip + (orderDetails.greenFee && 249) + 99;
 
     // FULLFIL RESERVATION
     const data = {};
@@ -113,10 +131,10 @@ export async function submitTicketReservation(prev, formData) {
     // POST RESERVATION
     const response = await postReservation(data);
     if (response) {
-      revalidatePath("/");
       delete orderDetails.reservationId;
-      delete orderDetails.ticketHolders;
-      delete orderDetails.optionals;
+      // delete orderDetails.ticketHolders;
+      // delete orderDetails.optionals;
+      revalidatePath("/");
       const orderCompleted = postOrder(orderDetails);
       if (orderCompleted) {
         console.log(orderCompleted);
@@ -131,9 +149,6 @@ export async function submitTicketReservation(prev, formData) {
         orderDetails,
       };
     }
-    // orderDetails = { ...prev.orderDetails };
-    // return console.log(prev.data);
-    // data.priceTotal = prev.data.
   }
 
   // if (Object.keys(errors).length > 0) {
