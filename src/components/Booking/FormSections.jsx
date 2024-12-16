@@ -1,4 +1,4 @@
-import { Fieldset, Legend } from "@headlessui/react";
+import { Fieldset, Legend, Input } from "@headlessui/react";
 import {
   NumberInput,
   CampingSpots,
@@ -240,7 +240,7 @@ export function OrderSummary({ green }) {
     ) + greenFee;
 
   return (
-    <section className="col-start-3 row-start-1 border border-border-form self-start">
+    <section className="col-start-3 row-start-1 row-span-2 border border-border-form self-start">
       <header className="border-b border-border-form p-6">
         <h3 className="heading-4 w-full text-center">Order Summary</h3>
       </header>
@@ -249,7 +249,7 @@ export function OrderSummary({ green }) {
           const totalQuantity = type.length;
           if (totalQuantity > 0) {
             const ticketType = type[0].type;
-            console.log(ticketType);
+            // console.log(ticketType);
             const ticketPrice = type.reduce(
               (accumulator, currentValue) =>
                 accumulator + Number(currentValue.price),
@@ -278,6 +278,7 @@ export function OrderSummary({ green }) {
       </ul>
       <footer className="flex justify-between gap-4 mx-6 pt-2 pb-6 items-end border-t border-border-global font-bold">
         <p>Total</p>
+        {/* <Input name="totalPrice" className="w-12" value={totalPrice} readOnly /> */}
         <p>{totalPrice}</p>
       </footer>
     </section>

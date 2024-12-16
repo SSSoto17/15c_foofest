@@ -26,6 +26,8 @@ export default function BookingForm({ areaData }) {
     initState
   );
 
+  console.log(state?.orderDetails);
+
   const keyEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -36,11 +38,11 @@ export default function BookingForm({ areaData }) {
   return (
     <>
       <FormHeader activeStep={state?.activeStep} />
-      <Form onKeyDown={keyEnter} action="" className="p-12">
+      <Form onKeyDown={keyEnter} action={submitReservation} className="p-12">
         {state?.activeStep === 2 ? (
-          <BookingStepTwo data={state?.data} error={state?.errors} />
+          <BookingStepTwo data={state?.orderDetails} error={state?.errors} />
         ) : state?.activeStep === 3 ? (
-          <BookingStepThree savedData={state?.data} />
+          <BookingStepThree savedData={state?.orderDetails} />
         ) : (
           <BookingStepOne areaData={areaData} error={state?.errors} />
         )}
@@ -125,7 +127,7 @@ export function BookingStepTwo({ data, error }) {
 
 export function BookingStepThree({ savedData }) {
   return (
-    <div className="grid grid-cols-3 gap-x-4 gap-y-16">
+    <div className="grid grid-cols-3 gap-x-4 gap-y-16 items-start">
       <EnterPaymentInfo />
       <EnterBillingInfo {...savedData} />
       <OrderSummary {...savedData.optionals} />
