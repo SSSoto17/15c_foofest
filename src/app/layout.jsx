@@ -1,5 +1,7 @@
 import "./globals.css";
 import { Anton } from "next/font/google";
+import Link from "next/link";
+import Image from "next/image";
 
 const anton = Anton({
   weight: "400",
@@ -7,6 +9,8 @@ const anton = Anton({
   display: "swap",
   variable: "--font-anton",
 });
+
+import logo from "@/assets/svg/logo_bold.svg";
 
 export const metadata = {
   title: "FooFest",
@@ -17,12 +21,40 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={anton.variable}>
       <body className="text-forest-100 text-desk-base">
-        <header className="col-start-2 p-12">
-          {/* <h1 className="text-8xl font-display uppercase">FooFest</h1> */}
-        </header>
+        <Header />
         {children}
         <footer></footer>
       </body>
     </html>
+  );
+}
+
+export function Header() {
+  return (
+    <header className="col-start-2 py-8">
+      <nav className="flex w-full items-center justify-between">
+        <Link href="/">
+          <Image src={logo} alt="FooFest" className="h-14 w-fit" />
+        </Link>
+        <ul className="flex gap-4">
+          <li>
+            <Link
+              href="/lineup/artists"
+              className="border-2 border-forest-600 text-forest-500 py-2 px-6 grid place-content-center uppercase font-bold"
+            >
+              Program
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/booking"
+              className="border-2 border-forest-600 bg-forest-600 py-2 px-6 grid place-content-center uppercase font-bold"
+            >
+              Buy Tickets
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </header>
   );
 }
