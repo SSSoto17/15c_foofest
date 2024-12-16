@@ -9,9 +9,13 @@ const ByArtist = ({ data }) => {
     <section className="grid grid-cols-4 gap-4">
       <SortByMenu></SortByMenu>
       <ul className="grid grid-cols-subgrid col-start-2 col-span-3 gap-4">
-        {artists.map((artist) => (
-          <ArtistCard key={artist.slug} name={artist.name} slug={artist.slug} img={artist.logo.startsWith("https://") ? artist.logo : `${endpoint}/logos/${artist.logo}`}></ArtistCard>
-        ))}
+        {artists.map((artist) => {
+          // console.log("URL", `${endpoint}/logos/${artist.logo}`);
+
+          const artistImg = artist.logo.startsWith("https://") ? artist.logo : `${endpoint}/logos/${artist.logo}`;
+          console.log("IMG", artistImg);
+          return <ArtistCard key={artist.slug} name={artist.name} slug={artist.slug} img={artistImg}></ArtistCard>;
+        })}
       </ul>
     </section>
   );
