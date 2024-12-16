@@ -17,10 +17,7 @@ const ByArtist = ({ artists }) => {
 
       <ul className="grid grid-cols-subgrid col-start-2 col-span-3 gap-4">
         {artists.map((artist) => {
-          // console.log("URL", `${endpoint}/logos/${artist.logo}`);
-
           const artistImg = artist.logo.startsWith("https://") ? artist.logo : `${endpoint}/logos/${artist.logo}`;
-          console.log("IMG", artistImg);
           return <ArtistCard key={artist.slug} name={artist.name} slug={artist.slug} img={artistImg}></ArtistCard>;
         })}
       </ul>
