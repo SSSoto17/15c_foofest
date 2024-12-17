@@ -55,7 +55,9 @@ export function AreaSelection({ data }) {
 export function OptionalsSelection() {
   return (
     <Fieldset className="grid gap-y-2">
-      <Optionals label="Green Fee" price={249} />
+      <Optionals name="greenFee" price={249}>
+        Green Fee
+      </Optionals>
     </Fieldset>
   );
 }

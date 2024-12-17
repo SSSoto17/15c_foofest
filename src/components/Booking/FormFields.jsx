@@ -121,6 +121,7 @@ export function CampingSpots({ selectionData }) {
 
 export function Optionals({ name, price, children }) {
   const [checked, setChecked] = useState(false);
+
   return (
     <Field className="flex items-center gap-3 max-w-xl group hover:cursor-pointer">
       <Checkbox
@@ -131,7 +132,7 @@ export function Optionals({ name, price, children }) {
       >
         <MdOutlineCheck className={`opacity-0 ${checked && "opacity-100"}`} />
       </Checkbox>
-      <Label className="flex justify-between group-data-disabled:opacity-25 group-not-data-disabled:cursor-pointer">
+      <Label className="text-sm text-aztec-300 flex justify-between group-data-disabled:opacity-25 group-not-data-disabled:cursor-pointer">
         {children}{" "}
         {price && (
           <small className="opacity-50 place-self-end mx-8">{price} DKK</small>
