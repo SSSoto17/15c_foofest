@@ -73,9 +73,14 @@
 
   /* COLOR | SEMANTIC TOKENS */
   --color-text-global: var(--color-forest-100);
+  --color-text-global--disabled: var(--color-aztec-500);
+  --color-text-global--error: var(--color-forest-500);
   --color-text-heading: var(--color-forest-300);
   --color-surface-global: #171e1b;
+  --color-surface-action: var(--color-forest-600);
+  --color-surface-action--disabled: var(--color-aztec-500);
   --color-border-global: var(--color-aztec-700);
+  --color-border-global--error: var(--color-forest-700);
 
   /* COLOR | SEMANTIC TOKENS | FORMS */
   --color-border-form: var(--color-border-global);
@@ -83,6 +88,11 @@
   --color-surface-input: color-mix(
     in oklch,
     var(--color-aztec-900) 50%,
+    transparent
+  );
+  --color-surface-input--error: color-mix(
+    in oklch,
+    var(--color-aztec-900) 75%,
     transparent
   );
   --color-surface-input--focus: var(--color-aztec-900);
@@ -108,7 +118,7 @@
     @apply text-desk-xl leading-16 font-display font-normal;
   }
   .heading-3 {
-    @apply text-desk-lg leading-9 font-bold;
+    @apply text-desk-lg leading-9 font-semibold;
   }
 
   .heading-4 {
@@ -127,9 +137,22 @@
     @apply text-desk-sm leading-5 font-normal;
   }
 
+  /* BASE COMPONENTS */
+
+  .button {
+    @apply w-full max-w-48 py-2 cursor-pointer font-bold disabled:hidden;
+  }
+
   /* FORM ELEMENTS */
-  .input-field-base {
-    @apply flex items-center p-2 border rounded-xs text-text-input bg-surface-input has-data-focus:bg-surface-input--focus border-border-input has-data-focus:border-border-input--focus;
+  .input-field {
+    @apply flex items-center w-full p-2 border rounded-xs text-text-input bg-surface-input border-border-input;
+  }
+
+  .input-field-text--focus {
+    @apply data-focus:outline-none data-focus:bg-surface-input--focus data-focus:border-border-input--focus;
+  }
+  .input-field-number--focus {
+    @apply has-data-focus:bg-surface-input--focus has-data-focus:border-border-input--focus;
   }
 
   .input-radio {
