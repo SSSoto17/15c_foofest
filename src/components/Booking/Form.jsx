@@ -11,11 +11,11 @@ import {
   EnterPaymentInfo,
   EnterBillingInfo,
   OrderSummary,
+  TentSetup,
 } from "./FormSections";
 
 import formSteps from "../../data/formsteps";
 
-import React from "react";
 import { Fragment, useActionState } from "react";
 import { submitTicketReservation } from "@/lib/actions";
 
@@ -40,17 +40,23 @@ export default function BookingForm({ areaData }) {
       <FormHeader activeStep={state?.activeStep} />
       <Form onKeyDown={keyEnter} action={submitReservation} className="p-12">
         {state?.activeStep === 2 ? (
-          <BookingStepTwo data={state?.orderDetails} error={state?.errors} />
+          <BookingStepTwo
+            guestData={state?.orderDetails}
+            error={state?.errors}
+          />
         ) : state?.activeStep === 3 ? (
-          <BookingStepThree savedData={state?.orderDetails} />
+          <BookingStepThree
+            orderData={state?.orderDetails}
+            error={state?.errors}
+          />
         ) : (
-          <BookingStepOne areaData={areaData} error={state?.errors} />
+          <BookingStepOne
+            areaData={areaData}
+            ticketData={state?.orderDetails}
+            error={state?.errors}
+          />
         )}
-        <FormFooter
-          activeStep={state?.activeStep}
-          nextStep={submitReservation}
-          isPending={isPending}
-        />
+        <FormFooter nextStep={submitReservation} isPending={isPending} />
       </Form>
     </>
   );
@@ -89,16 +95,9 @@ export function FormHeader({ activeStep }) {
   );
 }
 
-export function FormFooter({ activeStep, nextStep, isPending }) {
+export function FormFooter({ nextStep, isPending }) {
   return (
-    <footer
-      className={`flex ${
-        activeStep > 1 ? "justify-between" : "justify-end"
-      }  gap-4 items-end pt-10`}
-    >
-      <Button variant="form" isDisabled={activeStep === 1}>
-        Back
-      </Button>
+    <footer className="flex justify-end gap-4 items-end pt-10">
       <Button variant="form" formAction={nextStep} isDisabled={isPending}>
         Next
       </Button>
@@ -106,31 +105,32 @@ export function FormFooter({ activeStep, nextStep, isPending }) {
   );
 }
 
-export function BookingStepOne({ error, areaData }) {
+export function BookingStepOne({ ticketData, error, areaData }) {
   return (
     <div className="grid gap-y-16">
-      <TicketSelection error={error.tickets} />
+      <TicketSelection {...ticketData} error={error.tickets} />
       <AreaSelection data={areaData} />
       <OptionalsSelection />
     </div>
   );
 }
 
-export function BookingStepTwo({ data, error }) {
+export function BookingStepTwo({ guestData, error }) {
   return (
     <div className="grid gap-y-16">
-      <EnterBuyerInfo {...data} {...error} />
-      <EnterGuestInfo {...data} error={error.ticketGuests} />
+      <EnterGuestInfo {...guestData} error={error.ticketGuests} />
+      <TentSetup error={error.tentSetup} />
     </div>
   );
 }
 
-export function BookingStepThree({ savedData }) {
+export function BookingStepThree({ orderData, error }) {
   return (
     <div className="grid grid-cols-3 gap-x-4 gap-y-16 items-start">
+      {/* <EnterBuyerInfo {...orderData} error={error} /> */}
       <EnterPaymentInfo />
-      <EnterBillingInfo {...savedData} />
-      <OrderSummary {...savedData.optionals} />
+      <EnterBillingInfo {...orderData} />
+      <OrderSummary {...orderData} />
     </div>
   );
 }
