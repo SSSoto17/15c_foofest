@@ -23,7 +23,8 @@ export default function RootLayout({ children }) {
       <body className="text-forest-100 text-desk-base">
         <Header />
         {children}
-        <footer></footer>
+        <Footer />
+        {/* <footer></footer> */}
       </body>
     </html>
   );
@@ -34,15 +35,15 @@ export function Header() {
     <header className="col-start-2 py-8">
       <nav className="flex w-full items-center justify-between">
         <Link href="/">
-          <Image src={logo} alt="FooFest" className="h-14 w-fit" />
+          <Image src={logo} alt="FooFest" className="h-16 w-fit" />
         </Link>
-        <ul className="flex gap-4">
+        <ul className="flex gap-2">
           <li>
             <Link
               href="/lineup/artists"
-              className="border-2 border-forest-600 text-forest-500 py-2 px-6 grid place-content-center uppercase font-bold"
+              className="py-2 px-6 grid place-content-center uppercase font-semibold"
             >
-              Program
+              Lineup 2025
             </Link>
           </li>
           <li>
@@ -56,5 +57,13 @@ export function Header() {
         </ul>
       </nav>
     </header>
+  );
+}
+
+export function Footer() {
+  return (
+    <footer className="grid place-content-center py-6 text-aztec-600">
+      <small>Copyright © 2024 | All rights reserved</small>
+    </footer>
   );
 }
