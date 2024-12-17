@@ -1,3 +1,5 @@
+"use client";
+
 // COMPONENTS
 import {
   Field,
@@ -19,59 +21,17 @@ import {
 // FUNCTIONS
 import { useState } from "react";
 import { useTickets } from "@/store/GlobalStore";
-import { useShallow } from "zustand/react/shallow";
+// import { useShallow } from "zustand/react/shallow";
 
-export function NumberInput({ label, price, inBasket, error }) {
-  const tickets = inBasket.filter((ticket) => ticket.type === label);
-  const { addTicket, removeTicket, clearTickets } = useTickets(
-    useShallow((state) => ({
-      addTicket: state.addTicket,
-      removeTicket: state.removeTicket,
-      clearTickets: state.clearTickets,
-    }))
-  );
-
+export function NumberInput({ name, price, error, children }) {
   const [quantity, setQuantity] = useState(0);
 
-  const plusTicket = (label, price) => {
-    if (tickets.length < 10) {
-      addTicket(label, price);
-      setQuantity(tickets.length + 1);
-    }
-  };
-
-  const minusTicket = (label, price) => {
-    if (tickets.length > 0) {
-      setQuantity(tickets.length - 1);
-      const updatedTickets = Array(tickets.length - 1).fill({
-        type: label,
-        price: price,
-      });
-      removeTicket(label, updatedTickets);
-    }
-  };
-
-  const clearAll = (label) => {
-    setQuantity(0);
-    clearTickets(label);
-  };
-
-  const manualInput = (label, price, newQuantity) => {
-    setQuantity(newQuantity);
-    const updatedTickets = Array(Number(newQuantity)).fill({
-      type: label,
-      price: price,
-    });
-    removeTicket(label, updatedTickets);
-  };
-
   return (
-    <Field className="grid grid-cols-[1fr_auto_1rem] items-end justify-between max-w-xl gap-4">
+    <Field className="peer grid grid-cols-[1fr_auto_1rem] items-end justify-between max-w-xl gap-4">
       <Label className="flex justify-between">
-        {label}{" "}
+        {children}{" "}
         <span className="opacity-50 place-self-end mx-8">{price} DKK</span>
       </Label>
-
       <div
         className={`input-field input-field-number--focus gap-4 w-fit ${
           error &&
@@ -82,23 +42,21 @@ export function NumberInput({ label, price, inBasket, error }) {
         <Button
           disabled={!quantity}
           className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
-          onClick={() => minusTicket(label, price)}
+          onClick={() => setQuantity(Number(quantity) - 1)}
         >
           <MdOutlineRemove className="text-text-global" size="24" />
         </Button>
         <Input
           type="number"
-          name={label}
-          min={0}
+          name={name}
           value={quantity}
-          // {...(error.ticketsMin && { invalid: true })}
-          onChange={(e) => manualInput(label, price, e.target.value)}
+          onChange={(e) => setQuantity(e.target.value)}
           className="w-6 text-center data-focus:outline-none"
         />
         <Button
           disabled={quantity >= 10}
           className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
-          onClick={() => plusTicket(label, price)}
+          onClick={() => setQuantity(Number(quantity) + 1)}
         >
           <MdOutlineAdd className="text-text-global" size="24" />
         </Button>
@@ -107,7 +65,7 @@ export function NumberInput({ label, price, inBasket, error }) {
         <Button
           className="cursor-pointer"
           aria-label="Clear quantity"
-          onClick={() => clearAll(label)}
+          onClick={() => setQuantity(0)}
         >
           <MdOutlineDelete
             className="hover:opacity-50 opacity-25 place-self-center"
@@ -183,6 +141,8 @@ export function Optionals({ label, price }) {
   );
 }
 
+import { FaRegQuestionCircle } from "react-icons/fa";
+
 export function TextInput({
   name,
   type,
@@ -201,7 +161,7 @@ export function TextInput({
       className={`grid gap-y-2 ${variant ? variants[variant] : "max-w-sm"}`}
     >
       <Label className="capitalize">{children}</Label>
-      <div className="flex gap-4">
+      <div className="grid gap-4">
         <Input
           name={name}
           type={type}
@@ -212,6 +172,9 @@ export function TextInput({
             "not-data-focus:border-border-global--error bg-surface-input--focus"
           }`}
         />
+        {/* {name === "cardSecurityCode" && (
+          <FaRegQuestionCircle className="text-text-global--disabled hover:text-text-global" />
+        )} */}
         {error && (
           <MdOutlineError
             aria-label="Attention!"
