@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { MdOutlineArrowBack } from "react-icons/md";
-import { getArtistBySlug } from "@/app/lib/lineup";
+import { getArtistBySlug } from "@/lib/lineup";
 
 import picture from "../../../assets/tester/terminalist.jpg";
 
