@@ -160,7 +160,11 @@ export function TextInput({
     <Field
       className={`grid gap-y-2 ${variant ? variants[variant] : "max-w-sm"}`}
     >
-      <Label className="capitalize">{children}</Label>
+      <Label
+        className={`capitalize ${variant === "slim" && "text-sm opacity-65"}`}
+      >
+        {children}
+      </Label>
       <div className="grid gap-4">
         <Input
           name={name}
@@ -168,6 +172,8 @@ export function TextInput({
           placeholder={placeholder}
           defaultValue={defaultValue}
           className={`input-field input-field-text--focus ${
+            variant === "slim" && "py-1"
+          } ${
             error &&
             "not-data-focus:border-border-global--error bg-surface-input--focus"
           }`}
@@ -189,3 +195,11 @@ export function TextInput({
     </Field>
   );
 }
+
+// export function TicketGuestInput() {
+//   return (
+//     <Field>
+//       <Label>{children}</Label>
+//     </Field>
+//   )
+// }

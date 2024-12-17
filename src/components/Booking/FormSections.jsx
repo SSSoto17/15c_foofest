@@ -1,12 +1,15 @@
-import { Fieldset, Legend } from "@headlessui/react";
+import { Fieldset, Label, Legend } from "@headlessui/react";
 import {
   NumberInput,
   CampingSpots,
   Optionals,
   TextInput,
+  TicketGuestInput,
 } from "@/components/Booking/FormFields";
 import { useTickets } from "@/store/GlobalStore";
+import Image from "next/image";
 
+import vipStamp from "@/assets/svg/vip.svg";
 import optionalsListing from "../../data/optionals";
 import buyerInfo from "../../data/buyerfields";
 import Accordion from "../lineup/Accordion";
@@ -65,7 +68,6 @@ export function TentSetup({ error }) {
   return (
     <Accordion label="Tent Setup" variant="secondary">
       <Fieldset className="grid gap-y-4 ml-12">
-        <small className="italic">Optional: Select tents for your stay.</small>
         <small>{error}</small>
         {tentListing.map((tent, id) => {
           return (
@@ -108,112 +110,122 @@ export function EnterBuyerInfo({ customerName, customerEmail, error }) {
 
 export function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
   return (
-    <Fieldset className="grid gap-y-1">
-      <Legend className="heading-3">Guests</Legend>
-      <small className="text-text-global--error italic h-8">{error}</small>
-      <section className="grid gap-x-4">
-        {partoutGuests && (
+    <Fieldset className="grid gap-y-4 max-w-md">
+      <Legend className="heading-3 text-xl">Ticket #1</Legend>
+      <div className="grid gap-y-1 border border-border-input py-4 px-6 relative">
+        <Image
+          src={vipStamp}
+          alt="VIP Ticket"
+          className="absolute right-6 -top-6"
+        />
+        <TextInput variant="slim">Name</TextInput>
+        <TextInput variant="slim">Email</TextInput>
+      </div>
+      {/* <Legend className="heading-3">Guests</Legend> */}
+      {/* <small className="text-text-global--error italic h-8">{error}</small> */}
+      {/* <section className="grid gap-x-4"> */}
+      {/* {partoutGuests && (
           <ul>
-            {partoutGuests.map((guest, id) => {
-              return (
-                <li key={id}>
-                  <TextInput
-                    name={guest}
-                    type="text"
-                    error={error}
-                    // defaultValue={
-                    //   ticketHolders?.partout[id] || ticketHolders?.vip[id]
-                    // }
-                  >
-                    Name
-                  </TextInput>
+          {partoutGuests.map((guest, id) => {
+            return (
+              <li key={id}>
+              <TextInput
+              name={guest}
+              type="text"
+              error={error}
+              // defaultValue={
+                //   ticketHolders?.partout[id] || ticketHolders?.vip[id]
+                // }
+                >
+                Name
+                </TextInput>
                 </li>
-              );
-            })}
-          </ul>
-        )}
-        {vipGuests && (
-          <ul>
-            {vipGuests.map((guest, id) => {
-              return (
-                <li key={id}>
-                  <TextInput
-                    name={guest}
-                    type="text"
-                    error={error}
-                    // defaultValue={
-                    //   ticketHolders?.partout[id] || ticketHolders?.vip[id]
-                    // }
-                  >
-                    Name
-                  </TextInput>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-        {/* {singleType ? (
+                );
+                })}
+                </ul>
+                )}
+                {vipGuests && (
+                  <ul>
+                  {vipGuests.map((guest, id) => {
+                    return (
+                      <li key={id}>
+                      <TextInput
+                      name={guest}
+                      type="text"
+                      error={error}
+                      // defaultValue={
+                        //   ticketHolders?.partout[id] || ticketHolders?.vip[id]
+                        // }
+                        >
+                        Name
+                        </TextInput>
+                        </li>
+                        );
+                        })}
+                        </ul>
+                        )} */}
+      {/* {singleType ? (
           <ul className="grid grid-cols-2 gap-4">
-            {guests.map((guest, id) => {
-              return (
-                <li key={id}>
-                  <TextInput
-                    name={guest + " Guest"}
+          {guests.map((guest, id) => {
+            return (
+              <li key={id}>
+              <TextInput
+              name={guest + " Guest"}
+              type="text"
+              error={error}
+              defaultValue={
+                ticketHolders?.partout[id] || ticketHolders?.vip[id]
+                }
+                >
+                Name
+                </TextInput>
+                </li>
+                );
+                })}
+                </ul>
+                ) : (
+                  <div className="grid grid-cols-2 gap-4">
+                  <article className="flow-space">
+                  <h3 className="heading-4">Partout Tickets</h3>
+                  <ul className="grid gap-4">
+                  {partoutTickets.map((guest, id) => {
+                    return (
+                      <li key={id}>
+                      <TextInput
+                      name={guest.type + " Guest"}
+                      type="text"
+                      error={error}
+                      defaultValue={ticketHolders?.partout[id]}
+                      >
+                      Name
+                      </TextInput>
+                      </li>
+                      );
+                      })}
+                      </ul>
+                      </article>
+                      <article className="flow-space">
+                      <h3 className="heading-4">VIP Tickets</h3>
+                      <ul className="grid gap-4">
+                      {vipTickets.map((guest, id) => {
+                        return (
+                    <li key={id}>
+                    <TextInput
+                    name={guest.type + " Guest"}
                     type="text"
                     error={error}
-                    defaultValue={
-                      ticketHolders?.partout[id] || ticketHolders?.vip[id]
-                    }
-                  >
+                    defaultValue={ticketHolders?.vip[id]}
+                    >
                     Name
-                  </TextInput>
-                </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <div className="grid grid-cols-2 gap-4">
-            <article className="flow-space">
-              <h3 className="heading-4">Partout Tickets</h3>
-              <ul className="grid gap-4">
-                {partoutTickets.map((guest, id) => {
-                  return (
-                    <li key={id}>
-                      <TextInput
-                        name={guest.type + " Guest"}
-                        type="text"
-                        error={error}
-                        defaultValue={ticketHolders?.partout[id]}
-                      >
-                        Name
                       </TextInput>
                     </li>
-                  );
-                })}
-              </ul>
-            </article>
-            <article className="flow-space">
-              <h3 className="heading-4">VIP Tickets</h3>
-              <ul className="grid gap-4">
-                {vipTickets.map((guest, id) => {
-                  return (
-                    <li key={id}>
-                      <TextInput
-                        name={guest.type + " Guest"}
-                        type="text"
-                        error={error}
-                        defaultValue={ticketHolders?.vip[id]}
-                      >
-                        Name
-                      </TextInput>
-                    </li>
-                  );
-                })}
-              </ul>
-            </article>
-          </div>
-        )} */}
-      </section>
+                    );
+                    })}
+                    </ul>
+                    </article>
+                    </div>
+                    )} */}
+      {/* </section> */}
     </Fieldset>
   );
 }
