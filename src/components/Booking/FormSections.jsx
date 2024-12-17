@@ -1,4 +1,4 @@
-import { Fieldset, Legend, Input } from "@headlessui/react";
+import { Fieldset, Legend } from "@headlessui/react";
 import {
   NumberInput,
   CampingSpots,
@@ -9,10 +9,10 @@ import { useTickets } from "@/store/GlobalStore";
 
 import optionalsListing from "../../data/optionals";
 import buyerInfo from "../../data/buyerfields";
+import Accordion from "../lineup/Accordion";
 
-export function TicketSelection({ error }) {
-  const tickets = useTickets((state) => state.tickets);
-  const inBasket = tickets.length;
+export function TicketSelection({ partoutGuests, vipGuests, error }) {
+  const ticketQuantity = partoutGuests?.length + vipGuests?.length;
 
   const ticketListing = [
     { label: "Partout Ticket", price: "799", error },
@@ -22,17 +22,18 @@ export function TicketSelection({ error }) {
     <Fieldset className="grid gap-y-4">
       <Legend className="heading-3">Tickets</Legend>
       <small className="text-text-global--error italic h-0.5">
-        {!inBasket && error}
+        {!ticketQuantity && error}
       </small>
       {ticketListing.map((ticket, id) => {
         return (
           <NumberInput
             key={id}
-            label={ticket.label}
+            name={ticket.label}
             price={ticket.price}
-            inBasket={tickets}
-            error={(!inBasket && error) || (inBasket > 10 && error)}
-          />
+            error={(!ticketQuantity && error) || (ticketQuantity > 10 && error)}
+          >
+            {ticket.label}
+          </NumberInput>
         );
       })}
     </Fieldset>
@@ -51,19 +52,39 @@ export function AreaSelection({ data }) {
 export function OptionalsSelection() {
   return (
     <Fieldset className="grid gap-y-2">
-      {optionalsListing.map((option, id) => {
-        return <Optionals key={id} label={option.label} price={option.price} />;
-      })}
+      <Optionals label="Green Fee" price={249} />
     </Fieldset>
   );
 }
 
-export function EnterBuyerInfo({
-  buyerName,
-  buyerEmail,
-  customerName,
-  customerEmail,
-}) {
+export function TentSetup({ error }) {
+  const tentListing = [
+    { label: "Double Person Tent", price: "299" },
+    { label: "Triple Person Tent", price: "399" },
+  ];
+  return (
+    <Accordion label="Tent Setup" variant="secondary">
+      <Fieldset className="grid gap-y-4 ml-12">
+        <small className="italic">Optional: Select tents for your stay.</small>
+        <small>{error}</small>
+        {tentListing.map((tent, id) => {
+          return (
+            <NumberInput
+              key={id}
+              name={tent.label}
+              price={tent.price}
+              error={error}
+            >
+              {tent.label}
+            </NumberInput>
+          );
+        })}
+      </Fieldset>
+    </Accordion>
+  );
+}
+
+export function EnterBuyerInfo({ customerName, customerEmail, error }) {
   return (
     <Fieldset className="grid gap-y-8">
       <Legend className="heading-3">Your Information</Legend>
@@ -72,8 +93,10 @@ export function EnterBuyerInfo({
           <TextInput
             key={id}
             {...field}
-            defaultValue={field.name === "name" ? buyerName : buyerEmail}
-            error={field.name === "name" ? customerName : customerEmail}
+            defaultValue={field.name === "name" ? customerName : customerEmail}
+            error={
+              field.name === "name" ? error.customerName : error.customerEmail
+            }
           >
             {field.name}
           </TextInput>
@@ -83,28 +106,53 @@ export function EnterBuyerInfo({
   );
 }
 
-export function EnterGuestInfo({ ticketHolders, error }) {
-  const tickets = useTickets((state) => state.tickets);
-  const partoutTickets = tickets.filter(
-    (ticket) => ticket.type === "Partout Ticket"
-  );
-  const vipTickets = tickets.filter((ticket) => ticket.type === "VIP Ticket");
-
-  const guests = [
-    ...Array(partoutTickets.length).fill("Partout Ticket"),
-    ...Array(vipTickets.length).fill("VIP Ticket"),
-  ];
-
-  const singleType =
-    guests.every((ticket) => ticket === "Partout Ticket") ||
-    guests.every((ticket) => ticket === "VIP Ticket");
-
+export function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
   return (
     <Fieldset className="grid gap-y-1">
-      <Legend className="heading-3">Guest Information</Legend>
+      <Legend className="heading-3">Guests</Legend>
       <small className="text-text-global--error italic h-8">{error}</small>
       <section className="grid gap-x-4">
-        {singleType ? (
+        {partoutGuests && (
+          <ul>
+            {partoutGuests.map((guest, id) => {
+              return (
+                <li key={id}>
+                  <TextInput
+                    name={guest}
+                    type="text"
+                    error={error}
+                    // defaultValue={
+                    //   ticketHolders?.partout[id] || ticketHolders?.vip[id]
+                    // }
+                  >
+                    Name
+                  </TextInput>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        {vipGuests && (
+          <ul>
+            {vipGuests.map((guest, id) => {
+              return (
+                <li key={id}>
+                  <TextInput
+                    name={guest}
+                    type="text"
+                    error={error}
+                    // defaultValue={
+                    //   ticketHolders?.partout[id] || ticketHolders?.vip[id]
+                    // }
+                  >
+                    Name
+                  </TextInput>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        {/* {singleType ? (
           <ul className="grid grid-cols-2 gap-4">
             {guests.map((guest, id) => {
               return (
@@ -164,7 +212,7 @@ export function EnterGuestInfo({ ticketHolders, error }) {
               </ul>
             </article>
           </div>
-        )}
+        )} */}
       </section>
     </Fieldset>
   );
@@ -203,13 +251,16 @@ export function EnterPaymentInfo() {
   );
 }
 
-export function EnterBillingInfo({ buyerName }) {
+export function EnterBillingInfo({ customerName }) {
   return (
     <Fieldset className="grid gap-y-6 col-span-2">
       <Legend className="heading-3">Billing Address</Legend>
       <div className="grid grid-cols-3 gap-x-4 max-w-md">
-        <TextInput type="text" defaultValue={buyerName} variant="fullSpan">
+        <TextInput type="text" defaultValue={customerName} variant="fullSpan">
           Name
+        </TextInput>
+        <TextInput type="email" variant="fullSpan">
+          Email
         </TextInput>
         <TextInput type="text" variant="fullSpan">
           Address
@@ -226,18 +277,26 @@ export function EnterBillingInfo({ buyerName }) {
   );
 }
 
-export function OrderSummary({ green }) {
-  const productBasket = useTickets((state) => state.tickets);
-  const basketByTicket = [
-    productBasket.filter((ticket) => ticket.type === "Partout Ticket"),
-    productBasket.filter((ticket) => ticket.type === "VIP Ticket"),
-  ];
-  const greenFee = green?.price ? green.price : 0;
+export function OrderSummary({
+  partoutGuests,
+  vipGuests,
+  tentDouble,
+  tentTriple,
+  greenFee,
+}) {
+  // const productBasket = useTickets((state) => state.tickets);
+  // const basketByTicket = [
+  //   productBasket.filter((ticket) => ticket.type === "Partout Ticket"),
+  //   productBasket.filter((ticket) => ticket.type === "VIP Ticket"),
+  // ];
+  const green = greenFee ? 249 : 0;
   const totalPrice =
-    productBasket.reduce(
-      (accumulator, currentValue) => accumulator + Number(currentValue.price),
-      0
-    ) + greenFee;
+    partoutGuests.length * 799 + vipGuests.length * 1299 + green + 99;
+  // const totalPrice =
+  //   productBasket.reduce(
+  //     (accumulator, currentValue) => accumulator + Number(currentValue.price),
+  //     0
+  //   ) + greenFee;
 
   return (
     <section className="col-start-3 row-start-1 row-span-2 border border-border-form self-start">
@@ -245,7 +304,43 @@ export function OrderSummary({ green }) {
         <h3 className="heading-4 w-full text-center">Order Summary</h3>
       </header>
       <ul className="p-6">
-        {basketByTicket.map((type, id) => {
+        {partoutGuests.length > 0 && (
+          <li className="flex justify-between items-end gap-2">
+            <p className="flex gap-2 items-end">
+              <span className="text-desk-sm">{partoutGuests.length} x</span>
+              Partout {partoutGuests.length === 1 ? "Ticket" : "Tickets"}
+            </p>
+            <p>{partoutGuests.length * 799},-</p>
+          </li>
+        )}
+        {vipGuests.length > 0 && (
+          <li className="flex justify-between items-end gap-2">
+            <p className="flex gap-2 items-end">
+              <span className="text-desk-sm">{vipGuests.length} x</span>
+              VIP {vipGuests.length === 1 ? "Ticket" : "Tickets"}
+            </p>
+            <p>{vipGuests.length * 799},-</p>
+          </li>
+        )}
+        {tentDouble > 0 && (
+          <li className="flex justify-between items-end gap-2">
+            <p className="flex gap-2 items-end">
+              <span className="text-desk-sm">{tentDouble} x</span>
+              Double Person {tentDouble === 1 ? "Tent" : "Tents"}
+            </p>
+            <p>{tentDouble * 299},-</p>
+          </li>
+        )}
+        {tentTriple > 0 && (
+          <li className="flex justify-between items-end gap-2">
+            <p className="flex gap-2 items-end">
+              <span className="text-desk-sm">{tentTriple} x</span>
+              Triple Person {tentTriple === 1 ? "Tent" : "Tents"}
+            </p>
+            <p>{tentTriple * 399},-</p>
+          </li>
+        )}
+        {/* {basketByTicket.map((type, id) => {
           const totalQuantity = type.length;
           if (totalQuantity > 0) {
             const ticketType = type[0].type;
@@ -265,16 +360,23 @@ export function OrderSummary({ green }) {
               </li>
             );
           }
-        })}
-        {green?.price && (
+        })} */}
+        {greenFee && (
           <li className="flex justify-between items-end gap-2">
             <p className="flex gap-2 items-end">
               <span className="text-desk-sm">1 x</span>
-              {green?.name}
+              Green Fee
             </p>
-            <p>{green?.price},-</p>
+            <p>249,-</p>
           </li>
         )}
+        <li className="flex justify-between items-end gap-2">
+          <p className="flex gap-2 items-end">
+            <span className="text-desk-sm">1 x</span>
+            Fixed Booking Fee
+          </p>
+          <p>99,-</p>
+        </li>
       </ul>
       <footer className="flex justify-between gap-4 mx-6 pt-2 pb-6 items-end border-t border-border-global font-bold">
         <p>Total</p>
