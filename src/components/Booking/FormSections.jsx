@@ -108,23 +108,73 @@ export function EnterBuyerInfo({ customerName, customerEmail, error }) {
   );
 }
 
-export function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
+export function TicketGuestCard({ number, single, vip }) {
   return (
-    <Fieldset className="grid gap-y-4 max-w-md">
-      <Legend className="heading-3 text-xl">Ticket #1</Legend>
-      <div className="grid gap-y-1 border border-border-input py-4 px-6 relative">
-        <Image
-          src={vipStamp}
-          alt="VIP Ticket"
-          className="absolute right-6 -top-6"
-        />
-        <TextInput variant="slim">Name</TextInput>
-        <TextInput variant="slim">Email</TextInput>
-      </div>
-      {/* <Legend className="heading-3">Guests</Legend> */}
-      {/* <small className="text-text-global--error italic h-8">{error}</small> */}
-      {/* <section className="grid gap-x-4"> */}
-      {/* {partoutGuests && (
+    <>
+      <Fieldset className="grid gap-y-4 max-w-md grow shrink">
+        <Legend className="heading-3 text-xl">Ticket #{number}</Legend>
+        <div className="grid gap-y-1 border border-border-input py-4 px-6 relative">
+          {vip && (
+            <Image
+              src={vipStamp}
+              alt="VIP Ticket"
+              className="absolute right-6 -top-6"
+            />
+          )}
+          <TextInput variant="slim">Name</TextInput>
+          <TextInput variant="slim">Email</TextInput>
+        </div>
+        {single && (
+          <Optionals name="buyerIsGuest">
+            Are you buying the ticket for yourself?
+          </Optionals>
+        )}
+      </Fieldset>
+    </>
+  );
+}
+
+export function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
+  console.log(partoutGuests);
+  return (
+    <section className="grid grid-cols-3 gap-4 w-full">
+      <header className="col-span-3 flow-space mb-6">
+        <h2 className="heading-3">Ticket Information</h2>
+        <p className="opacity-50">
+          Please provide the name and email of each ticket holder.
+        </p>
+      </header>
+      {partoutGuests &&
+        partoutGuests.map((guest, id) => {
+          return (
+            <TicketGuestCard
+              key={id}
+              number={id + 1}
+              single={partoutGuests.length === 1}
+            />
+          );
+        })}
+      {vipGuests &&
+        vipGuests.map((guest, id) => {
+          return (
+            <TicketGuestCard
+              key={id}
+              number={partoutGuests.length + id + 1}
+              vip
+            />
+          );
+        })}
+    </section>
+  );
+
+  {
+    /* <small className="text-text-global--error italic h-8">{error}</small> */
+  }
+  {
+    /* <section className="grid gap-x-4"> */
+  }
+  {
+    /* {partoutGuests && (
           <ul>
           {partoutGuests.map((guest, id) => {
             return (
@@ -163,8 +213,10 @@ export function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
                         );
                         })}
                         </ul>
-                        )} */}
-      {/* {singleType ? (
+                        )} */
+  }
+  {
+    /* {singleType ? (
           <ul className="grid grid-cols-2 gap-4">
           {guests.map((guest, id) => {
             return (
@@ -224,10 +276,11 @@ export function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
                     </ul>
                     </article>
                     </div>
-                    )} */}
-      {/* </section> */}
-    </Fieldset>
-  );
+                    )} */
+  }
+  {
+    /* </section> */
+  }
 }
 
 export function EnterPaymentInfo() {

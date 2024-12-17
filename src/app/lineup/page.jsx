@@ -1,4 +1,4 @@
-import { getArtists, getStages } from "../lib/lineup";
+import { getArtists, getStages } from "../../lib/lineup";
 import ByArtist from "@/components/lineup/ByArtist";
 import ByDay from "@/components/lineup/ByDay";
 import ByStage from "@/components/lineup/ByStage";

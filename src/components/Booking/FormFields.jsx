@@ -119,12 +119,12 @@ export function CampingSpots({ selectionData }) {
   );
 }
 
-export function Optionals({ label, price }) {
+export function Optionals({ name, price, children }) {
   const [checked, setChecked] = useState(false);
   return (
     <Field className="flex items-center gap-3 max-w-xl group hover:cursor-pointer">
       <Checkbox
-        name={label}
+        name={name}
         checked={checked}
         onChange={setChecked}
         className="border-2 border-aztec-600 rounded-sm data-checked:border-forest-600 data-checked:bg-forest-600 data-focus:outline-none"
@@ -132,7 +132,7 @@ export function Optionals({ label, price }) {
         <MdOutlineCheck className={`opacity-0 ${checked && "opacity-100"}`} />
       </Checkbox>
       <Label className="flex justify-between group-data-disabled:opacity-25 group-not-data-disabled:cursor-pointer">
-        {label}{" "}
+        {children}{" "}
         {price && (
           <small className="opacity-50 place-self-end mx-8">{price} DKK</small>
         )}

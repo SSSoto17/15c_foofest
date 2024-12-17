@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { MdOutlineArrowBack } from "react-icons/md";
-import { getArtistBySlug } from "@/app/lib/lineup";
+import { getArtistBySlug } from "@/lib/lineup";
 
 import picture from "../../../assets/tester/terminalist.jpg";
 
@@ -27,8 +27,16 @@ export default async function ArtistSingle({ params }) {
 
       <section className="grid md:grid-cols-2 gap-10">
         <div>
-          <Image src={picture} alt={`Image of ${artist.name}`} placeholder="blur"></Image>
-          {artist.logoCredits && <small className="mt-2 inline-block body-copy-small">Photo by Johan von Bülow</small>}
+          <Image
+            src={picture}
+            alt={`Image of ${artist.name}`}
+            placeholder="blur"
+          ></Image>
+          {artist.logoCredits && (
+            <small className="mt-2 inline-block body-copy-small">
+              Photo by Johan von Bülow
+            </small>
+          )}
         </div>
         <article className="">
           <h1 className="heading-tagline px-4 py-2 border-2 inline-block">
