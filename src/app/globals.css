@@ -85,16 +85,8 @@
   /* COLOR | SEMANTIC TOKENS | FORMS */
   --color-border-form: var(--color-border-global);
   --color-text-input: var(--color-text-global);
-  --color-surface-input: color-mix(
-    in oklch,
-    var(--color-aztec-900) 50%,
-    transparent
-  );
-  --color-surface-input--error: color-mix(
-    in oklch,
-    var(--color-aztec-900) 75%,
-    transparent
-  );
+  --color-surface-input: color-mix(in oklch, var(--color-aztec-900) 50%, transparent);
+  --color-surface-input--error: color-mix(in oklch, var(--color-aztec-900) 75%, transparent);
   --color-surface-input--focus: var(--color-aztec-900);
   --color-border-input: var(--color-aztec-900);
   --color-border-input--focus: var(--color-aztec-600);
@@ -140,7 +132,7 @@
   /* BASE COMPONENTS */
 
   .button {
-    @apply w-full max-w-48 py-2 cursor-pointer font-bold disabled:hidden;
+    @apply w-full max-w-48  cursor-pointer border-2 disabled:cursor-default;
   }
 
   /* FORM ELEMENTS */
@@ -166,8 +158,7 @@ body {
   grid-template-columns: minmax(1rem, 1fr) minmax(0, 1200px) minmax(1rem, 1fr);
   grid-template-rows: auto 1fr auto;
   min-height: 100svh;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 
   > * {
     grid-column: 2;
