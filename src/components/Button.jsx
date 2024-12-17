@@ -2,7 +2,7 @@ export default function Button({ variant, size, formAction, onClick, isDisabled,
   const variants = {
     primary: "border-forest-600 bg-forest-600  hover:bg-forest-500 hover:border-forest-500 disabled:bg-forest-800 disabled:border-forest-800 disabled:text-aztec-400",
     secondary: "border-2 border-forest-600 text-forest-500  hover:text-forest-400 hover:border-forest-500 disabled:text-forest-800 disabled:border-forest-800",
-    small: "rounded-sm px-2 py-1",
+    small: "rounded-sm px-2 py-1 grow",
     base: "px-6 py-3",
   };
   return (

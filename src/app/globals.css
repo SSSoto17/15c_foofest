@@ -132,7 +132,7 @@
   /* BASE COMPONENTS */
 
   .button {
-    @apply w-full max-w-48  cursor-pointer border-2 disabled:cursor-default;
+    @apply max-w-48  cursor-pointer border-2 disabled:cursor-default;
   }
 
   /* FORM ELEMENTS */
