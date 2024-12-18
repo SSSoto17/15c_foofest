@@ -11,6 +11,7 @@ const anton = Anton({
 });
 
 import logo from "@/assets/svg/logo_bold.svg";
+import { WarningEscape } from "./Booking/FormFields";
 
 export default function MainLayout({ page, children }) {
   return (
@@ -28,9 +29,13 @@ export function Header({ linksActive }) {
   return (
     <header className="col-start-2 py-8">
       <nav className="flex w-full items-center justify-between">
-        <Link href="/">
-          <Image src={logo} alt="FooFest" className="h-16 w-fit" />
-        </Link>
+        {linksActive ? (
+          <Link href="/">
+            <Image src={logo} alt="FooFest" className="h-16 w-fit" />
+          </Link>
+        ) : (
+          <WarningEscape />
+        )}
         {linksActive && (
           <ul className="flex gap-2">
             <li>
