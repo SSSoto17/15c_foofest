@@ -152,10 +152,6 @@
   .input-radio {
     @apply block w-4 aspect-square rounded-full group-not-data-disabled:group-hover:bg-surface-radio--hover border-2 border-border-radio group-data-checked:border-6 group-data-checked:border-border-radio--checked group-data-disabled:border-border-radio--disabled;
   }
-
-  .full-bleed {
-    @apply grid grid-cols-subgrid col-start-1 col-span-full;
-  }
 }
 
 body {
@@ -172,6 +168,16 @@ body {
 
   > main {
     grid-row: 2;
+  }
+}
+
+.full-bleed {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+
+  > :not(&) {
+    grid-column: 2;
   }
 }
 
