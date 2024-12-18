@@ -124,7 +124,7 @@
   }
 
   .body-copy {
-    @apply text-desk-base leading-7 font-normal;
+    @apply text-desk-base leading-7 font-normal max-w-prose;
   }
 
   .body-copy-small {
