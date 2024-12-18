@@ -5,10 +5,10 @@ const TicketCard = ({ type, description, price, variant }) => {
   };
 
   return (
-    <article className={`flow-space px-12 py-8 bg-aztec-950 ${variants[variant]} bg-no-repeat 	`}>
-      <h2 className="heading-2">{type} ticket</h2>
-      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. ipsa expedita facilis eius fugiat hic nostrum dicta, suscipit ad odio. Eum?</p>
-      <p className="text-right pt-4 heading-2 text-desk-lg">{price} ,-</p>
+    <article className={`flow-space px-8 pt-6 pb-2 bg-aztec-900 ${variants[variant]} bg-no-repeat 	`}>
+      <h2 className="heading-2 text-desk-xl">{type} ticket</h2>
+      <p className="text-balance">Lorem ipsum ipsa expedita facilis eius fugiat hic nostrum dicta, suscipit ad odio. Eum?</p>
+      <p className="text-right heading-2 text-desk-lg">{price} ,-</p>
     </article>
   );
 };
