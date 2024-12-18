@@ -2,7 +2,6 @@
 
 import { revalidatePath } from "next/cache";
 import { putReservation, postReservation, postOrder } from "./tickets";
-import { OrderSummary } from "@/components/Booking/FormSections";
 
 export async function submitTicketReservation(prev, formData) {
   const errors = {};

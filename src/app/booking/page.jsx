@@ -6,9 +6,7 @@ export default async function Page() {
 
   return (
     <main>
-      <section className="border border-border-form">
-        <Form areaData={campingSpots} />
-      </section>
+      <Form areaData={campingSpots} />
     </main>
   );
 }

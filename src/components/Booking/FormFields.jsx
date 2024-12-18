@@ -19,7 +19,8 @@ import {
 } from "react-icons/md";
 
 // FUNCTIONS
-import { useState } from "react";
+import { redirect } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { useTickets } from "@/store/GlobalStore";
 // import { useShallow } from "zustand/react/shallow";
 
@@ -119,7 +120,7 @@ export function CampingSpots({ selectionData }) {
   );
 }
 
-export function Optionals({ name, price, children }) {
+export function Optionals({ name, price, minor, children }) {
   const [checked, setChecked] = useState(false);
 
   return (
@@ -132,7 +133,11 @@ export function Optionals({ name, price, children }) {
       >
         <MdOutlineCheck className={`opacity-0 ${checked && "opacity-100"}`} />
       </Checkbox>
-      <Label className="text-sm text-aztec-300 flex justify-between group-data-disabled:opacity-25 group-not-data-disabled:cursor-pointer">
+      <Label
+        className={`${
+          minor && "text-sm text-aztec-300"
+        } flex justify-between group-data-disabled:opacity-25 group-not-data-disabled:cursor-pointer`}
+      >
         {children}{" "}
         {price && (
           <small className="opacity-50 place-self-end mx-8">{price} DKK</small>
@@ -197,10 +202,47 @@ export function TextInput({
   );
 }
 
-// export function TicketGuestInput() {
-//   return (
-//     <Field>
-//       <Label>{children}</Label>
-//     </Field>
-//   )
-// }
+export function ReservationTimer() {
+  return (
+    <div className="flex justify-between gap-2 items-center bg-surface-action py-2 px-4">
+      <small className="leading-tight">Time to complete reservation</small>
+      <CountDown seconds={60 * 5} />
+    </div>
+  );
+}
+
+export function CountDown({ seconds }) {
+  const [countdown, setCountdown] = useState(seconds);
+  const timerID = useRef();
+
+  useEffect(() => {
+    timerID.current = setInterval(() => {
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(timerID.current);
+  }, []);
+
+  useEffect(() => {
+    if (countdown <= 1) {
+      clearInterval(timerID);
+      redirect("/");
+    }
+  }, [countdown]);
+  // COUNTDOWN FUNCTION CREDIT: https://youtu.be/4_9yJXO4F2Y
+
+  const formattedTimer =
+    new Date(countdown * 1000).getUTCMinutes().toLocaleString("en-US", {
+      minimumIntegerDigits: 2,
+      maximumFractionDigits: 0,
+      useGrouping: false,
+    }) +
+    ":" +
+    new Date(countdown * 1000).getSeconds().toLocaleString("en-US", {
+      minimumIntegerDigits: 2,
+      maximumFractionDigits: 0,
+      useGrouping: false,
+    });
+  // TIME FORMAT CREDIT: https://www.geeksforgeeks.org/how-to-convert-seconds-to-time-string-format-hhmmss-using-javascript/
+
+  return <p className="font-semibold">{formattedTimer}</p>;
+}

@@ -36,9 +36,13 @@ export default function BookingForm({ areaData }) {
   };
 
   return (
-    <>
-      <FormHeader activeStep={state?.activeStep} />
-      <Form onKeyDown={keyEnter} action={submitReservation} className="p-12">
+    <section className="grid grid-cols-4 grid-rows-[auto_auto_auto] gap-x-4">
+      <Form
+        onKeyDown={keyEnter}
+        action={submitReservation}
+        className="col-span-3 row-span-full border border-border-form grid grid-rows-subgrid"
+      >
+        <FormHeader activeStep={state?.activeStep} />
         {state?.activeStep === 2 ? (
           <BookingStepTwo
             guestData={state?.orderDetails}
@@ -58,13 +62,14 @@ export default function BookingForm({ areaData }) {
         )}
         <FormFooter nextStep={submitReservation} isPending={isPending} />
       </Form>
-    </>
+      <OrderSummary step={state?.activeStep} {...state?.orderDetails} />
+    </section>
   );
 }
 
 export function FormHeader({ activeStep }) {
   return (
-    <header className="border-b border-border-form p-12">
+    <header className="border-b border-border-form py-8 px-12">
       <ol className="flex justify-between items-center gap-4 font-semibold cursor-default">
         {formSteps.map((step, id) => (
           <Fragment key={id}>
@@ -97,7 +102,7 @@ export function FormHeader({ activeStep }) {
 
 export function FormFooter({ nextStep, isPending }) {
   return (
-    <footer className="flex justify-end gap-4 items-end pt-10">
+    <footer className="flex justify-end gap-4 items-end p-12 pt-0">
       <Button variant="form" formAction={nextStep} isDisabled={isPending}>
         Next
       </Button>
@@ -107,7 +112,7 @@ export function FormFooter({ nextStep, isPending }) {
 
 export function BookingStepOne({ ticketData, error, areaData }) {
   return (
-    <div className="grid gap-y-16">
+    <div className="grid gap-y-16 p-12">
       <TicketSelection {...ticketData} error={error.tickets} />
       <AreaSelection data={areaData} />
       <OptionalsSelection />
@@ -117,7 +122,7 @@ export function BookingStepOne({ ticketData, error, areaData }) {
 
 export function BookingStepTwo({ guestData, error }) {
   return (
-    <div className="grid gap-y-16">
+    <div className="grid gap-y-16 p-12">
       <EnterGuestInfo {...guestData} error={error.ticketGuests} />
       <TentSetup error={error.tentSetup} />
     </div>
@@ -126,7 +131,7 @@ export function BookingStepTwo({ guestData, error }) {
 
 export function BookingStepThree({ orderData, error }) {
   return (
-    <div className="grid grid-cols-3 gap-x-4 gap-y-16 items-start">
+    <div className="grid grid-cols-3 gap-x-4 gap-y-16 p-12 items-start">
       {/* <EnterBuyerInfo {...orderData} error={error} /> */}
       <EnterPaymentInfo />
       <EnterBillingInfo {...orderData} />

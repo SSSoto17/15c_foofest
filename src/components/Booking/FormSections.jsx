@@ -5,6 +5,7 @@ import {
   Optionals,
   TextInput,
   TicketGuestInput,
+  ReservationTimer,
 } from "@/components/Booking/FormFields";
 import { useTickets } from "@/store/GlobalStore";
 import Image from "next/image";
@@ -127,8 +128,8 @@ export function TicketGuestCard({ number, single, vip }) {
           <TextInput variant="slim">Email</TextInput>
         </div>
         {single && (
-          <Optionals name="buyerIsGuest">
-            Are you buying the ticket for yourself?
+          <Optionals name="buyerIsGuest" minor>
+            Are you buying this ticket for yourself?
           </Optionals>
         )}
       </Fieldset>
@@ -137,10 +138,13 @@ export function TicketGuestCard({ number, single, vip }) {
 }
 
 export function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
-  console.log(partoutGuests);
   return (
-    <section className="grid grid-cols-3 gap-4 w-full">
-      <header className="col-span-3 flow-space mb-6">
+    <section
+      className={`grid ${
+        partoutGuests.length > 1 && "md:grid-cols-2"
+      } gap-4 w-full`}
+    >
+      <header className="col-span-full flow-space mb-6">
         <h2 className="heading-3">Ticket Information</h2>
         <p className="opacity-50">
           Please provide the name and email of each ticket holder.
@@ -345,6 +349,7 @@ export function EnterBillingInfo({ customerName }) {
 }
 
 export function OrderSummary({
+  step,
   partoutGuests,
   vipGuests,
   tentDouble,
@@ -357,98 +362,80 @@ export function OrderSummary({
   //   productBasket.filter((ticket) => ticket.type === "VIP Ticket"),
   // ];
   const green = greenFee ? 249 : 0;
-  const totalPrice =
-    partoutGuests.length * 799 + vipGuests.length * 1299 + green + 99;
-  // const totalPrice =
-  //   productBasket.reduce(
-  //     (accumulator, currentValue) => accumulator + Number(currentValue.price),
-  //     0
-  //   ) + greenFee;
+  const partoutPrice = partoutGuests ? partoutGuests.length * 799 : 0;
+  const vipPrice = vipGuests ? vipGuests.length * 1299 : 0;
+  const totalPrice = partoutPrice + vipPrice + green + 99;
 
   return (
-    <section className="col-start-3 row-start-1 row-span-2 border border-border-form self-start">
-      <header className="border-b border-border-form p-6">
-        <h3 className="heading-4 w-full text-center">Order Summary</h3>
+    <section className="border border-border-form self-start grid grid-rows-subgrid row-span-full">
+      <header className="border-b border-border-form grid place-items-end p-8">
+        <h3 className="text-desk-base font-semibold w-full text-center">
+          Order Summary
+        </h3>
       </header>
-      <ul className="p-6">
-        {partoutGuests.length > 0 && (
-          <li className="flex justify-between items-end gap-2">
-            <p className="flex gap-2 items-end">
-              <span className="text-desk-sm">{partoutGuests.length} x</span>
-              Partout {partoutGuests.length === 1 ? "Ticket" : "Tickets"}
-            </p>
-            <p>{partoutGuests.length * 799},-</p>
-          </li>
+      <article
+        className={`grid grid-rows-[auto_1fr] ${
+          step !== 1 && "grid-rows-[auto_auto_1fr]"
+        } gap-y-2`}
+      >
+        <div>{step !== 1 && <ReservationTimer />}</div>
+        {!partoutGuests && !vipGuests && (
+          <small className="p-6 italic opacity-50">No tickets selected.</small>
         )}
-        {vipGuests.length > 0 && (
+        <ul className="p-6">
+          {partoutGuests?.length > 0 && (
+            <li className="flex justify-between items-end gap-2">
+              <p className="flex gap-2 items-end">
+                <span className="text-desk-sm">{partoutGuests.length} x</span>
+                Partout {partoutGuests.length === 1 ? "Ticket" : "Tickets"}
+              </p>
+              <p>{partoutGuests.length * 799},-</p>
+            </li>
+          )}
+          {vipGuests?.length > 0 && (
+            <li className="flex justify-between items-end gap-2">
+              <p className="flex gap-2 items-end">
+                <span className="text-desk-sm">{vipGuests.length} x</span>
+                VIP {vipGuests.length === 1 ? "Ticket" : "Tickets"}
+              </p>
+              <p>{vipGuests.length * 799},-</p>
+            </li>
+          )}
+          {tentDouble > 0 && (
+            <li className="flex justify-between items-end gap-2">
+              <p className="flex gap-2 items-end">
+                <span className="text-desk-sm">{tentDouble} x</span>
+                Double Person {tentDouble === 1 ? "Tent" : "Tents"}
+              </p>
+              <p>{tentDouble * 299},-</p>
+            </li>
+          )}
+          {tentTriple > 0 && (
+            <li className="flex justify-between items-end gap-2">
+              <p className="flex gap-2 items-end">
+                <span className="text-desk-sm">{tentTriple} x</span>
+                Triple Person {tentTriple === 1 ? "Tent" : "Tents"}
+              </p>
+              <p>{tentTriple * 399},-</p>
+            </li>
+          )}
+        </ul>
+        <ul className="p-6 place-content-end">
+          {greenFee && (
+            <li className="flex justify-between items-end gap-2">
+              <p className="flex gap-2 items-end">Green Fee</p>
+              <p>249,-</p>
+            </li>
+          )}
           <li className="flex justify-between items-end gap-2">
-            <p className="flex gap-2 items-end">
-              <span className="text-desk-sm">{vipGuests.length} x</span>
-              VIP {vipGuests.length === 1 ? "Ticket" : "Tickets"}
-            </p>
-            <p>{vipGuests.length * 799},-</p>
+            <p className="flex gap-2 items-end">Fixed Booking Fee</p>
+            <p>99,-</p>
           </li>
-        )}
-        {tentDouble > 0 && (
-          <li className="flex justify-between items-end gap-2">
-            <p className="flex gap-2 items-end">
-              <span className="text-desk-sm">{tentDouble} x</span>
-              Double Person {tentDouble === 1 ? "Tent" : "Tents"}
-            </p>
-            <p>{tentDouble * 299},-</p>
-          </li>
-        )}
-        {tentTriple > 0 && (
-          <li className="flex justify-between items-end gap-2">
-            <p className="flex gap-2 items-end">
-              <span className="text-desk-sm">{tentTriple} x</span>
-              Triple Person {tentTriple === 1 ? "Tent" : "Tents"}
-            </p>
-            <p>{tentTriple * 399},-</p>
-          </li>
-        )}
-        {/* {basketByTicket.map((type, id) => {
-          const totalQuantity = type.length;
-          if (totalQuantity > 0) {
-            const ticketType = type[0].type;
-            // console.log(ticketType);
-            const ticketPrice = type.reduce(
-              (accumulator, currentValue) =>
-                accumulator + Number(currentValue.price),
-              0
-            );
-            return (
-              <li key={id} className="flex justify-between items-end gap-2">
-                <p className="flex gap-2 items-end">
-                  <span className="text-desk-sm">{totalQuantity} x</span>
-                  {ticketType}
-                </p>
-                {<p>{ticketPrice},-</p>}
-              </li>
-            );
-          }
-        })} */}
-        {greenFee && (
-          <li className="flex justify-between items-end gap-2">
-            <p className="flex gap-2 items-end">
-              <span className="text-desk-sm">1 x</span>
-              Green Fee
-            </p>
-            <p>249,-</p>
-          </li>
-        )}
-        <li className="flex justify-between items-end gap-2">
-          <p className="flex gap-2 items-end">
-            <span className="text-desk-sm">1 x</span>
-            Fixed Booking Fee
-          </p>
-          <p>99,-</p>
-        </li>
-      </ul>
-      <footer className="flex justify-between gap-4 mx-6 pt-2 pb-6 items-end border-t border-border-global font-bold">
+        </ul>
+      </article>
+      <footer className="flex justify-between gap-4 p-6 items-center border-t border-border-global font-bold">
         <p>Total</p>
-        {/* <Input name="totalPrice" className="w-12" value={totalPrice} readOnly /> */}
-        <p>{totalPrice}</p>
+        <p>{totalPrice},-</p>
       </footer>
     </section>
   );
