@@ -3,12 +3,13 @@ import Link from "next/link";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { getArtistBySlug } from "@/app/lib/lineup";
 
-import picture from "../../../assets/tester/terminalist.jpg";
+import picture from "@/assets/tester/terminalist.jpg";
 
 export default async function ArtistSingle({ params }) {
   const slug = await params;
+  console.log("slug page:", slug);
   const artist = await getArtistBySlug(slug.slug);
-  const artistImg = artist.logo.startsWith("https://") ? artist.logo : `${endpoint}/logos/${artist.logo}`;
+  // const artistImg = artist.logo.startsWith("https://") ? artist.logo : `${endpoint}/logos/${artist.logo}`;
 
   return (
     <main>
