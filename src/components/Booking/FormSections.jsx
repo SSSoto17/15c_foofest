@@ -1,64 +1,12 @@
-import { Fieldset, Label, Legend } from "@headlessui/react";
+import { Fieldset, Legend } from "@headlessui/react";
 import {
   NumberInput,
-  CampingSpots,
   Optionals,
   TextInput,
-  TicketGuestInput,
   ReservationTimer,
 } from "@/components/Booking/FormFields";
-import { useTickets } from "@/store/GlobalStore";
-import Image from "next/image";
-
-import vipStamp from "@/assets/svg/vip.svg";
 import buyerInfo from "../../data/buyerfields";
 import Accordion from "../lineup/Accordion";
-
-export function TicketSelection({
-  partoutGuests,
-  vipGuests,
-  error,
-  quantity,
-  setQuantity,
-}) {
-  const ticketQuantity = partoutGuests?.length + vipGuests?.length;
-
-  const ticketListing = [
-    { label: "Partout Ticket", price: "799", error },
-    { label: "VIP Ticket", price: "1299", error },
-  ];
-  return (
-    <Fieldset className="grid gap-y-4">
-      <Legend className="heading-3">Tickets</Legend>
-      <small className="text-text-global--action italic h-0.5">
-        {!ticketQuantity && error}
-      </small>
-      {ticketListing.map((ticket, id) => {
-        return (
-          <NumberInput
-            key={id}
-            name={ticket.label}
-            price={ticket.price}
-            error={(!ticketQuantity && error) || (ticketQuantity > 10 && error)}
-            quantity={quantity}
-            setQuantity={setQuantity}
-          >
-            {ticket.label}
-          </NumberInput>
-        );
-      })}
-    </Fieldset>
-  );
-}
-
-export function AreaSelection({ data, quantity }) {
-  return (
-    <Fieldset className="grid gap-y-6">
-      <Legend className="heading-3">Camping Spot</Legend>
-      <CampingSpots selectionData={data} quantity={quantity} />
-    </Fieldset>
-  );
-}
 
 export function OptionalsSelection() {
   return (
@@ -116,184 +64,6 @@ export function EnterBuyerInfo({ customerName, customerEmail, error }) {
       })}
     </Fieldset>
   );
-}
-
-export function TicketGuestCard({ number, single, vip }) {
-  return (
-    <>
-      <Fieldset className="grid gap-y-4 max-w-md grow shrink">
-        <Legend className="heading-3 text-xl">Ticket #{number}</Legend>
-        <div className="grid gap-y-1 border border-border-input py-4 px-6 relative">
-          {vip && (
-            <Image
-              src={vipStamp}
-              alt="VIP Ticket"
-              className="absolute right-6 -top-6"
-            />
-          )}
-          <TextInput variant="slim">Name</TextInput>
-          <TextInput variant="slim">Email</TextInput>
-        </div>
-        {single && (
-          <Optionals name="buyerIsGuest" minor>
-            Are you buying this ticket for yourself?
-          </Optionals>
-        )}
-      </Fieldset>
-    </>
-  );
-}
-
-export function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
-  return (
-    <section
-      className={`grid ${
-        partoutGuests.length > 1 && "md:grid-cols-2"
-      } gap-4 w-full`}
-    >
-      <header className="col-span-full flow-space mb-6">
-        <h2 className="heading-3">Ticket Information</h2>
-        <p className="opacity-50">
-          Please provide the name and email of each ticket holder.
-        </p>
-      </header>
-      {partoutGuests &&
-        partoutGuests.map((guest, id) => {
-          return (
-            <TicketGuestCard
-              key={id}
-              number={id + 1}
-              single={partoutGuests.length === 1}
-            />
-          );
-        })}
-      {vipGuests &&
-        vipGuests.map((guest, id) => {
-          return (
-            <TicketGuestCard
-              key={id}
-              number={partoutGuests.length + id + 1}
-              vip
-            />
-          );
-        })}
-    </section>
-  );
-
-  {
-    /* <small className="text-text-global--error italic h-8">{error}</small> */
-  }
-  {
-    /* <section className="grid gap-x-4"> */
-  }
-  {
-    /* {partoutGuests && (
-          <ul>
-          {partoutGuests.map((guest, id) => {
-            return (
-              <li key={id}>
-              <TextInput
-              name={guest}
-              type="text"
-              error={error}
-              // defaultValue={
-                //   ticketHolders?.partout[id] || ticketHolders?.vip[id]
-                // }
-                >
-                Name
-                </TextInput>
-                </li>
-                );
-                })}
-                </ul>
-                )}
-                {vipGuests && (
-                  <ul>
-                  {vipGuests.map((guest, id) => {
-                    return (
-                      <li key={id}>
-                      <TextInput
-                      name={guest}
-                      type="text"
-                      error={error}
-                      // defaultValue={
-                        //   ticketHolders?.partout[id] || ticketHolders?.vip[id]
-                        // }
-                        >
-                        Name
-                        </TextInput>
-                        </li>
-                        );
-                        })}
-                        </ul>
-                        )} */
-  }
-  {
-    /* {singleType ? (
-          <ul className="grid grid-cols-2 gap-4">
-          {guests.map((guest, id) => {
-            return (
-              <li key={id}>
-              <TextInput
-              name={guest + " Guest"}
-              type="text"
-              error={error}
-              defaultValue={
-                ticketHolders?.partout[id] || ticketHolders?.vip[id]
-                }
-                >
-                Name
-                </TextInput>
-                </li>
-                );
-                })}
-                </ul>
-                ) : (
-                  <div className="grid grid-cols-2 gap-4">
-                  <article className="flow-space">
-                  <h3 className="heading-4">Partout Tickets</h3>
-                  <ul className="grid gap-4">
-                  {partoutTickets.map((guest, id) => {
-                    return (
-                      <li key={id}>
-                      <TextInput
-                      name={guest.type + " Guest"}
-                      type="text"
-                      error={error}
-                      defaultValue={ticketHolders?.partout[id]}
-                      >
-                      Name
-                      </TextInput>
-                      </li>
-                      );
-                      })}
-                      </ul>
-                      </article>
-                      <article className="flow-space">
-                      <h3 className="heading-4">VIP Tickets</h3>
-                      <ul className="grid gap-4">
-                      {vipTickets.map((guest, id) => {
-                        return (
-                    <li key={id}>
-                    <TextInput
-                    name={guest.type + " Guest"}
-                    type="text"
-                    error={error}
-                    defaultValue={ticketHolders?.vip[id]}
-                    >
-                    Name
-                      </TextInput>
-                    </li>
-                    );
-                    })}
-                    </ul>
-                    </article>
-                    </div>
-                    )} */
-  }
-  {
-    /* </section> */
-  }
 }
 
 export function EnterPaymentInfo() {
@@ -363,11 +133,6 @@ export function OrderSummary({
   tentTriple,
   greenFee,
 }) {
-  // const productBasket = useTickets((state) => state.tickets);
-  // const basketByTicket = [
-  //   productBasket.filter((ticket) => ticket.type === "Partout Ticket"),
-  //   productBasket.filter((ticket) => ticket.type === "VIP Ticket"),
-  // ];
   const green = greenFee ? 249 : 0;
   const partoutPrice = partoutGuests ? partoutGuests.length * 799 : 0;
   const vipPrice = vipGuests ? vipGuests.length * 1299 : 0;
@@ -405,7 +170,7 @@ export function OrderSummary({
                 <span className="text-desk-sm">{vipGuests.length} x</span>
                 VIP {vipGuests.length === 1 ? "Ticket" : "Tickets"}
               </p>
-              <p>{vipGuests.length * 799},-</p>
+              <p>{vipGuests.length * 1299},-</p>
             </li>
           )}
           {tentDouble > 0 && (

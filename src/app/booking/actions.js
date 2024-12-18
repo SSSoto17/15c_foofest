@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { putReservation, postReservation, postOrder } from "./tickets";
+import { putReservation, postReservation, postOrder } from "../../lib/tickets";
 
 export async function submitTicketReservation(prev, formData) {
   const errors = {};
@@ -24,12 +24,13 @@ export async function submitTicketReservation(prev, formData) {
       "vipGuests"
     );
     orderDetails.campingArea = data.area;
-    orderDetails.greenFee = Boolean(formData.get("Green fee"));
+    orderDetails.greenFee = Boolean(formData.get("greenFee"));
 
     // FORM VALIDATION
     if (!data.amount || data.amount < 1) {
       errors.tickets = "Please select your tickets.";
     }
+
     if (
       Number(formData.get("Partout Ticket")) > 10 ||
       Number(formData.get("VIP Ticket")) > 10
@@ -53,44 +54,76 @@ export async function submitTicketReservation(prev, formData) {
 
   // BOOKING FLOW || STEP TWO
   if (prev.activeStep === 2) {
-    // COLLECT FORMDATA
+    // REASSIGN VALUES FROM PREVIOUS STEP TO ORDER DETAILS
     Object.assign(orderDetails, prev.orderDetails);
-    orderDetails.customerName = formData.get("name");
-    orderDetails.customerEmail = formData.get("email");
-    orderDetails.partoutGuests = formData.getAll("partoutGuests");
-    orderDetails.vipGuests = formData.getAll("vipGuests");
-    orderDetails.tentDouble = formData.get("Double Person Tent");
-    orderDetails.tentTriple = formData.get("Triple Person Tent");
+
+    // CLEAR PARTOUT GUESTS
+    orderDetails.partoutGuests = [];
+
+    // COLLECT PARTOUT GUESTS INFORMATION
+    formData.getAll("partoutName").map((name) => {
+      orderDetails.partoutGuests = [
+        ...orderDetails.partoutGuests,
+        { name: name },
+      ];
+    });
+    formData.getAll("partoutEmail").map((email, id) => {
+      orderDetails.partoutGuests[id].email = email;
+    });
+
+    // orderDetails.partoutGuests = formData.getAll("partoutName");
+    // orderDetails.partoutGuestsEmails = formData.getAll("partoutEmail");
+    // orderDetails.vipGuests = formData.getAll("vipName");
+    // orderDetails.vipGuestsEmails = formData.getAll("vipEmail");
+    // orderDetails.tentDouble = formData.get("Double Person Tent");
+    // orderDetails.tentTriple = formData.get("Triple Person Tent");
+
+    // MOVED TO STEP 3
+    // orderDetails.customerName = formData.get("name");
+    // orderDetails.customerEmail = formData.get("email");
 
     // FORM VALIDATION
-    if (!orderDetails.customerName || orderDetails.customerName.length <= 1) {
-      errors.customerName = "Please provide your name.";
-    }
-    if (
-      !orderDetails.customerEmail ||
-      !orderDetails.customerEmail.includes(".")
-    ) {
-      errors.customerEmail = "Please provide a valid email address.";
-    }
-    orderDetails.partoutGuests.map((guest) => {
-      if (!guest || guest.length <= 1) {
-        errors.ticketGuests = "Please provide the name of each ticket holder.";
-      }
-    });
-    orderDetails.vipGuests.map((guest) => {
-      if (!guest || guest.length <= 1) {
-        errors.ticketGuests = "Please provide the name of each ticket holder.";
-      }
-    });
-    if (orderDetails.tentTriple * 3 > orderDetails.partoutGuests.length) {
-      errors.tentSetup = "Please fill up all tent space.";
-    }
+    // if (!orderDetails.customerName || orderDetails.customerName.length <= 1) {
+    //   errors.customerName = "Please provide your name.";
+    // }
+    // if (
+    //   !orderDetails.customerEmail ||
+    //   !orderDetails.customerEmail.includes(".")
+    // ) {
+    //   errors.customerEmail = "Please provide a valid email address.";
+    // }
+    // orderDetails.partoutGuests.map((name) => {
+    //   if (!name || name.length <= 1) {
+    //     errors.ticketGuestsName =
+    //       "Please provide the name of each ticket holder.";
+    //   }
+    // });
+    // orderDetails.partoutGuestsEmails.map((email) => {
+    //   if (!email || !email.includes(".")) {
+    //     errors.ticketGuestsEmail =
+    //       "Please provide a valid email for each ticket holder.";
+    //   }
+    // });
+    // orderDetails.vipGuests.map((name) => {
+    //   if (!name || name.length <= 1) {
+    //     errors.ticketGuestsName =
+    //       "Please provide the name of each ticket holder.";
+    //   }
+    // });
+    // orderDetails.vipGuestsEmails.map((email) => {
+    //   if (!email || !email.includes(".")) {
+    //     errors.ticketGuestsEmail =
+    //       "Please provide a valid email for each ticket holder.";
+    //   }
+    // });
+    // if (orderDetails.tentTriple * 3 > orderDetails.partoutGuests.length) {
+    //   errors.tentSetup = "Please fill up all tent space.";
+    // }
 
     if (
-      errors.customerName ||
-      errors.customerEmail ||
-      errors.ticketGuests ||
-      errors.tentSetup
+      errors.ticketGuestsName ||
+      errors.ticketGuestsEmail
+      // errors.tentSetup
     ) {
       return {
         activeStep: prev.activeStep,

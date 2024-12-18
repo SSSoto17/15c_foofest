@@ -3,22 +3,20 @@
 import Form from "next/form";
 import Button from "../Button";
 import {
-  TicketSelection,
-  AreaSelection,
   OptionalsSelection,
-  EnterBuyerInfo,
-  EnterGuestInfo,
-  EnterPaymentInfo,
-  EnterBillingInfo,
-  OrderSummary,
   TentSetup,
+  EnterBillingInfo,
+  EnterPaymentInfo,
+  OrderSummary,
 } from "./FormSections";
+import EnterGuestInfo from "./form-sections/GuestInfo";
+import SelectTickets from "./form-sections/SelectTickets";
+import SelectCampingArea from "./form-sections/SelectCampingArea";
 
 import formSteps from "../../data/formsteps";
 
 import { Fragment, useActionState } from "react";
-import { submitTicketReservation } from "@/lib/actions";
-import { TicketsandArea } from "./FormFields";
+import { submitTicketReservation } from "@/app/booking/actions";
 
 export default function BookingForm({ areaData }) {
   const initState = { activeStep: 1, success: false, errors: {} };
@@ -114,8 +112,8 @@ export function FormFooter({ nextStep, isPending }) {
 export function BookingStepOne({ ticketData, error, areaData }) {
   return (
     <div className="grid gap-y-16 p-12">
-      <TicketSelection {...ticketData} error={error.tickets} />
-      <AreaSelection data={areaData} />
+      <SelectTickets {...ticketData} error={error.tickets} />
+      <SelectCampingArea data={areaData} />
       <OptionalsSelection />
     </div>
   );
@@ -124,7 +122,7 @@ export function BookingStepOne({ ticketData, error, areaData }) {
 export function BookingStepTwo({ guestData, error }) {
   return (
     <div className="grid gap-y-16 p-12">
-      <EnterGuestInfo {...guestData} error={error.ticketGuests} />
+      <EnterGuestInfo {...guestData} error={error} />
       <TentSetup error={error.tentSetup} />
     </div>
   );

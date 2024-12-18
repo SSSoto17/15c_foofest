@@ -30,7 +30,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTickets } from "@/store/GlobalStore";
 import { useShallow } from "zustand/react/shallow";
 
-export function NumberInput({ name, price, error, children }) {
+export function NumberInput({ name, price, error, tickets, children }) {
   const {
     totalTickets,
     addTotalTickets,
@@ -44,32 +44,36 @@ export function NumberInput({ name, price, error, children }) {
       enterTotalTickets: state.enterTicket,
     }))
   );
-  // const totalTickets = useTickets((state) => state.totalTickets);
-  // const addTotalTickets = useTickets((state) => state.addTicket);
-  // const removeTotalTickets = useTickets((state) => state.removeTicket);
-  // const enterTotalTickets = useTickets((state) => state.enterTicket);
   const [quantity, setQuantity] = useState(0);
 
   const addTicket = () => {
-    setQuantity(quantity + 1);
-    addTotalTickets();
+    setQuantity(Number(quantity) + 1);
+    if (tickets) {
+      addTotalTickets();
+    }
   };
 
   const removeTicket = () => {
-    setQuantity(quantity - 1);
-    removeTotalTickets(1);
+    setQuantity(Number(quantity) - 1);
+    if (tickets) {
+      removeTotalTickets(1);
+    }
   };
 
   const clearTickets = () => {
-    removeTotalTickets(quantity);
+    if (tickets) {
+      removeTotalTickets(quantity);
+    }
     setQuantity(0);
   };
 
   const enterTicket = (e) => {
     setQuantity(e.target.value);
-    const newQuantity = totalTickets - quantity + Number(e.target.value);
-    console.log("new quantity: ", newQuantity);
-    enterTotalTickets(newQuantity);
+    if (tickets) {
+      const newQuantity = totalTickets - quantity + Number(e.target.value);
+      console.log("new quantity: ", newQuantity);
+      enterTotalTickets(newQuantity);
+    }
   };
 
   return (
@@ -81,7 +85,7 @@ export function NumberInput({ name, price, error, children }) {
       <div
         className={`input-field input-field-number--focus gap-4 w-fit ${
           error &&
-          !quantity &&
+          !totalTickets &&
           "not-has-data-focus:border-border-global--error bg-surface-input--focus"
         }`}
       >
@@ -119,7 +123,7 @@ export function NumberInput({ name, price, error, children }) {
           />
         </Button>
       )}
-      {error && !quantity && (
+      {error && !totalTickets && (
         <MdOutlineError
           aria-label="Attention!"
           className="place-self-center text-text-global--error error_icon"
@@ -135,6 +139,7 @@ export function CampingSpots({ selectionData }) {
   const availableAreas = selectionData.filter(
     (spot) => spot.available > 0 && spot.available >= ticketQuantity
   );
+
   const [selected, setSelected] = useState(availableAreas[0].area);
 
   return (
@@ -291,7 +296,6 @@ export function CountDown({ seconds }) {
 }
 
 import logo from "@/assets/svg/logo_bold.svg";
-import { AreaSelection, TicketSelection } from "./FormSections";
 export function WarningEscape() {
   const [isOpen, setIsOpen] = useState(false);
 
