@@ -1,9 +1,9 @@
 import Link from "next/link";
 
-const ButtonNav = ({ activeCategory, label }) => {
+const ButtonNav = ({ active, label, setActive }) => {
   return (
-    <li className={activeCategory === label ? "border-b-2 border-forest-700" : undefined}>
-      <Link href={`?category=${label}`}>{label}</Link>
+    <li className={active ? "border-b-2 border-forest-700" : undefined}>
+      <Link href={`/lineup/${label}`}>{label}</Link>
       {/* <button onClick=`/${label}`>{label}</button> */}
     </li>
   );
