@@ -1,14 +1,13 @@
+"use client";
 import ButtonNav from "./ButtonNav";
 
-const LineupNav = ({ category }) => {
-  const activeCategory = category;
-
+const LineupNav = ({ active }) => {
+  const pages = ["artists", "days", "stages"];
   return (
     <ul className="flex gap-8 uppercase font-semibold justify-center mb-8">
-      {/* <li className="border-b-2 border-forest-700">Stages</li> */}
-      <ButtonNav activeCategory={activeCategory} label="Artist"></ButtonNav>
-      <ButtonNav activeCategory={activeCategory} label="Day"></ButtonNav>
-      <ButtonNav activeCategory={activeCategory} label="Stage"></ButtonNav>
+      {pages.map((page, id) => {
+        return <ButtonNav key={id} label={page} active={active == page} />;
+      })}
     </ul>
   );
 };
