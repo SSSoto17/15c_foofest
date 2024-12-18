@@ -44,12 +44,6 @@ export async function submitTicketReservation(prev, formData) {
     const response = await putReservation(data);
     if (response) {
       orderDetails.reservationId = response.id;
-      // orderDetails.optionals = {
-      //   greenFee: formData.get("Green fee") && {
-      //     name: "Green Fee",
-      //     price: 249,
-      //   },
-      // }
       revalidatePath("/");
       return { activeStep: 2, success: true, errors: {}, orderDetails };
     } else {

@@ -11,11 +11,16 @@ import { useTickets } from "@/store/GlobalStore";
 import Image from "next/image";
 
 import vipStamp from "@/assets/svg/vip.svg";
-import optionalsListing from "../../data/optionals";
 import buyerInfo from "../../data/buyerfields";
 import Accordion from "../lineup/Accordion";
 
-export function TicketSelection({ partoutGuests, vipGuests, error }) {
+export function TicketSelection({
+  partoutGuests,
+  vipGuests,
+  error,
+  quantity,
+  setQuantity,
+}) {
   const ticketQuantity = partoutGuests?.length + vipGuests?.length;
 
   const ticketListing = [
@@ -25,7 +30,7 @@ export function TicketSelection({ partoutGuests, vipGuests, error }) {
   return (
     <Fieldset className="grid gap-y-4">
       <Legend className="heading-3">Tickets</Legend>
-      <small className="text-text-global--error italic h-0.5">
+      <small className="text-text-global--action italic h-0.5">
         {!ticketQuantity && error}
       </small>
       {ticketListing.map((ticket, id) => {
@@ -35,6 +40,8 @@ export function TicketSelection({ partoutGuests, vipGuests, error }) {
             name={ticket.label}
             price={ticket.price}
             error={(!ticketQuantity && error) || (ticketQuantity > 10 && error)}
+            quantity={quantity}
+            setQuantity={setQuantity}
           >
             {ticket.label}
           </NumberInput>
@@ -44,11 +51,11 @@ export function TicketSelection({ partoutGuests, vipGuests, error }) {
   );
 }
 
-export function AreaSelection({ data }) {
+export function AreaSelection({ data, quantity }) {
   return (
     <Fieldset className="grid gap-y-6">
       <Legend className="heading-3">Camping Spot</Legend>
-      <CampingSpots selectionData={data} />
+      <CampingSpots selectionData={data} quantity={quantity} />
     </Fieldset>
   );
 }

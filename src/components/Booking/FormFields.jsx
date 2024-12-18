@@ -28,10 +28,49 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useTickets } from "@/store/GlobalStore";
-// import { useShallow } from "zustand/react/shallow";
+import { useShallow } from "zustand/react/shallow";
 
 export function NumberInput({ name, price, error, children }) {
+  const {
+    totalTickets,
+    addTotalTickets,
+    removeTotalTickets,
+    enterTotalTickets,
+  } = useTickets(
+    useShallow((state) => ({
+      totalTickets: state.totalTickets,
+      addTotalTickets: state.addTicket,
+      removeTotalTickets: state.removeTicket,
+      enterTotalTickets: state.enterTicket,
+    }))
+  );
+  // const totalTickets = useTickets((state) => state.totalTickets);
+  // const addTotalTickets = useTickets((state) => state.addTicket);
+  // const removeTotalTickets = useTickets((state) => state.removeTicket);
+  // const enterTotalTickets = useTickets((state) => state.enterTicket);
   const [quantity, setQuantity] = useState(0);
+
+  const addTicket = () => {
+    setQuantity(quantity + 1);
+    addTotalTickets();
+  };
+
+  const removeTicket = () => {
+    setQuantity(quantity - 1);
+    removeTotalTickets(1);
+  };
+
+  const clearTickets = () => {
+    removeTotalTickets(quantity);
+    setQuantity(0);
+  };
+
+  const enterTicket = (e) => {
+    setQuantity(e.target.value);
+    const newQuantity = totalTickets - quantity + Number(e.target.value);
+    console.log("new quantity: ", newQuantity);
+    enterTotalTickets(newQuantity);
+  };
 
   return (
     <Field className="peer grid grid-cols-[1fr_auto_1rem] items-end justify-between max-w-xl gap-4">
@@ -49,7 +88,7 @@ export function NumberInput({ name, price, error, children }) {
         <Button
           disabled={!quantity}
           className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
-          onClick={() => setQuantity(Number(quantity) - 1)}
+          onClick={removeTicket}
         >
           <MdOutlineRemove className="text-text-global" size="24" />
         </Button>
@@ -57,13 +96,13 @@ export function NumberInput({ name, price, error, children }) {
           type="number"
           name={name}
           value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
+          onChange={enterTicket}
           className="w-6 text-center data-focus:outline-none"
         />
         <Button
           disabled={quantity >= 10}
           className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
-          onClick={() => setQuantity(Number(quantity) + 1)}
+          onClick={addTicket}
         >
           <MdOutlineAdd className="text-text-global" size="24" />
         </Button>
@@ -72,7 +111,7 @@ export function NumberInput({ name, price, error, children }) {
         <Button
           className="cursor-pointer"
           aria-label="Clear quantity"
-          onClick={() => setQuantity(0)}
+          onClick={clearTickets}
         >
           <MdOutlineDelete
             className="hover:opacity-50 opacity-25 place-self-center"
@@ -83,7 +122,7 @@ export function NumberInput({ name, price, error, children }) {
       {error && !quantity && (
         <MdOutlineError
           aria-label="Attention!"
-          className="place-self-center text-text-global--error"
+          className="place-self-center text-text-global--error error_icon"
           size="24"
         />
       )}
@@ -92,9 +131,9 @@ export function NumberInput({ name, price, error, children }) {
 }
 
 export function CampingSpots({ selectionData }) {
-  const ticketQuantity = useTickets((state) => state.tickets);
+  const ticketQuantity = useTickets((state) => state.totalTickets);
   const availableAreas = selectionData.filter(
-    (spot) => spot.available > 0 && spot.available >= ticketQuantity.length
+    (spot) => spot.available > 0 && spot.available >= ticketQuantity
   );
   const [selected, setSelected] = useState(availableAreas[0].area);
 
@@ -103,9 +142,7 @@ export function CampingSpots({ selectionData }) {
       {selectionData.map((spot, id) => (
         <Field
           key={id}
-          disabled={
-            spot.available === 0 || spot.available < ticketQuantity.length
-          }
+          disabled={spot.available === 0 || spot.available < ticketQuantity}
           className="flex items-end justify-between max-w-xl gap-8 not-data-disabled:cursor-pointer"
         >
           <Radio
@@ -254,6 +291,7 @@ export function CountDown({ seconds }) {
 }
 
 import logo from "@/assets/svg/logo_bold.svg";
+import { AreaSelection, TicketSelection } from "./FormSections";
 export function WarningEscape() {
   const [isOpen, setIsOpen] = useState(false);
 

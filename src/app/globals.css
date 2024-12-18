@@ -74,13 +74,14 @@
   /* COLOR | SEMANTIC TOKENS */
   --color-text-global: var(--color-forest-100);
   --color-text-global--disabled: var(--color-aztec-500);
-  --color-text-global--error: var(--color-forest-500);
+  --color-text-global--action: var(--color-forest-300);
+  --color-text-global--error: #ef4444;
   --color-text-heading: var(--color-forest-300);
   --color-surface-global: #171e1b;
   --color-surface-action: var(--color-forest-600);
   --color-surface-action--disabled: var(--color-aztec-500);
   --color-border-global: var(--color-aztec-700);
-  --color-border-global--error: var(--color-forest-700);
+  --color-border-global--error: #f87171;
 
   /* COLOR | SEMANTIC TOKENS | FORMS */
   --color-border-form: var(--color-border-global);

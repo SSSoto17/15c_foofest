@@ -18,6 +18,7 @@ import formSteps from "../../data/formsteps";
 
 import { Fragment, useActionState } from "react";
 import { submitTicketReservation } from "@/lib/actions";
+import { TicketsandArea } from "./FormFields";
 
 export default function BookingForm({ areaData }) {
   const initState = { activeStep: 1, success: false, errors: {} };
