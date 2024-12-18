@@ -1,5 +1,6 @@
 import Image from "next/image";
 import succes from "@/assets/img/timelimit.png";
+import Button from "@/components/Button";
 
 export default function Thanks() {
   return (
@@ -10,7 +11,9 @@ export default function Thanks() {
           <h1 className="heading-1 uppercase">Time limit exceeded...</h1>
           <p className="body-copy">The time limit makes it fair to all our customers searching for tickets.</p>
           <p className="body-copy">You’re welcome to try again!</p>
-          <div className="bg-forest-600 p-4 inline-block">Try again</div>
+          <Button variant="primary" size="base">
+            Try again
+          </Button>
         </section>
       </article>
     </main>
