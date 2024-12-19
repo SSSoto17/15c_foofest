@@ -8,6 +8,7 @@ const ByArtist = ({ artists, filters }) => {
   const genres = Object.groupBy(artists, ({ genre }) => genre);
   const genreNames = Object.keys(genres);
   const sortedGenreNames = genreNames.toSorted();
+  console.log("ARTIST:", artists);
 
   // const filteredArtists = filters.map((genre) => {
   //   return artists.filter((artist) => artist.genre === genre);
@@ -27,6 +28,7 @@ const ByArtist = ({ artists, filters }) => {
     <section>
       <ul className="grid grid-cols-4 gap-4">
         {artists.map((artist, i) => (
+          // console.log("ARTIST:", artist.slug)
           <ArtistCard key={i} name={artist.name} slug={artist.slug} img={artist.logo.startsWith("https://") ? artist.logo : `${endpoint}/logos/${artist.logo}`}></ArtistCard>
         ))}
       </ul>

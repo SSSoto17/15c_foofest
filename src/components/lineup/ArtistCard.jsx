@@ -3,7 +3,7 @@ import picture from "../../assets/tester/terminalist.jpg";
 import Link from "next/link";
 
 const ArtistCard = ({ name, slug, img }) => {
-  // console.log("IMG:", img);
+  // console.log("slug:", slug);
 
   return (
     <li>
