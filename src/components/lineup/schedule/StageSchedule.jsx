@@ -3,12 +3,12 @@ import HeaderSchedule from "./HeaderSchedule";
 import TableCell from "./TableCell";
 
 const StageSchedule = ({ data }) => {
-  //   console.log("Schedule DATA", data);
+  // console.log("Schedule DATA", data);
 
   const dataArr = Object.values(data); //Laver objektet om til et array
-  const threeDays = dataArr.slice(4, 7); // Laver et array med blot 3 dage
-  const aDay = threeDays[0];
-  //   console.log("A DAY", threeDays[0]);
+  const threeDays = dataArr.slice(4, 7); // Laver et array med blot 3 dage men de er ikke torsdag til lørdag...
+  const aDay = data.mon;
+  console.log("MON", data.mon);
 
   return (
     // grid-rows-[repeat(13,_minmax(0,_1fr)
