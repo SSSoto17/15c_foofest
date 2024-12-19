@@ -8,7 +8,7 @@ const TicketCard = ({ type, description, price, variant }) => {
 
   return (
     <Link href="/booking">
-      <article className={`px-8 pt-6 pb-2 bg-aztec-950 ${variants[variant]} bg-no-repeat hover:scale-101	transition-transform	`}>
+      <article className={`px-8 pt-6 pb-2 h-full bg-aztec-950 ${variants[variant]} bg-no-repeat hover:scale-101	transition-transform	`}>
         <h2 className="heading-2 text-desk-lg">{type} ticket</h2>
         <p className="">{description}</p>
         <p className="text-right heading-2 text-2xl">{price} ,-</p>
