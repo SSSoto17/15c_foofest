@@ -10,7 +10,7 @@ const DaySchedule = ({ jotun, mid, vana }) => {
       <ul className="row-start-2 row-span-full grid grid-cols-1 grid-rows-subgrid">
         {jotun.map((time, i) => (
           <TableCell key={i}>
-            <p className="text-res-sm">{time.start}</p>
+            <p className="text-res-sm sm:text-res-base">{time.start}</p>
           </TableCell>
         ))}
       </ul>
