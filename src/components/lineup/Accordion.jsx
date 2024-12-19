@@ -2,8 +2,8 @@ import { MdAdd } from "react-icons/md";
 
 const Accordion = ({ label, variant, name, children }) => {
   const variants = {
-    primary: "heading-2 justify-between",
-    secondary: "heading-4",
+    primary: "heading-4 justify-between",
+    secondary: "body-copy font-bold",
   };
 
   return (

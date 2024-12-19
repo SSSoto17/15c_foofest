@@ -1,7 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { putReservation, postReservation, postOrder } from "../../lib/order";
+import {
+  putReservation,
+  postReservation,
+  postOrder,
+} from "../../../../../lib/order";
 
 export async function submitTicketReservation(prev, formData) {
   const errors = {};
@@ -92,21 +96,23 @@ export async function submitTicketReservation(prev, formData) {
       }
     });
 
-    return {
-      activeStep: prev.activeStep,
-      success: false,
-      errors: {},
-      orderDetails,
-    };
-
-    // orderDetails.tentDouble = formData.get("Double Person Tent");
-    // orderDetails.tentTriple = formData.get("Triple Person Tent");
-
-    // MOVED TO STEP 3
-    // orderDetails.customerName = formData.get("name");
-    // orderDetails.customerEmail = formData.get("email");
+    // COLLECT TENT ORDER
+    orderDetails.tentDouble = Number(formData.get("Double Person Tent")) * 2;
+    orderDetails.tentTriple = Number(formData.get("Triple Person Tent")) * 3;
 
     // FORM VALIDATION
+
+    orderDetails.partoutGuests.map((guest) => {
+      if (!guest.name) {
+        errors.ticketGuestsName =
+          "Please provide the name of each ticket holder.";
+      }
+      if (!guest.email || !guest.email.includes(".")) {
+        errors.ticketGuestsEmail =
+          "Please provide the email of each ticket holder.";
+      }
+      return console.log(errors);
+    });
     // if (!orderDetails.customerName || orderDetails.customerName.length <= 1) {
     //   errors.customerName = "Please provide your name.";
     // }
@@ -167,6 +173,9 @@ export async function submitTicketReservation(prev, formData) {
     // orderDetails.partoutGuests = orderDetails.ticketHolders.partoutGuests;
     // orderDetails.vipGuests = orderDetails.ticketHolders.vipGuests;
     // orderDetails.greenFee = Boolean(orderDetails.optionals?.greenFee);
+
+    // orderDetails.customerName = formData.get("name");
+    // orderDetails.customerEmail = formData.get("email");
 
     // PRICE SUMUP
     const pricePartout = orderDetails.partoutGuests.length * 799;

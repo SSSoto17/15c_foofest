@@ -18,34 +18,18 @@ import { create } from "zustand";
 //       tickets: state.tickets.filter((ticket) => ticket.type !== ticketType),
 //     })),
 // }));
-export const useTickets = create((set) => ({
-  totalTickets: 0,
-  addTicket: () =>
+export const useQuantityStore = create((set) => ({
+  total: 0,
+  add: () =>
     set((state) => ({
       totalTickets: state.totalTickets + 1,
     })),
-  removeTicket: (quantity) =>
+  remove: (quantity) =>
     set((state) => ({
       totalTickets: state.totalTickets - Number(quantity),
     })),
-  enterTicket: (quantity) =>
+  enter: (quantity) =>
     set((state) => ({
       totalTickets: (state.totalTickets = quantity),
-    })),
-}));
-
-export const useTents = create((set) => ({
-  tentSpaces: 0,
-  addTent: (spaces) =>
-    set((state) => ({
-      tentSpaces: state.tentSpaces + 1 * spaces,
-    })),
-  removeTent: (quantity, spaces) =>
-    set((state) => ({
-      tentSpaces: state.tentSpaces - Number(quantity) * spaces,
-    })),
-  enterTent: (quantity, spaces) =>
-    set((state) => ({
-      tentSpaces: (state.tentSpaces = Number(quantity) * spaces),
     })),
 }));

@@ -17,9 +17,9 @@ export default function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
         partoutGuests.length > 1 && "md:grid-cols-2"
       } gap-4 w-full`}
     >
-      <header className="col-span-full flow-space mb-6">
-        <h2 className="heading-3">Ticket Information</h2>
-        <p className="opacity-50">
+      <header className="col-span-full flow-space">
+        <h2 className="heading-5">Ticket Information</h2>
+        <p className="body-copy opacity-50">
           Please provide the name and email of each ticket holder.
         </p>
       </header>
@@ -65,10 +65,12 @@ export function TicketGuestCard({
   const checkboxData = { name: "isBuyerGuest" };
   return (
     <>
-      <Fieldset className="grid gap-y-4 max-w-md grow shrink">
-        <Legend className="heading-3 text-xl">Ticket #{number}</Legend>
+      <Fieldset className="grid gap-y-6 max-w-md grow shrink">
+        <Legend className="heading-6 font-semibold capitalize">
+          Ticket #{number}
+        </Legend>
         <div
-          className={`grid gap-y-1 border border-border-input py-4 px-6 relative`}
+          className={`grid gap-y-1 border border-border-input py-4 px-8 relative`}
         >
           {vip && (
             <Image

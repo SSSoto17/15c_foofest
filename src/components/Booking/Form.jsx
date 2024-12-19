@@ -9,7 +9,7 @@ import { OrderSummary } from "./FormSections";
 import formSteps from "../../data/formsteps";
 
 import { useActionState } from "react";
-import { submitTicketReservation } from "@/app/booking/actions";
+import { submitTicketReservation } from "@/app/session/reservation/flow/checkout/actions";
 import { keyEnter } from "@/lib/utils";
 
 export default function BookingForm({ areaData }) {
@@ -76,7 +76,7 @@ function FormStepIndicator({ activeStep, step, title }) {
         {...(activeStep >= step && {
           "data-active": true,
         })}
-        className={`group flex items-center gap-3 justify-between ${
+        className={`group body-copy font-semibold flex items-center gap-3 justify-between ${
           activeStep === step
             ? "text-text-global"
             : "text-text-global--disabled"
@@ -94,7 +94,12 @@ function FormStepIndicator({ activeStep, step, title }) {
 function FormFooter({ nextStep, isPending }) {
   return (
     <footer className="flex justify-end gap-4 items-end p-12 pt-0">
-      <Button variant="form" formAction={nextStep} isDisabled={isPending}>
+      <Button
+        variant="primary"
+        size="base"
+        formAction={nextStep}
+        isDisabled={isPending}
+      >
         Next
       </Button>
     </footer>

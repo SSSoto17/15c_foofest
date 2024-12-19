@@ -48,7 +48,7 @@ export function Header({ linksActive }) {
             </li>
             <li>
               <Link
-                href="/booking"
+                href="/session/reservation/flow/checkout"
                 className="border-2 border-forest-600 bg-forest-600 py-2 px-6 grid place-content-center uppercase font-bold"
               >
                 Buy Tickets

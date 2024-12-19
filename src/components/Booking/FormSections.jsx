@@ -3,6 +3,7 @@ import {
   CheckField,
   TextInput,
   ReservationTimer,
+  ErrorText,
 } from "@/components/Booking/FormFields";
 import buyerInfo from "../../data/buyerfields";
 import Accordion from "../lineup/Accordion";
@@ -26,9 +27,7 @@ export function TentSetup({ tentDouble, tentTriple, error }) {
   return (
     <Accordion label="Tent Setup" variant="secondary">
       <Fieldset className="grid gap-y-4 ml-12">
-        <small className="text-text-global--action italic h-0.5">
-          {!tentSpaces && error}
-        </small>
+        <ErrorText>{!tentSpaces && error}</ErrorText>
         {tentListing.map((tent, id) => {
           return (
             <NumberSpinner
@@ -143,7 +142,7 @@ export function OrderSummary({
   return (
     <section className="border border-border-form self-start grid grid-rows-subgrid row-span-full">
       <header className="border-b border-border-form grid place-items-end p-8">
-        <h3 className="text-desk-base font-semibold w-full text-center">
+        <h3 className="body-copy font-semibold w-full text-center">
           Order Summary
         </h3>
       </header>
@@ -152,64 +151,70 @@ export function OrderSummary({
           step !== 1 && "grid-rows-[auto_auto_1fr]"
         } gap-y-2`}
       >
-        <div>{step !== 1 && <ReservationTimer />}</div>
+        <div>{step !== 2 && <ReservationTimer />}</div>
         {!partoutGuests && !vipGuests && (
-          <small className="p-6 italic opacity-50">No tickets selected.</small>
+          <small className="body-copy-small p-6 text-center italic opacity-50">
+            No tickets selected.
+          </small>
         )}
         <ul className="p-6">
           {partoutGuests?.length > 0 && (
             <li className="flex justify-between items-end gap-2">
-              <p className="flex gap-2 items-end">
-                <span className="text-desk-sm">{partoutGuests.length} x</span>
+              <p className="body-copy flex gap-2 items-end">
+                <span className="body-copy-small">
+                  {partoutGuests.length} x
+                </span>
                 Partout {partoutGuests.length === 1 ? "Ticket" : "Tickets"}
               </p>
-              <p>{partoutGuests.length * 799},-</p>
+              <p className="body-copy">{partoutGuests.length * 799},-</p>
             </li>
           )}
           {vipGuests?.length > 0 && (
             <li className="flex justify-between items-end gap-2">
-              <p className="flex gap-2 items-end">
-                <span className="text-desk-sm">{vipGuests.length} x</span>
+              <p className="body-copy flex gap-2 items-end">
+                <span className="body-copy-small">{vipGuests.length} x</span>
                 VIP {vipGuests.length === 1 ? "Ticket" : "Tickets"}
               </p>
-              <p>{vipGuests.length * 1299},-</p>
+              <p className="body-copy">{vipGuests.length * 1299},-</p>
             </li>
           )}
           {tentDouble > 0 && (
             <li className="flex justify-between items-end gap-2">
-              <p className="flex gap-2 items-end">
-                <span className="text-desk-sm">{tentDouble} x</span>
+              <p className="body-copy flex gap-2 items-end">
+                <span className="body-copy-small">{tentDouble} x</span>
                 Double Person {tentDouble === 1 ? "Tent" : "Tents"}
               </p>
-              <p>{tentDouble * 299},-</p>
+              <p className="body-copy">{tentDouble * 299},-</p>
             </li>
           )}
           {tentTriple > 0 && (
             <li className="flex justify-between items-end gap-2">
-              <p className="flex gap-2 items-end">
+              <p className="body-copy flex gap-2 items-end">
                 <span className="text-desk-sm">{tentTriple} x</span>
                 Triple Person {tentTriple === 1 ? "Tent" : "Tents"}
               </p>
-              <p>{tentTriple * 399},-</p>
+              <p className="body-copy">{tentTriple * 399},-</p>
             </li>
           )}
         </ul>
         <ul className="p-6 place-content-end">
           {greenFee && (
             <li className="flex justify-between items-end gap-2">
-              <p className="flex gap-2 items-end">Green Fee</p>
-              <p>249,-</p>
+              <p className="body-copy flex gap-2 items-end">Green Fee</p>
+              <p className="body-copy">249,-</p>
             </li>
           )}
           <li className="flex justify-between items-end gap-2">
-            <p className="flex gap-2 items-end">Fixed Booking Fee</p>
-            <p>99,-</p>
+            <p className="body-copy font-bold flex gap-2 items-end">
+              Fixed Booking Fee
+            </p>
+            <p className="body-copy font-semibold">99,-</p>
           </li>
         </ul>
       </article>
       <footer className="flex justify-between gap-4 p-6 items-center border-t border-border-global font-bold">
-        <p>Total</p>
-        <p>{totalPrice},-</p>
+        <p className="body-copy font-bold uppercase tracking-wider">Total</p>
+        <p className="body-copy font-semibold">{totalPrice},-</p>
       </footer>
     </section>
   );

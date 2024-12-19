@@ -17,9 +17,9 @@ import {
 
 // FUNCTIONS
 import { useState } from "react";
-import { useTickets, useTents } from "@/store/GlobalStore";
+import { useQuantityStore } from "@/store/GlobalStore";
 import { useShallow } from "zustand/react/shallow";
-import { M_PLUS_1 } from "next/font/google";
+import { ErrorText } from "../FormFields";
 
 export default function SelectTickets({ partoutGuests, vipGuests, error }) {
   const ticketQuantity = partoutGuests?.length + vipGuests?.length;
@@ -29,11 +29,9 @@ export default function SelectTickets({ partoutGuests, vipGuests, error }) {
     { label: "VIP Ticket", price: "1299", error },
   ];
   return (
-    <Fieldset className="grid gap-y-4">
-      <Legend className="heading-3">Tickets</Legend>
-      <small className="text-text-global--action italic h-0.5">
-        {!ticketQuantity && error}
-      </small>
+    <Fieldset className="grid gap-y-4 max-w-xl">
+      <Legend className="heading-5">Tickets</Legend>
+      <ErrorText>{!ticketQuantity && error}</ErrorText>
       {ticketListing.map((ticket, id) => {
         return (
           <NumberSpinner
@@ -50,109 +48,47 @@ export default function SelectTickets({ partoutGuests, vipGuests, error }) {
   );
 }
 
-export function NumberSpinner({
-  label,
-  price,
-  error,
-  forTickets,
-  forTents,
-  children,
-}) {
-  const { totalTickets, addTickets, removeTickets, enterTickets } = useTickets(
+export function NumberSpinner({ label, price, error, children }) {
+  const { total, add, remove, enter } = useQuantityStore(
     useShallow((state) => ({
-      totalTickets: state.totalTickets,
-      addTickets: state.addTicket,
-      removeTickets: state.removeTicket,
-      enterTickets: state.enterTicket,
-    }))
-  );
-  const { totalTentSpaces, addTents, removeTents, enterTents } = useTents(
-    useShallow((state) => ({
-      totalTentSpaces: state.tentSpaces,
-      addTents: state.addTent,
-      removeTents: state.removeTent,
-      enterTents: state.enterTent,
+      total: state.total,
+      add: state.add,
+      remove: state.remove,
+      enter: state.enter,
     }))
   );
 
   const [quantity, setQuantity] = useState(0);
-  let tentSpaces;
-  console.log(totalTentSpaces);
 
   const incrInput = () => {
     setQuantity(Number(quantity) + 1);
-    if (forTickets) {
-      addTickets();
-    }
-    if (forTents) {
-      if (label.includes("Double")) {
-        tentSpaces = 2;
-      }
-      if (label.includes("Triple")) {
-        tentSpaces = 3;
-      }
-      addTents(tentSpaces);
-    }
+    add();
   };
 
   const decrInput = () => {
     setQuantity(Number(quantity) - 1);
-    if (forTickets) {
-      removeTickets(1);
-    }
-    if (forTents) {
-      if (label.includes("Double")) {
-        tentSpaces = 2;
-      }
-      if (label.includes("Triple")) {
-        tentSpaces = 3;
-      }
-      removeTents(1, tentSpaces);
-    }
+    remove(1);
   };
 
   const clearInput = () => {
-    if (forTickets) {
-      removeTickets(quantity);
-    }
-    if (forTents) {
-      if (label.includes("Double")) {
-        tentSpaces = 2;
-      }
-      if (label.includes("Triple")) {
-        tentSpaces = 3;
-      }
-      removeTents(quantity, tentSpaces);
-    }
+    remove(quantity);
     setQuantity(0);
   };
 
   const manualInput = (e) => {
     let newQuantity;
-    if (forTickets) {
-      newQuantity = totalTickets - quantity + Number(e.target.value);
-      enterTickets(newQuantity);
-    }
-    if (forTents) {
-      if (label.includes("Double")) {
-        tentSpaces = 2;
-      }
-      if (label.includes("Triple")) {
-        tentSpaces = 3;
-      }
-      const currentQuantity = quantity * tentSpaces;
-      const editedQuantity = Number(e.target.value) * tentSpaces;
-      newQuantity = totalTentSpaces - currentQuantity + editedQuantity;
-      enterTents(newQuantity, tentSpaces);
-    }
+    newQuantity = total - quantity + Number(e.target.value);
+    enter(newQuantity);
     setQuantity(e.target.value);
   };
 
   return (
-    <Field className="peer grid grid-cols-[1fr_auto_1rem] items-end justify-between max-w-xl gap-4">
-      <Label className="flex justify-between">
+    <Field className="peer grid grid-cols-[1fr_auto_1rem] items-end justify-between gap-4">
+      <Label className="body-copy flex justify-between">
         {children}{" "}
-        <span className="opacity-50 place-self-end mx-8">{price} DKK</span>
+        <span className="body-copy opacity-50 place-self-end mx-8">
+          {price} DKK
+        </span>
       </Label>
       <div
         className={`input-field input-field-number--focus gap-4 w-fit ${
@@ -173,7 +109,7 @@ export function NumberSpinner({
           name={label}
           value={quantity}
           onChange={manualInput}
-          className="w-6 text-center data-focus:outline-none"
+          className="body-copy w-6 text-center data-focus:outline-none"
         />
         <Button
           disabled={quantity >= 10}

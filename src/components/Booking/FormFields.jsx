@@ -33,15 +33,15 @@ export function CheckField({ data, minor, children }) {
         <MdOutlineCheck className={`opacity-0 ${checked && "opacity-100"}`} />
       </Checkbox>
       <Label
-        className={`${
-          minor && "text-sm text-aztec-300"
-        } flex justify-between group-data-disabled:opacity-25 group-not-data-disabled:cursor-pointer`}
+        className={`body-copy flex justify-between group-data-disabled:opacity-25 group-not-data-disabled:cursor-pointer ${
+          minor && "body-copy-small text-aztec-300"
+        }`}
       >
         {children}{" "}
         {data?.price && (
-          <small className="opacity-50 place-self-end mx-8">
+          <span className="body-copy opacity-50 place-self-end mx-8">
             {data?.price} DKK
-          </small>
+          </span>
         )}
       </Label>
     </Field>
@@ -68,7 +68,7 @@ export function TextInput({
       className={`grid gap-y-2 ${variant ? variants[variant] : "max-w-sm"}`}
     >
       <Label
-        className={`capitalize ${variant === "slim" && "text-sm opacity-65"}`}
+        className={`body-copy capitalize ${variant === "slim" && "opacity-65"}`}
       >
         {children}
       </Label>
@@ -78,7 +78,7 @@ export function TextInput({
           type={type}
           placeholder={placeholder}
           defaultValue={defaultValue}
-          className={`input-field input-field-text--focus ${
+          className={`input-field input-field-text--focus body-copy ${
             variant === "slim" && "py-1"
           } ${
             error &&
@@ -96,9 +96,7 @@ export function TextInput({
           />
         )}
       </div>
-      <small className="text-text-global--error italic h-0.5">
-        {!error?.includes("ticket") && error}
-      </small>
+      <ErrorText>{!error?.includes("ticket") && error}</ErrorText>
     </Field>
   );
 }
@@ -106,7 +104,9 @@ export function TextInput({
 export function ReservationTimer() {
   return (
     <div className="flex justify-between gap-2 items-center bg-surface-action py-2 px-4">
-      <small className="leading-tight">Time to complete reservation</small>
+      <small className="body-copy-small leading-tight">
+        Time to complete reservation
+      </small>
       <CountDown seconds={60 * 5} />
     </div>
   );
@@ -145,7 +145,7 @@ export function CountDown({ seconds }) {
     });
   // TIME FORMAT CREDIT: https://www.geeksforgeeks.org/how-to-convert-seconds-to-time-string-format-hhmmss-using-javascript/
 
-  return <p className="font-semibold">{formattedTimer}</p>;
+  return <p className="body-copy font-semibold">{formattedTimer}</p>;
 }
 
 import logo from "@/assets/svg/logo_bold.svg";
@@ -162,9 +162,9 @@ export function WarningEscape() {
         onClose={() => setIsOpen(false)}
         className="fixed inset-0 flex items-center justify-center p-4"
       >
-        <div className="bg-surface-global p-12 border border-border-global">
-          <DialogPanel className="grid gap-6">
-            <DialogTitle className="heading-4">
+        <div className="bg-surface-global p-12 border border-border-global max-w-md">
+          <DialogPanel className="grid gap-8">
+            <DialogTitle className="heading-6 text-red-400">
               Leave Booking Session
             </DialogTitle>
             <div className="grid gap-2">
@@ -178,7 +178,7 @@ export function WarningEscape() {
             <div className="flex gap-4">
               <button
                 onClick={() => setIsOpen(false)}
-                className="grow cursor-pointer bg-aztec-400 p-2 rounded-sm font-semibold max-w-40"
+                className="grow cursor-pointer bg-aztec-300 p-2 rounded-sm font-semibold max-w-40"
               >
                 Cancel
               </button>
@@ -193,5 +193,13 @@ export function WarningEscape() {
         </div>
       </Dialog>
     </>
+  );
+}
+
+export function ErrorText({ children }) {
+  return (
+    <small className="body-copy-small text-text-global--action italic h-0.5">
+      {children}
+    </small>
   );
 }
