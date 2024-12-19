@@ -96,27 +96,31 @@
   /* TEXT STYLES */
 
   .heading-title {
-    @apply text-res-6xl leading-36 font-display font-normal uppercase;
+    @apply text-res-6xl leading-48 font-display font-normal uppercase;
   }
   .heading-1 {
-    @apply text-res-5xl leading-22 font-display font-normal;
+    @apply text-res-5xl leading-44 font-display font-normal;
   }
   .heading-2 {
-    @apply text-res-4xl leading-16 font-display font-normal;
+    @apply text-res-4xl leading-36 font-display font-normal;
   }
   .heading-3 {
-    @apply text-res-3xl leading-9 font-semibold;
+    @apply text-res-3xl leading-22 font-semibold;
   }
 
   .heading-4 {
-    @apply text-res-2xl leading-6 font-bold uppercase text-text-heading;
+    @apply text-res-2xl leading-16 font-bold uppercase text-text-heading;
   }
   .heading-5 {
-    @apply text-res-xl leading-6 font-bold uppercase text-text-heading;
+    @apply text-res-xl leading-9 font-semibold;
+  }
+
+  .heading-6 {
+    @apply text-res-lg leading-8 font-bold uppercase;
   }
 
   .heading-tagline {
-    @apply text-res-lg leading-9 uppercase text-text-heading;
+    @apply text-res-lg leading-8 uppercase text-text-heading;
   }
 
   .body-copy {
@@ -124,7 +128,7 @@
   }
 
   .body-copy-small {
-    @apply text-res-sm leading-5 font-normal;
+    @apply text-res-sm leading-6 font-normal;
   }
 
   /* BASE COMPONENTS */
