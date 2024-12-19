@@ -20,16 +20,20 @@ import { create } from "zustand";
 // }));
 export const useQuantityStore = create((set) => ({
   total: 0,
-  add: () =>
-    set((state) => ({
-      total: state.total + 1,
+  setTotal: (quantity) =>
+    set(() => ({
+      total: quantity,
     })),
-  remove: (quantity) =>
-    set((state) => ({
-      total: state.total - Number(quantity),
-    })),
-  enter: (quantity) =>
-    set((state) => ({
-      total: (state.total = quantity),
-    })),
+  // add: (quantity) =>
+  //   set((state) => ({
+  //     total: state.total + 1,
+  //   })),
+  // remove: (quantity) =>
+  //   set((state) => ({
+  //     total: state.total - Number(quantity),
+  //   })),
+  // enter: (quantity) =>
+  //   set((state) => ({
+  //     total: (state.total = quantity),
+  //   })),
 }));

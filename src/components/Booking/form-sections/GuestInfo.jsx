@@ -69,7 +69,6 @@ export function TicketGuestCard({
   vip,
   error,
 }) {
-  console.log(error);
   const checkboxData = { name: "isBuyerGuest" };
   return (
     <>
@@ -92,14 +91,6 @@ export function TicketGuestCard({
               className="absolute right-6 -top-6"
             />
           )}
-
-          {/* {error && (
-            <Image
-              src={vipStamp}
-              alt="VIP Ticket"
-              className="absolute right-6 -top-6"
-            />
-          )} */}
           <TextInput
             name={name}
             error={error?.ticketGuestsName}
@@ -124,7 +115,6 @@ export function TicketGuestCard({
             Are you buying this ticket for yourself?
           </CheckField>
         )}
-        {/* <small className="text-text-global--error italic h-8">{error}</small> */}
       </Fieldset>
     </>
   );

@@ -25,13 +25,13 @@ export default function SelectTickets({ partoutGuests, vipGuests, error }) {
   const ticketQuantity = partoutGuests?.length + vipGuests?.length;
 
   const ticketListing = [
-    { label: "Partout Ticket", price: "799", error },
-    { label: "VIP Ticket", price: "1299", error },
+    { label: "Partout Ticket", price: "799", error: error.tickets },
+    { label: "VIP Ticket", price: "1299", error: error.tickets },
   ];
   return (
     <Fieldset className="grid gap-y-4 max-w-xl">
       <Legend className="heading-5">Tickets</Legend>
-      <ErrorText>{!ticketQuantity && error}</ErrorText>
+      <ErrorText>{!ticketQuantity && error.tickets}</ErrorText>
       {ticketListing.map((ticket, id) => {
         return (
           <NumberSpinner
@@ -49,12 +49,10 @@ export default function SelectTickets({ partoutGuests, vipGuests, error }) {
 }
 
 export function NumberSpinner({ label, price, error, children }) {
-  const { total, add, remove, enter } = useQuantityStore(
+  const { total, setTotal } = useQuantityStore(
     useShallow((state) => ({
       total: state.total,
-      add: state.add,
-      remove: state.remove,
-      enter: state.enter,
+      setTotal: state.setTotal,
     }))
   );
 
@@ -62,24 +60,22 @@ export function NumberSpinner({ label, price, error, children }) {
 
   const incrInput = () => {
     setQuantity(Number(quantity) + 1);
-    add();
+    setTotal(Number(quantity) + 1);
   };
 
   const decrInput = () => {
     setQuantity(Number(quantity) - 1);
-    remove(1);
+    setTotal(Number(quantity) - 1);
   };
 
   const clearInput = () => {
-    remove(quantity);
+    setTotal(0);
     setQuantity(0);
   };
 
   const manualInput = (e) => {
-    let newQuantity;
-    newQuantity = total - quantity + Number(e.target.value);
-    enter(newQuantity);
     setQuantity(e.target.value);
+    setTotal(e.target.value);
   };
 
   return (
@@ -92,9 +88,9 @@ export function NumberSpinner({ label, price, error, children }) {
       </Label>
       <div
         className={`input-field input-field-number--focus gap-4 w-fit ${
-          error &&
-          total === 0 &&
-          "not-has-data-focus:border-border-global--error bg-surface-input--focus"
+          (error.tickets && total === 0) ||
+          (error.tentSetup &&
+            "not-has-data-focus:border-border-global--error bg-surface-input--focus")
         }`}
       >
         <Button
@@ -131,7 +127,7 @@ export function NumberSpinner({ label, price, error, children }) {
           />
         </Button>
       )}
-      {error && !total && (
+      {error.tickets && !total && (
         <MdOutlineError
           aria-label="Attention!"
           className="place-self-center text-text-global--error error_icon"

@@ -18,24 +18,18 @@ export function GreenFee() {
   );
 }
 
-export function TentSetup({ tentDouble, tentTriple, error }) {
-  const tentSpaces = tentDouble?.length * 2 + tentTriple?.length * 3;
+export function TentSetup({ error }) {
   const tentListing = [
     { label: "Double Person Tent", price: "299" },
     { label: "Triple Person Tent", price: "399" },
   ];
   return (
     <Accordion label="Tent Setup" variant="secondary">
-      <Fieldset className="grid gap-y-4 ml-12">
-        <ErrorText>{!tentSpaces && error}</ErrorText>
+      <Fieldset className="grid gap-y-3 ml-12">
+        <ErrorText>{error?.tentSetup}</ErrorText>
         {tentListing.map((tent, id) => {
           return (
-            <NumberSpinner
-              forTents
-              key={id}
-              {...tent}
-              error={(!tentSpaces && error) || (tentSpaces > 10 && error)}
-            >
+            <NumberSpinner key={id} {...tent} error={error}>
               {tent.label}
             </NumberSpinner>
           );
@@ -47,8 +41,8 @@ export function TentSetup({ tentDouble, tentTriple, error }) {
 
 export function EnterBuyerInfo({ customerName, customerEmail, error }) {
   return (
-    <Fieldset className="grid gap-y-8">
-      <Legend className="heading-3">Your Information</Legend>
+    <Fieldset className="grid gap-y-4">
+      <Legend className="heading-5">Your Information</Legend>
       {buyerInfo.map((field, id) => {
         return (
           <TextInput
@@ -69,12 +63,12 @@ export function EnterBuyerInfo({ customerName, customerEmail, error }) {
 
 export function EnterPaymentInfo() {
   return (
-    <Fieldset className="grid gap-y-6 col-span-2">
-      <Legend className="heading-3">Payment</Legend>
+    <Fieldset className="grid gap-y-6">
+      <Legend className="heading-5">Payment</Legend>
       <div className="grid grid-cols-3 gap-x-4 max-w-md">
         <TextInput
           name="cardNumber"
-          type="number"
+          type="tel"
           placeholder="Card number"
           variant="fullSpan"
         />
@@ -95,32 +89,6 @@ export function EnterPaymentInfo() {
           placeholder="Name on card"
           variant="fullSpan"
         />
-      </div>
-    </Fieldset>
-  );
-}
-
-export function EnterBillingInfo({ customerName }) {
-  return (
-    <Fieldset className="grid gap-y-6 col-span-2">
-      <Legend className="heading-3">Billing Address</Legend>
-      <div className="grid grid-cols-3 gap-x-4 max-w-md">
-        <TextInput type="text" defaultValue={customerName} variant="fullSpan">
-          Name
-        </TextInput>
-        <TextInput type="email" variant="fullSpan">
-          Email
-        </TextInput>
-        <TextInput type="text" variant="fullSpan">
-          Address
-        </TextInput>
-        <TextInput type="text" variant="twoSpan">
-          City
-        </TextInput>
-        <TextInput type="number">Zip Code</TextInput>
-        <TextInput type="tel" variant="fullSpan">
-          Phone
-        </TextInput>
       </div>
     </Fieldset>
   );
@@ -151,7 +119,7 @@ export function OrderSummary({
           step !== 1 && "grid-rows-[auto_auto_1fr]"
         } gap-y-2`}
       >
-        <div>{step !== 2 && <ReservationTimer />}</div>
+        <div>{step !== 3 && <ReservationTimer />}</div>
         {!partoutGuests && !vipGuests && (
           <small className="body-copy-small p-6 text-center italic opacity-50">
             No tickets selected.
@@ -181,17 +149,17 @@ export function OrderSummary({
           {tentDouble > 0 && (
             <li className="flex justify-between items-end gap-2">
               <p className="body-copy flex gap-2 items-end">
-                <span className="body-copy-small">{tentDouble} x</span>
-                Double Person {tentDouble === 1 ? "Tent" : "Tents"}
+                <span className="body-copy-small">{tentDouble / 2} x</span>
+                Double Person {tentDouble === 2 ? "Tent" : "Tents"}
               </p>
-              <p className="body-copy">{tentDouble * 299},-</p>
+              <p className="body-copy">{(tentDouble / 2) * 299},-</p>
             </li>
           )}
           {tentTriple > 0 && (
             <li className="flex justify-between items-end gap-2">
               <p className="body-copy flex gap-2 items-end">
-                <span className="text-desk-sm">{tentTriple} x</span>
-                Triple Person {tentTriple === 1 ? "Tent" : "Tents"}
+                <span className="text-desk-sm">{tentTriple / 3} x</span>
+                Triple Person {tentTriple === 3 ? "Tent" : "Tents"}
               </p>
               <p className="body-copy">{tentTriple * 399},-</p>
             </li>

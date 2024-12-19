@@ -71,13 +71,13 @@ export function TextInput({
       >
         {children}
       </Label>
-      <div className="grid gap-4">
+      <div className="grid gap-4 relative">
         <Input
           name={name}
           type={type}
           placeholder={placeholder}
           defaultValue={defaultValue}
-          className={`input-field input-field-text--focus body-copy ${
+          className={`input-field input-field-text--focus body-copy placeholder:text-res-sm ${
             variant === "slim" && "py-1"
           } ${
             error &&
@@ -85,9 +85,9 @@ export function TextInput({
             "not-data-focus:border-border-global--error bg-surface-input--focus"
           }`}
         />
-        {/* {name === "cardSecurityCode" && (
-          <FaRegQuestionCircle className="text-text-global--disabled hover:text-text-global" />
-        )} */}
+        {name === "cardSecurityCode" && (
+          <FaRegQuestionCircle className="text-text-global--disabled hover:text-text-global absolute top-2 right-2" />
+        )}
         {error && !defaultValue && variant != "slim" && (
           <MdOutlineError
             aria-label="Attention!"
@@ -198,9 +198,13 @@ export function WarningEscape() {
   );
 }
 
-export function ErrorText({ children }) {
+export function ErrorText({ retainHeight, children }) {
   return (
-    <small className="body-copy-small text-text-global--action italic h-6">
+    <small
+      className={`body-copy-small text-text-global--action italic ${
+        retainHeight && "h-6"
+      }`}
+    >
       {children}
     </small>
   );

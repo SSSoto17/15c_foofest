@@ -81,26 +81,23 @@ export async function submitTicketReservation(prev, formData) {
       guest.email = emails[id];
     });
 
-    // formData.getAll("vipName").map((name) => {
-    //   orderDetails.vipGuests = [];
-    //   orderDetails.vipGuests = [...orderDetails.vipGuests, { name: name }];
-    //   if (formData.get("isBuyerGuest")) {
-    //     orderDetails.customerName = orderDetails.vipGuests[0].name;
-    //   }
-    // });
-    // formData.getAll("vipEmail").map((email, id) => {
-    //   orderDetails.vipGuests[id].email = email;
-    //   if (formData.get("isBuyerGuest")) {
-    //     orderDetails.customerEmail = orderDetails.vipGuests[0].email;
-    //   }
-    // });
+    // IS BUYER GOING?
+    if (formData.get("isBuyerGuest")) {
+      if (!orderDetails.vipGuests.length) {
+        orderDetails.customerName = orderDetails.partoutGuests[0].name;
+        orderDetails.customerEmail = orderDetails.partoutGuests[0].email;
+      }
+      if (!orderDetails.partoutGuests.length) {
+        orderDetails.customerName = orderDetails.vipGuests[0].name;
+        orderDetails.customerEmail = orderDetails.vipGuests[0].email;
+      }
+    }
 
     // COLLECT TENT ORDER
     orderDetails.tentDouble = Number(formData.get("Double Person Tent")) * 2;
     orderDetails.tentTriple = Number(formData.get("Triple Person Tent")) * 3;
 
     // FORM VALIDATION
-
     orderDetails.partoutGuests.map((guest) => {
       if (!guest.name || guest.name.length <= 1) {
         errors.ticketGuestsName =
@@ -122,46 +119,27 @@ export async function submitTicketReservation(prev, formData) {
           "Please provide the email of each ticket holder.";
       }
     });
-    // if (!orderDetails.customerName || orderDetails.customerName.length <= 1) {
-    //   errors.customerName = "Please provide your name.";
-    // }
-    // if (
-    //   !orderDetails.customerEmail ||
-    //   !orderDetails.customerEmail.includes(".")
-    // ) {
-    //   errors.customerEmail = "Please provide a valid email address.";
-    // }
-    // orderDetails.partoutGuests.map((name) => {
-    //   if (!name || name.length <= 1) {
-    //     errors.ticketGuestsName =
-    //       "Please provide the name of each ticket holder.";
-    //   }
-    // });
-    // orderDetails.partoutGuestsEmails.map((email) => {
-    //   if (!email || !email.includes(".")) {
-    //     errors.ticketGuestsEmail =
-    //       "Please provide a valid email for each ticket holder.";
-    //   }
-    // });
-    // orderDetails.vipGuests.map((name) => {
-    //   if (!name || name.length <= 1) {
-    //     errors.ticketGuestsName =
-    //       "Please provide the name of each ticket holder.";
-    //   }
-    // });
-    // orderDetails.vipGuestsEmails.map((email) => {
-    //   if (!email || !email.includes(".")) {
-    //     errors.ticketGuestsEmail =
-    //       "Please provide a valid email for each ticket holder.";
-    //   }
-    // });
-    // if (orderDetails.tentTriple * 3 > orderDetails.partoutGuests.length) {
-    //   errors.tentSetup = "Please fill up all tent space.";
-    // }
 
-    if (errors.ticketGuestsName || errors.ticketGuestsEmail) {
-      // orderDetails.partoutGuests = prev.orderDetails.partoutGuests;
-      // orderDetails.vipGuests = prev.orderDetails.vipGuests;
+    if (orderDetails.partoutGuests.length + orderDetails.vipGuests.length > 1) {
+      if (
+        orderDetails.partoutGuests.length + orderDetails.vipGuests.length <
+        orderDetails.tentDouble + orderDetails.tentTriple
+      ) {
+        errors.tentSetup = "Please fill up all available tent space.";
+      }
+      if (
+        orderDetails.partoutGuests.length + orderDetails.vipGuests.length >
+        orderDetails.tentDouble + orderDetails.tentTriple
+      ) {
+        errors.tentSetup = "Please ensure room for all guests.";
+      }
+    }
+
+    if (
+      errors.ticketGuestsName ||
+      errors.ticketGuestsEmail ||
+      errors.tentSetup
+    ) {
       return {
         activeStep: prev.activeStep,
         success: false,
@@ -183,6 +161,16 @@ export async function submitTicketReservation(prev, formData) {
 
     // orderDetails.customerName = formData.get("name");
     // orderDetails.customerEmail = formData.get("email");
+
+    // if (!orderDetails.customerName || orderDetails.customerName.length <= 1) {
+    //   errors.customerName = "Please provide your name.";
+    // }
+    // if (
+    //   !orderDetails.customerEmail ||
+    //   !orderDetails.customerEmail.includes(".")
+    // ) {
+    //   errors.customerEmail = "Please provide a valid email address.";
+    // }
 
     // PRICE SUMUP
     const pricePartout = orderDetails.partoutGuests.length * 799;
