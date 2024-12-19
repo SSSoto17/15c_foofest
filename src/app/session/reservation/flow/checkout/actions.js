@@ -61,40 +61,39 @@ export async function submitTicketReservation(prev, formData) {
     // REASSIGN VALUES FROM PREVIOUS STEP TO ORDER DETAILS
     Object.assign(orderDetails, prev.orderDetails);
 
-    // CLEAR GUESTS
-    orderDetails.partoutGuests = [];
-    orderDetails.vipGuests = [];
-
     // COLLECT PARTOUT GUESTS INFORMATION
-    formData.getAll("partoutName").map((name) => {
-      orderDetails.partoutGuests = [
-        ...orderDetails.partoutGuests,
-        { name: name },
-      ];
-      if (formData.get("isBuyerGuest")) {
-        orderDetails.customerName = orderDetails.partoutGuests[0].name;
-      }
-    });
-    formData.getAll("partoutEmail").map((email, id) => {
-      orderDetails.partoutGuests[id].email = email;
-      if (formData.get("isBuyerGuest")) {
-        orderDetails.customerEmail = orderDetails.partoutGuests[0].email;
-      }
+    orderDetails.partoutGuests = formData
+      .getAll("partoutName")
+      .map((str) => ({ name: str }));
+
+    orderDetails.partoutGuests.forEach(function (guest, id) {
+      const emails = formData.getAll("partoutEmail");
+      guest.email = emails[id];
     });
 
     // COLLECT VIP GUESTS INFORMATION
-    formData.getAll("vipName").map((name) => {
-      orderDetails.vipGuests = [...orderDetails.vipGuests, { name: name }];
-      if (formData.get("isBuyerGuest")) {
-        orderDetails.customerName = orderDetails.vipGuests[0].name;
-      }
+    orderDetails.vipGuests = formData
+      .getAll("vipName")
+      .map((str) => ({ name: str }));
+
+    orderDetails.vipGuests.forEach(function (guest, id) {
+      const emails = formData.getAll("vipEmail");
+      guest.email = emails[id];
     });
-    formData.getAll("vipEmail").map((email, id) => {
-      orderDetails.vipGuests[id].email = email;
-      if (formData.get("isBuyerGuest")) {
-        orderDetails.customerEmail = orderDetails.vipGuests[0].email;
-      }
-    });
+
+    // formData.getAll("vipName").map((name) => {
+    //   orderDetails.vipGuests = [];
+    //   orderDetails.vipGuests = [...orderDetails.vipGuests, { name: name }];
+    //   if (formData.get("isBuyerGuest")) {
+    //     orderDetails.customerName = orderDetails.vipGuests[0].name;
+    //   }
+    // });
+    // formData.getAll("vipEmail").map((email, id) => {
+    //   orderDetails.vipGuests[id].email = email;
+    //   if (formData.get("isBuyerGuest")) {
+    //     orderDetails.customerEmail = orderDetails.vipGuests[0].email;
+    //   }
+    // });
 
     // COLLECT TENT ORDER
     orderDetails.tentDouble = Number(formData.get("Double Person Tent")) * 2;
@@ -103,7 +102,18 @@ export async function submitTicketReservation(prev, formData) {
     // FORM VALIDATION
 
     orderDetails.partoutGuests.map((guest) => {
-      if (!guest.name) {
+      if (!guest.name || guest.name.length <= 1) {
+        errors.ticketGuestsName =
+          "Please provide the name and email of each ticket holder.";
+      }
+      if (!guest.email || !guest.email.includes(".")) {
+        errors.ticketGuestsEmail =
+          "Please provide the name and email of each ticket holder.";
+      }
+    });
+
+    orderDetails.vipGuests.map((guest) => {
+      if (!guest.name || guest.name.length <= 1) {
         errors.ticketGuestsName =
           "Please provide the name of each ticket holder.";
       }
@@ -111,7 +121,6 @@ export async function submitTicketReservation(prev, formData) {
         errors.ticketGuestsEmail =
           "Please provide the email of each ticket holder.";
       }
-      return console.log(errors);
     });
     // if (!orderDetails.customerName || orderDetails.customerName.length <= 1) {
     //   errors.customerName = "Please provide your name.";
@@ -150,11 +159,9 @@ export async function submitTicketReservation(prev, formData) {
     //   errors.tentSetup = "Please fill up all tent space.";
     // }
 
-    if (
-      errors.ticketGuestsName ||
-      errors.ticketGuestsEmail ||
-      errors.tentSetup
-    ) {
+    if (errors.ticketGuestsName || errors.ticketGuestsEmail) {
+      // orderDetails.partoutGuests = prev.orderDetails.partoutGuests;
+      // orderDetails.vipGuests = prev.orderDetails.vipGuests;
       return {
         activeStep: prev.activeStep,
         success: false,

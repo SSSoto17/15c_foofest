@@ -93,7 +93,7 @@ export function NumberSpinner({ label, price, error, children }) {
       <div
         className={`input-field input-field-number--focus gap-4 w-fit ${
           error &&
-          !totalTickets &&
+          total === 0 &&
           "not-has-data-focus:border-border-global--error bg-surface-input--focus"
         }`}
       >
@@ -131,7 +131,7 @@ export function NumberSpinner({ label, price, error, children }) {
           />
         </Button>
       )}
-      {error && !totalTickets && (
+      {error && !total && (
         <MdOutlineError
           aria-label="Attention!"
           className="place-self-center text-text-global--error error_icon"

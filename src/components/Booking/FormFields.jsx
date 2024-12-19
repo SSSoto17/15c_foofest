@@ -12,6 +12,7 @@ import {
   Description,
 } from "@headlessui/react";
 import { MdOutlineCheck, MdOutlineError } from "react-icons/md";
+import { FaRegQuestionCircle } from "react-icons/fa";
 
 // FUNCTIONS
 import Image from "next/image";
@@ -48,8 +49,6 @@ export function CheckField({ data, minor, children }) {
   );
 }
 
-import { FaRegQuestionCircle } from "react-icons/fa";
-
 export function TextInput({
   name,
   type,
@@ -82,13 +81,14 @@ export function TextInput({
             variant === "slim" && "py-1"
           } ${
             error &&
+            !defaultValue &&
             "not-data-focus:border-border-global--error bg-surface-input--focus"
           }`}
         />
         {/* {name === "cardSecurityCode" && (
           <FaRegQuestionCircle className="text-text-global--disabled hover:text-text-global" />
         )} */}
-        {error && (
+        {error && !defaultValue && variant != "slim" && (
           <MdOutlineError
             aria-label="Attention!"
             className="place-self-center text-text-global--error"
@@ -96,7 +96,9 @@ export function TextInput({
           />
         )}
       </div>
-      <ErrorText>{!error?.includes("ticket") && error}</ErrorText>
+      {variant != "slim" && (
+        <ErrorText>{!error?.includes("ticket") && error}</ErrorText>
+      )}
     </Field>
   );
 }
@@ -198,7 +200,7 @@ export function WarningEscape() {
 
 export function ErrorText({ children }) {
   return (
-    <small className="body-copy-small text-text-global--action italic h-0.5">
+    <small className="body-copy-small text-text-global--action italic h-6">
       {children}
     </small>
   );

@@ -22,14 +22,14 @@ export const useQuantityStore = create((set) => ({
   total: 0,
   add: () =>
     set((state) => ({
-      totalTickets: state.totalTickets + 1,
+      total: state.total + 1,
     })),
   remove: (quantity) =>
     set((state) => ({
-      totalTickets: state.totalTickets - Number(quantity),
+      total: state.total - Number(quantity),
     })),
   enter: (quantity) =>
     set((state) => ({
-      totalTickets: (state.totalTickets = quantity),
+      total: (state.total = quantity),
     })),
 }));

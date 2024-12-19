@@ -2,7 +2,12 @@ import Image from "next/image";
 import vipStamp from "@/assets/svg/vip.svg";
 
 import { Fieldset, Legend } from "@headlessui/react";
-import { TextInput, CheckField } from "@/components/Booking/FormFields";
+import {
+  TextInput,
+  CheckField,
+  ErrorText,
+} from "@/components/Booking/FormFields";
+import { MdOutlineError } from "react-icons/md";
 
 export default function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
   const TicketGuestKeys = {
@@ -17,19 +22,20 @@ export default function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
         partoutGuests.length > 1 && "md:grid-cols-2"
       } gap-4 w-full`}
     >
-      <header className="col-span-full flow-space">
+      <header className="col-span-full grid gap-2">
         <h2 className="heading-5">Ticket Information</h2>
-        <p className="body-copy opacity-50">
-          Please provide the name and email of each ticket holder.
-        </p>
+        <ErrorText>
+          {error?.ticketGuestsName || error?.ticketGuestsEmail}
+        </ErrorText>
       </header>
       {partoutGuests &&
         partoutGuests.map((guest, id) => {
+          console.log(guest);
           return (
             <TicketGuestCard
               key={id}
               data={guest}
-              {...TicketGuestKeys[guest]}
+              {...TicketGuestKeys["partoutGuests"]}
               number={id + 1}
               single={singleTicket}
               error={error}
@@ -42,9 +48,10 @@ export default function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
             <TicketGuestCard
               key={id}
               data={guest}
-              {...TicketGuestKeys[guest]}
+              {...TicketGuestKeys["vipGuests"]}
               number={partoutGuests.length + id + 1}
               single={singleTicket}
+              error={error}
               vip
             />
           );
@@ -62,15 +69,21 @@ export function TicketGuestCard({
   vip,
   error,
 }) {
+  console.log(error);
   const checkboxData = { name: "isBuyerGuest" };
   return (
     <>
       <Fieldset className="grid gap-y-6 max-w-md grow shrink">
-        <Legend className="heading-6 font-semibold capitalize">
+        <Legend className="heading-6 font-semibold capitalize flex gap-4">
           Ticket #{number}
         </Legend>
         <div
-          className={`grid gap-y-1 border border-border-input py-4 px-8 relative`}
+          className={`grid gap-y-4 border p-8 pt-4 relative ${
+            (error.ticketGuestsName && !data?.name) ||
+            (error.ticketGuestsEmail && !data?.email)
+              ? "border-border-global--error/35"
+              : "border-border-input"
+          }`}
         >
           {vip && (
             <Image
@@ -79,6 +92,14 @@ export function TicketGuestCard({
               className="absolute right-6 -top-6"
             />
           )}
+
+          {/* {error && (
+            <Image
+              src={vipStamp}
+              alt="VIP Ticket"
+              className="absolute right-6 -top-6"
+            />
+          )} */}
           <TextInput
             name={name}
             error={error?.ticketGuestsName}
@@ -91,6 +112,7 @@ export function TicketGuestCard({
           <TextInput
             name={email}
             error={error?.ticketGuestsEmail}
+            defaultValue={data?.email}
             type="email"
             variant="slim"
           >
