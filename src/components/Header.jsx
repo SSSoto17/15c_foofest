@@ -2,9 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { WarningEscape } from "./booking/FormFields";
 import { useState } from "react";
 import logo from "@/assets/svg/logo_bold.svg";
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Description,
+} from "@headlessui/react";
 
 export default function Header({ linksActive }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -114,3 +119,50 @@ export const MobileNavIcon = ({ setIsOpen, isOpen }) => {
     </button>
   );
 };
+
+function WarningEscape() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setIsOpen(true)} className="cursor-pointer">
+        <Image src={logo} alt="FooFest" className="h-16 w-fit" />
+      </button>
+      <Dialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="fixed inset-0 flex items-center justify-center p-4"
+      >
+        <div className="bg-surface-global p-12 border border-border-global max-w-md">
+          <DialogPanel className="grid gap-8">
+            <DialogTitle className="heading-6 text-red-400">
+              Leave Booking Session
+            </DialogTitle>
+            <div className="grid gap-2">
+              <Description className="font-bold">
+                Are you sure you wish to leave?
+              </Description>
+              <p className="text-aztec-300">
+                If you exit the booking session you will lose your reservation.
+              </p>
+            </div>
+            <div className="flex gap-4">
+              <button
+                onClick={() => setIsOpen(false)}
+                className="grow cursor-pointer bg-aztec-300 p-2 rounded-sm font-semibold max-w-40"
+              >
+                Cancel
+              </button>
+              <Link
+                href="/"
+                className="grow flex place-content-center bg-rose-600 p-2 rounded-sm font-semibold max-w-40"
+              >
+                Exit
+              </Link>
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
+    </>
+  );
+}

@@ -1,22 +1,11 @@
 "use client";
 
 // COMPONENTS
-import {
-  Field,
-  Label,
-  Input,
-  Checkbox,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  Description,
-} from "@headlessui/react";
+import { Field, Label, Input, Checkbox } from "@headlessui/react";
 import { MdOutlineCheck, MdOutlineError } from "react-icons/md";
 import { FaRegQuestionCircle } from "react-icons/fa";
 
 // FUNCTIONS
-import Image from "next/image";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -152,54 +141,6 @@ export function CountDown({ seconds }) {
   // TIME FORMAT CREDIT: https://www.geeksforgeeks.org/how-to-convert-seconds-to-time-string-format-hhmmss-using-javascript/
 
   return <p className="body-copy font-semibold">{formattedTimer}</p>;
-}
-
-import logo from "@/assets/svg/logo_bold.svg";
-export function WarningEscape() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <>
-      <button onClick={() => setIsOpen(true)} className="cursor-pointer">
-        <Image src={logo} alt="FooFest" className="h-16 w-fit" />
-      </button>
-      <Dialog
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        className="fixed inset-0 flex items-center justify-center p-4"
-      >
-        <div className="bg-surface-global p-12 border border-border-global max-w-md">
-          <DialogPanel className="grid gap-8">
-            <DialogTitle className="heading-6 text-red-400">
-              Leave Booking Session
-            </DialogTitle>
-            <div className="grid gap-2">
-              <Description className="font-bold">
-                Are you sure you wish to leave?
-              </Description>
-              <p className="text-aztec-300">
-                If you exit the booking session you will lose your reservation.
-              </p>
-            </div>
-            <div className="flex gap-4">
-              <button
-                onClick={() => setIsOpen(false)}
-                className="grow cursor-pointer bg-aztec-300 p-2 rounded-sm font-semibold max-w-40"
-              >
-                Cancel
-              </button>
-              <Link
-                href="/"
-                className="grow flex place-content-center bg-rose-600 p-2 rounded-sm font-semibold max-w-40"
-              >
-                Exit
-              </Link>
-            </div>
-          </DialogPanel>
-        </div>
-      </Dialog>
-    </>
-  );
 }
 
 export function ErrorText({ retainHeight, children }) {

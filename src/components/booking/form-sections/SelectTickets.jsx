@@ -88,9 +88,8 @@ export function NumberSpinner({ label, price, error, single, children }) {
       </Label>
       <div
         className={`input-field input-field-number--focus gap-4 w-fit ${
-          (error.tickets && total === 0) ||
-          (error.tentSetup &&
-            "not-has-data-focus:border-border-global--error bg-surface-input--focus")
+          ((error.tickets && total === 0) || error.tentSetup) &&
+          "not-has-data-focus:border-border-global--error bg-surface-input--focus"
         }`}
       >
         <Button
