@@ -1,4 +1,4 @@
-import { getArtists } from "@/app/lib/lineup";
+import { getArtists } from "@/lib/lineup";
 import LineupLayout from "@/components/lineup/LineupLayout";
 import ByArtist from "@/components/lineup/ByArtist";
 

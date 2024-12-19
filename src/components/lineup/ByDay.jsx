@@ -1,4 +1,4 @@
-import Accordion from "@/components/lineup/Accordion";
+import Accordion from "@/components/Accordion";
 import DaySchedule from "@/components/lineup/schedule/DaySchedule";
 
 const ByDay = ({ data }) => {
@@ -38,13 +38,21 @@ const ByDay = ({ data }) => {
         <DaySchedule jotun={JotunMon} mid={MidMon} vana={VanaMon}></DaySchedule>
       </Accordion>
       <Accordion label="Tuesday" name="day" variant="primary">
-        <DaySchedule jotun={JotunTues} mid={MidTues} vana={VanaTues}></DaySchedule>
+        <DaySchedule
+          jotun={JotunTues}
+          mid={MidTues}
+          vana={VanaTues}
+        ></DaySchedule>
       </Accordion>
       <Accordion label="Wednesday" name="day" variant="primary">
         <DaySchedule jotun={JotunWed} mid={MidWed} vana={VanaWed}></DaySchedule>
       </Accordion>
       <Accordion label="Thursday" name="day" variant="primary">
-        <DaySchedule jotun={JotunThur} mid={MidThur} vana={VanaThur}></DaySchedule>
+        <DaySchedule
+          jotun={JotunThur}
+          mid={MidThur}
+          vana={VanaThur}
+        ></DaySchedule>
       </Accordion>
       <Accordion label="Friday" name="day" variant="primary">
         <DaySchedule jotun={JotunFri} mid={MidFri} vana={VanaFri}></DaySchedule>
