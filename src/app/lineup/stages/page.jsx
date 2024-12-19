@@ -1,4 +1,4 @@
-import { getStages } from "@/app/lib/lineup";
+import { getStages } from "@/lib/lineup";
 import LineupLayout from "@/components/lineup/LineupLayout";
 import ByStage from "@/components/lineup/ByStage";
 

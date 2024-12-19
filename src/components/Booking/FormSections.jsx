@@ -8,6 +8,7 @@ import {
 import buyerInfo from "../../data/buyerfields";
 import Accordion from "../lineup/Accordion";
 import { NumberSpinner } from "./form-sections/SelectTickets";
+import Accordion from "../Accordion";
 
 export function GreenFee() {
   const data = { name: "greenFee", price: 249 };

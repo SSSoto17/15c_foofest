@@ -1,4 +1,4 @@
-import Accordion from "@/components/lineup/Accordion";
+import Accordion from "@/components/Accordion";
 import DaySchedule from "@/components/lineup/schedule/DaySchedule";
 
 const ByDay = ({ data }) => {
@@ -34,25 +34,33 @@ const ByDay = ({ data }) => {
 
   return (
     <section className="grid gap-4">
-      <Accordion summary="Monday" name="day">
+      <Accordion label="Monday" name="day" variant="primary">
         <DaySchedule jotun={JotunMon} mid={MidMon} vana={VanaMon}></DaySchedule>
       </Accordion>
-      <Accordion summary="Tuesday" name="day">
-        <DaySchedule jotun={JotunTues} mid={MidTues} vana={VanaTues}></DaySchedule>
+      <Accordion label="Tuesday" name="day" variant="primary">
+        <DaySchedule
+          jotun={JotunTues}
+          mid={MidTues}
+          vana={VanaTues}
+        ></DaySchedule>
       </Accordion>
-      <Accordion summary="Wednesday" name="day">
+      <Accordion label="Wednesday" name="day" variant="primary">
         <DaySchedule jotun={JotunWed} mid={MidWed} vana={VanaWed}></DaySchedule>
       </Accordion>
-      <Accordion summary="Thursday" name="day">
-        <DaySchedule jotun={JotunThur} mid={MidThur} vana={VanaThur}></DaySchedule>
+      <Accordion label="Thursday" name="day" variant="primary">
+        <DaySchedule
+          jotun={JotunThur}
+          mid={MidThur}
+          vana={VanaThur}
+        ></DaySchedule>
       </Accordion>
-      <Accordion summary="Friday" name="day">
+      <Accordion label="Friday" name="day" variant="primary">
         <DaySchedule jotun={JotunFri} mid={MidFri} vana={VanaFri}></DaySchedule>
       </Accordion>
-      <Accordion summary="Saturday" name="day">
+      <Accordion label="Saturday" name="day" variant="primary">
         <DaySchedule jotun={JotunSat} mid={MidSat} vana={VanaSat}></DaySchedule>
       </Accordion>
-      <Accordion summary="Sunday" name="day">
+      <Accordion label="Sunday" name="day" variant="primary">
         <DaySchedule jotun={JotunSun} mid={MidSun} vana={VanaSun}></DaySchedule>
       </Accordion>
     </section>
