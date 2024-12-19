@@ -5,176 +5,27 @@ import {
   Field,
   Label,
   Input,
-  Button,
-  RadioGroup,
-  Radio,
   Checkbox,
   Dialog,
   DialogPanel,
   DialogTitle,
   Description,
 } from "@headlessui/react";
-import {
-  MdOutlineAdd,
-  MdOutlineRemove,
-  MdOutlineDelete,
-  MdOutlineCheck,
-  MdOutlineError,
-} from "react-icons/md";
+import { MdOutlineCheck, MdOutlineError } from "react-icons/md";
 
 // FUNCTIONS
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { useTickets } from "@/store/GlobalStore";
-import { useShallow } from "zustand/react/shallow";
 
-export function NumberInput({ name, price, error, tickets, children }) {
-  const {
-    totalTickets,
-    addTotalTickets,
-    removeTotalTickets,
-    enterTotalTickets,
-  } = useTickets(
-    useShallow((state) => ({
-      totalTickets: state.totalTickets,
-      addTotalTickets: state.addTicket,
-      removeTotalTickets: state.removeTicket,
-      enterTotalTickets: state.enterTicket,
-    }))
-  );
-  const [quantity, setQuantity] = useState(0);
-
-  const addTicket = () => {
-    setQuantity(Number(quantity) + 1);
-    if (tickets) {
-      addTotalTickets();
-    }
-  };
-
-  const removeTicket = () => {
-    setQuantity(Number(quantity) - 1);
-    if (tickets) {
-      removeTotalTickets(1);
-    }
-  };
-
-  const clearTickets = () => {
-    if (tickets) {
-      removeTotalTickets(quantity);
-    }
-    setQuantity(0);
-  };
-
-  const enterTicket = (e) => {
-    setQuantity(e.target.value);
-    if (tickets) {
-      const newQuantity = totalTickets - quantity + Number(e.target.value);
-      console.log("new quantity: ", newQuantity);
-      enterTotalTickets(newQuantity);
-    }
-  };
-
-  return (
-    <Field className="peer grid grid-cols-[1fr_auto_1rem] items-end justify-between max-w-xl gap-4">
-      <Label className="flex justify-between">
-        {children}{" "}
-        <span className="opacity-50 place-self-end mx-8">{price} DKK</span>
-      </Label>
-      <div
-        className={`input-field input-field-number--focus gap-4 w-fit ${
-          error &&
-          !totalTickets &&
-          "not-has-data-focus:border-border-global--error bg-surface-input--focus"
-        }`}
-      >
-        <Button
-          disabled={!quantity}
-          className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
-          onClick={removeTicket}
-        >
-          <MdOutlineRemove className="text-text-global" size="24" />
-        </Button>
-        <Input
-          type="number"
-          name={name}
-          value={quantity}
-          onChange={enterTicket}
-          className="w-6 text-center data-focus:outline-none"
-        />
-        <Button
-          disabled={quantity >= 10}
-          className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
-          onClick={addTicket}
-        >
-          <MdOutlineAdd className="text-text-global" size="24" />
-        </Button>
-      </div>
-      {quantity > 0 && (
-        <Button
-          className="cursor-pointer"
-          aria-label="Clear quantity"
-          onClick={clearTickets}
-        >
-          <MdOutlineDelete
-            className="hover:opacity-50 opacity-25 place-self-center"
-            size="24"
-          />
-        </Button>
-      )}
-      {error && !totalTickets && (
-        <MdOutlineError
-          aria-label="Attention!"
-          className="place-self-center text-text-global--error error_icon"
-          size="24"
-        />
-      )}
-    </Field>
-  );
-}
-
-export function CampingSpots({ selectionData }) {
-  const ticketQuantity = useTickets((state) => state.totalTickets);
-  const availableAreas = selectionData.filter(
-    (spot) => spot.available > 0 && spot.available >= ticketQuantity
-  );
-
-  const [selected, setSelected] = useState(availableAreas[0].area);
-
-  return (
-    <RadioGroup name="area" value={selected} onChange={setSelected}>
-      {selectionData.map((spot, id) => (
-        <Field
-          key={id}
-          disabled={spot.available === 0 || spot.available < ticketQuantity}
-          className="flex items-end justify-between max-w-xl gap-8 not-data-disabled:cursor-pointer"
-        >
-          <Radio
-            value={spot.area}
-            className="group grid grid-cols-[auto_8rem_4rem] gap-3 items-center"
-          >
-            <span className="input-radio" />
-            <Label className="group-data-disabled:opacity-25 group-not-data-disabled:cursor-pointer">
-              {spot.area}
-            </Label>
-            <small className="opacity-25 cursor-default justify-self-end">
-              {spot.available} / {spot.spots}{" "}
-            </small>
-          </Radio>
-        </Field>
-      ))}
-    </RadioGroup>
-  );
-}
-
-export function Optionals({ name, price, minor, children }) {
+export function CheckField({ data, minor, children }) {
   const [checked, setChecked] = useState(false);
 
   return (
     <Field className="flex items-center gap-3 max-w-xl group hover:cursor-pointer">
       <Checkbox
-        name={name}
+        name={data?.name}
         checked={checked}
         onChange={setChecked}
         className="border-2 border-aztec-600 rounded-sm data-checked:border-forest-600 data-checked:bg-forest-600 data-focus:outline-none"
@@ -187,8 +38,10 @@ export function Optionals({ name, price, minor, children }) {
         } flex justify-between group-data-disabled:opacity-25 group-not-data-disabled:cursor-pointer`}
       >
         {children}{" "}
-        {price && (
-          <small className="opacity-50 place-self-end mx-8">{price} DKK</small>
+        {data?.price && (
+          <small className="opacity-50 place-self-end mx-8">
+            {data?.price} DKK
+          </small>
         )}
       </Label>
     </Field>

@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { putReservation, postReservation, postOrder } from "../../lib/tickets";
+import { putReservation, postReservation, postOrder } from "../../lib/order";
 
 export async function submitTicketReservation(prev, formData) {
   const errors = {};
@@ -57,8 +57,9 @@ export async function submitTicketReservation(prev, formData) {
     // REASSIGN VALUES FROM PREVIOUS STEP TO ORDER DETAILS
     Object.assign(orderDetails, prev.orderDetails);
 
-    // CLEAR PARTOUT GUESTS
+    // CLEAR GUESTS
     orderDetails.partoutGuests = [];
+    orderDetails.vipGuests = [];
 
     // COLLECT PARTOUT GUESTS INFORMATION
     formData.getAll("partoutName").map((name) => {
@@ -66,15 +67,38 @@ export async function submitTicketReservation(prev, formData) {
         ...orderDetails.partoutGuests,
         { name: name },
       ];
+      if (formData.get("isBuyerGuest")) {
+        orderDetails.customerName = orderDetails.partoutGuests[0].name;
+      }
     });
     formData.getAll("partoutEmail").map((email, id) => {
       orderDetails.partoutGuests[id].email = email;
+      if (formData.get("isBuyerGuest")) {
+        orderDetails.customerEmail = orderDetails.partoutGuests[0].email;
+      }
     });
 
-    // orderDetails.partoutGuests = formData.getAll("partoutName");
-    // orderDetails.partoutGuestsEmails = formData.getAll("partoutEmail");
-    // orderDetails.vipGuests = formData.getAll("vipName");
-    // orderDetails.vipGuestsEmails = formData.getAll("vipEmail");
+    // COLLECT VIP GUESTS INFORMATION
+    formData.getAll("vipName").map((name) => {
+      orderDetails.vipGuests = [...orderDetails.vipGuests, { name: name }];
+      if (formData.get("isBuyerGuest")) {
+        orderDetails.customerName = orderDetails.vipGuests[0].name;
+      }
+    });
+    formData.getAll("vipEmail").map((email, id) => {
+      orderDetails.vipGuests[id].email = email;
+      if (formData.get("isBuyerGuest")) {
+        orderDetails.customerEmail = orderDetails.vipGuests[0].email;
+      }
+    });
+
+    return {
+      activeStep: prev.activeStep,
+      success: false,
+      errors: {},
+      orderDetails,
+    };
+
     // orderDetails.tentDouble = formData.get("Double Person Tent");
     // orderDetails.tentTriple = formData.get("Triple Person Tent");
 
@@ -122,8 +146,8 @@ export async function submitTicketReservation(prev, formData) {
 
     if (
       errors.ticketGuestsName ||
-      errors.ticketGuestsEmail
-      // errors.tentSetup
+      errors.ticketGuestsEmail ||
+      errors.tentSetup
     ) {
       return {
         activeStep: prev.activeStep,

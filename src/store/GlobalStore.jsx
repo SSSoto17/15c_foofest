@@ -33,3 +33,19 @@ export const useTickets = create((set) => ({
       totalTickets: (state.totalTickets = quantity),
     })),
 }));
+
+export const useTents = create((set) => ({
+  tentSpaces: 0,
+  addTent: (spaces) =>
+    set((state) => ({
+      tentSpaces: state.tentSpaces + 1 * spaces,
+    })),
+  removeTent: (quantity, spaces) =>
+    set((state) => ({
+      tentSpaces: state.tentSpaces - Number(quantity) * spaces,
+    })),
+  enterTent: (quantity, spaces) =>
+    set((state) => ({
+      tentSpaces: (state.tentSpaces = Number(quantity) * spaces),
+    })),
+}));

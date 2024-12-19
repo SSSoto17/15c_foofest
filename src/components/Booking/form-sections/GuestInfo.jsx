@@ -2,7 +2,7 @@ import Image from "next/image";
 import vipStamp from "@/assets/svg/vip.svg";
 
 import { Fieldset, Legend } from "@headlessui/react";
-import { TextInput, Optionals } from "@/components/Booking/FormFields";
+import { TextInput, CheckField } from "@/components/Booking/FormFields";
 
 export default function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
   const TicketGuestKeys = {
@@ -41,6 +41,7 @@ export default function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
           return (
             <TicketGuestCard
               key={id}
+              data={guest}
               {...TicketGuestKeys[guest]}
               number={partoutGuests.length + id + 1}
               single={singleTicket}
@@ -50,52 +51,6 @@ export default function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
         })}
     </section>
   );
-
-  {
-    /* <small className="text-text-global--error italic h-8">{error}</small> */
-  }
-  {
-    /* {partoutGuests && (
-            <ul>
-            {partoutGuests.map((guest, id) => {
-              return (
-                <li key={id}>
-                <TextInput
-                name={guest}
-                type="text"
-                error={error}
-                // defaultValue={
-                  //   ticketHolders?.partout[id] || ticketHolders?.vip[id]
-                  // }
-                  >
-                  Name
-                  </TextInput>
-                  </li>
-                  );
-                  })}
-                  </ul>
-                  )}
-                  {vipGuests && (
-                    <ul>
-                    {vipGuests.map((guest, id) => {
-                      return (
-                        <li key={id}>
-                        <TextInput
-                        name={guest}
-                        type="text"
-                        error={error}
-                        // defaultValue={
-                          //   ticketHolders?.partout[id] || ticketHolders?.vip[id]
-                          // }
-                          >
-                          Name
-                          </TextInput>
-                          </li>
-                          );
-                          })}
-                          </ul>
-                          )} */
-  }
 }
 
 export function TicketGuestCard({
@@ -107,6 +62,7 @@ export function TicketGuestCard({
   vip,
   error,
 }) {
+  const checkboxData = { name: "isBuyerGuest" };
   return (
     <>
       <Fieldset className="grid gap-y-4 max-w-md grow shrink">
@@ -123,7 +79,7 @@ export function TicketGuestCard({
           )}
           <TextInput
             name={name}
-            error={error.ticketGuestsName}
+            error={error?.ticketGuestsName}
             defaultValue={data?.name}
             type="text"
             variant="slim"
@@ -132,7 +88,7 @@ export function TicketGuestCard({
           </TextInput>
           <TextInput
             name={email}
-            error={error.ticketGuestsEmail}
+            error={error?.ticketGuestsEmail}
             type="email"
             variant="slim"
           >
@@ -140,10 +96,11 @@ export function TicketGuestCard({
           </TextInput>
         </div>
         {single && (
-          <Optionals name="buyerIsGuest" minor>
+          <CheckField data={checkboxData} minor>
             Are you buying this ticket for yourself?
-          </Optionals>
+          </CheckField>
         )}
+        {/* <small className="text-text-global--error italic h-8">{error}</small> */}
       </Fieldset>
     </>
   );

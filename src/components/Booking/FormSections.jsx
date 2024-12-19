@@ -1,24 +1,24 @@
 import { Fieldset, Legend } from "@headlessui/react";
 import {
-  NumberInput,
-  Optionals,
+  CheckField,
   TextInput,
   ReservationTimer,
 } from "@/components/Booking/FormFields";
 import buyerInfo from "../../data/buyerfields";
 import Accordion from "../lineup/Accordion";
+import { NumberSpinner } from "./form-sections/SelectTickets";
 
-export function OptionalsSelection() {
+export function GreenFee() {
+  const data = { name: "greenFee", price: 249 };
   return (
     <Fieldset className="grid gap-y-2">
-      <Optionals name="greenFee" price={249}>
-        Green Fee
-      </Optionals>
+      <CheckField data={data}>Green Fee</CheckField>
     </Fieldset>
   );
 }
 
-export function TentSetup({ error }) {
+export function TentSetup({ tentDouble, tentTriple, error }) {
+  const tentSpaces = tentDouble?.length * 2 + tentTriple?.length * 3;
   const tentListing = [
     { label: "Double Person Tent", price: "299" },
     { label: "Triple Person Tent", price: "399" },
@@ -26,17 +26,19 @@ export function TentSetup({ error }) {
   return (
     <Accordion label="Tent Setup" variant="secondary">
       <Fieldset className="grid gap-y-4 ml-12">
-        <small>{error}</small>
+        <small className="text-text-global--action italic h-0.5">
+          {!tentSpaces && error}
+        </small>
         {tentListing.map((tent, id) => {
           return (
-            <NumberInput
+            <NumberSpinner
+              forTents
               key={id}
-              name={tent.label}
-              price={tent.price}
-              error={error}
+              {...tent}
+              error={(!tentSpaces && error) || (tentSpaces > 10 && error)}
             >
               {tent.label}
-            </NumberInput>
+            </NumberSpinner>
           );
         })}
       </Fieldset>
