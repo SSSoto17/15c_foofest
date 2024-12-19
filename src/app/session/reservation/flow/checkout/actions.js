@@ -200,7 +200,7 @@ export async function submitTicketReservation(prev, formData) {
       !formData.get("cardNumber") ||
       formData.get("cardNumber").length != 16 ||
       !formData.get("cardExp") ||
-      formData.get("cardExp").cardExp.length > 5 ||
+      formData.get("cardExp").length > 5 ||
       !formData.get("cardSecurityCode") ||
       !formData.get("cardSecurityCode").length !== 3 ||
       !formData.get("cardHolder") ||
@@ -209,14 +209,14 @@ export async function submitTicketReservation(prev, formData) {
       errors.payment = "Please check your card details.";
     }
 
-    if (errors.customerName || errors.customerEmail || errors.payment) {
-      return {
-        activeStep: prev.activeStep,
-        success: false,
-        errors,
-        orderDetails,
-      };
-    }
+    // if (errors.customerName || errors.customerEmail || errors.payment) {
+    //   return {
+    //     activeStep: prev.activeStep,
+    //     success: false,
+    //     errors,
+    //     orderDetails,
+    //   };
+    // }
 
     // PRICE SUMUP
     const pricePartout = orderDetails.partoutGuests.length * 799;
@@ -240,10 +240,11 @@ export async function submitTicketReservation(prev, formData) {
     if (response) {
       delete orderDetails.reservationId;
       revalidatePath("/");
-      const orderCompleted = postOrder(orderDetails);
+      const orderCompleted = await postOrder(orderDetails);
       if (orderCompleted) {
         console.log("thanks for your order!");
-        // revalidatePath("/"), redirect("/");
+        revalidatePath("/");
+        redirect("/session/reservation/order-confirmation");
         // return { activeStep: 1, success: true, errors: {}, orderDetails };
       }
     } else {
