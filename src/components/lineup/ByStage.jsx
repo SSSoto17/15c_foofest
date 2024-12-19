@@ -11,13 +11,13 @@ const ByStage = ({ data }) => {
 
   return (
     <section className="grid gap-4">
-      <Accordion summary="Jotunheim" name="stage">
+      <Accordion variant="primary" label="Jotunheim" name="stage">
         <StageSchedule data={Jotunheim}></StageSchedule>
       </Accordion>
-      <Accordion summary="Midgard" name="stage">
+      <Accordion variant="primary" label="Midgard" name="stage">
         <StageSchedule data={Midgard}></StageSchedule>
       </Accordion>
-      <Accordion summary="Vanaheim" name="stage">
+      <Accordion variant="primary" label="Vanaheim" name="stage">
         <StageSchedule data={Vanaheim}></StageSchedule>
       </Accordion>
     </section>
