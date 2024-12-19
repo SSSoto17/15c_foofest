@@ -14,23 +14,16 @@
 
   /* @link https://utopia.fyi/type/calculator?c=320,16,1.333,1240,18,1.618,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
 
-  --text-mob-xs: 0.4rem;
-  --text-mob-sm: 0.7rem;
-  --text-mob-base: 1rem;
-  --text-mob-lg: 1.3rem;
-  --text-mob-xl: 1.8rem;
-  --text-mob-2xl: 2.4rem;
-  --text-mob-3xl: 3.15rem;
-  --text-mob-4xl: 4.2rem;
-
-  --text-desk-xs: 0.55rem;
-  --text-desk-sm: 0.75rem;
-  --text-desk-base: 1.125rem;
-  --text-desk-lg: 1.825rem;
-  --text-desk-xl: 3rem;
-  --text-desk-2xl: 4.75rem;
-  --text-desk-3xl: 7.75rem;
-  --text-desk-4xl: 12.5rem;
+  --text-res-xs: clamp(0.6331rem, 0.6425rem + -0.0125vw, 0.64rem);
+  --text-res-sm: clamp(0.8rem, 0.784rem + 0.0799vw, 0.844rem);
+  --text-res-base: clamp(1rem, 0.9545rem + 0.2273vw, 1.125rem);
+  --text-res-lg: clamp(1.25rem, 1.1592rem + 0.4539vw, 1.4996rem);
+  --text-res-xl: clamp(1.5625rem, 1.4038rem + 0.7936vw, 1.999rem);
+  --text-res-2xl: clamp(1.9531rem, 1.6944rem + 1.2937vw, 2.6647rem);
+  --text-res-3xl: clamp(2.4414rem, 2.0376rem + 2.0193vw, 3.552rem);
+  --text-res-4xl: clamp(3.0518rem, 2.4397rem + 3.0601vw, 4.7348rem);
+  --text-res-5xl: clamp(3.8147rem, 2.9068rem + 4.5397vw, 6.3115rem);
+  --text-res-6xl: clamp(4.7684rem, 3.443rem + 6.627vw, 8.4132rem);
 
   /* COLOR | PRIMARY */
   --color-forest-50: #effaf4;
@@ -85,8 +78,16 @@
   /* COLOR | SEMANTIC TOKENS | FORMS */
   --color-border-form: var(--color-border-global);
   --color-text-input: var(--color-text-global);
-  --color-surface-input: color-mix(in oklch, var(--color-aztec-900) 50%, transparent);
-  --color-surface-input--error: color-mix(in oklch, var(--color-aztec-900) 75%, transparent);
+  --color-surface-input: color-mix(
+    in oklch,
+    var(--color-aztec-900) 50%,
+    transparent
+  );
+  --color-surface-input--error: color-mix(
+    in oklch,
+    var(--color-aztec-900) 75%,
+    transparent
+  );
   --color-surface-input--focus: var(--color-aztec-900);
   --color-border-input: var(--color-aztec-900);
   --color-border-input--focus: var(--color-aztec-600);
@@ -103,32 +104,35 @@
   /* TEXT STYLES */
 
   .heading-title {
-    @apply text-desk-3xl leading-36 font-display font-normal uppercase;
+    @apply text-res-6xl leading-36 font-display font-normal uppercase;
   }
   .heading-1 {
-    @apply text-desk-2xl leading-22 font-display font-normal;
+    @apply text-res-5xl leading-22 font-display font-normal;
   }
   .heading-2 {
-    @apply text-desk-xl leading-16 font-display font-normal;
+    @apply text-res-4xl leading-16 font-display font-normal;
   }
   .heading-3 {
-    @apply text-desk-lg leading-9 font-semibold;
+    @apply text-res-3xl leading-9 font-semibold;
   }
 
   .heading-4 {
-    @apply text-desk-base leading-6 font-bold uppercase text-text-heading;
+    @apply text-res-2xl leading-6 font-bold uppercase text-text-heading;
+  }
+  .heading-5 {
+    @apply text-res-xl leading-6 font-bold uppercase text-text-heading;
   }
 
   .heading-tagline {
-    @apply text-desk-lg leading-9 uppercase text-text-heading;
+    @apply text-res-lg leading-9 uppercase text-text-heading;
   }
 
   .body-copy {
-    @apply text-desk-base leading-7 font-normal max-w-prose;
+    @apply text-res-base leading-7 font-normal max-w-prose;
   }
 
   .body-copy-small {
-    @apply text-desk-sm leading-5 font-normal;
+    @apply text-res-sm leading-5 font-normal;
   }
 
   /* BASE COMPONENTS */
@@ -160,7 +164,8 @@ body {
   grid-template-columns: minmax(1rem, 1fr) minmax(0, 1200px) minmax(1rem, 1fr);
   grid-template-rows: auto 1fr auto;
   min-height: 100svh;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 
   > * {
     grid-column: 2;
