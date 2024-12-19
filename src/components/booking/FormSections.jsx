@@ -4,7 +4,7 @@ import {
   TextInput,
   ReservationTimer,
   ErrorText,
-} from "@/components/Booking/FormFields";
+} from "@/components/booking/FormFields2";
 import buyerInfo from "../../data/buyerfields";
 import { NumberSpinner } from "./form-sections/SelectTickets";
 import Accordion from "../Accordion";
