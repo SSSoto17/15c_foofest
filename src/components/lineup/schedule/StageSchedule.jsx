@@ -20,7 +20,9 @@ const StageSchedule = ({ data }) => {
       <HeaderSchedule text1="Thursday" dec1="08" text2="Friday" dec2="09" text3="Saturday" dec3="10"></HeaderSchedule>
       <ul className="row-start-2 row-span-full grid grid-cols-1 grid-rows-subgrid">
         {thu.map((time, i) => (
-          <TableCell key={i}>{time.start}</TableCell>
+          <TableCell key={i}>
+            <p className="text-res-sm">{time.start}</p>
+          </TableCell>
         ))}
       </ul>
       <ul className="col-start-2 col-span-full row-span-full grid grid-cols-subgrid grid-rows-subgrid">
