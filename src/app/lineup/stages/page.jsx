@@ -5,8 +5,8 @@ import StageSchedule from "@/components/lineup/schedule/StageSchedule";
 
 export default async function Stages() {
   const stages = await getStages();
-  const stageSchedule = Object.entries(stages).map(([name, days]) => ({ name, days }));
   const stageNames = Object.keys(stages);
+  const stageSchedule = Object.entries(stages).map(([name, days]) => ({ name, days }));
 
   return (
     <LineupLayout category="stages">

@@ -24,11 +24,6 @@ const StageSchedule = ({ data }) => {
         <ColSchedule data={fri}></ColSchedule>
         <ColSchedule data={sat}></ColSchedule>
       </ul>
-      {/* <ul className="col-start-2 col-span-full row-span-full grid grid-cols-subgrid grid-rows-subgrid">
-        {threeDays.map((day, i) => (
-          <ColSchedule key={i} data={day}></ColSchedule>
-        ))}
-      </ul> */}
     </section>
   );
 };
