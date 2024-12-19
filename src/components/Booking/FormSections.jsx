@@ -6,7 +6,6 @@ import {
   ErrorText,
 } from "@/components/Booking/FormFields";
 import buyerInfo from "../../data/buyerfields";
-import Accordion from "../lineup/Accordion";
 import { NumberSpinner } from "./form-sections/SelectTickets";
 import Accordion from "../Accordion";
 
@@ -19,18 +18,24 @@ export function GreenFee() {
   );
 }
 
-export function TentSetup({ error }) {
+export function TentSetup({ partoutGuests, vipGuests, error }) {
   const tentListing = [
     { label: "Double Person Tent", price: "299" },
     { label: "Triple Person Tent", price: "399" },
   ];
+
   return (
     <Accordion label="Tent Setup" variant="secondary">
       <Fieldset className="grid gap-y-3 ml-12">
         <ErrorText>{error?.tentSetup}</ErrorText>
         {tentListing.map((tent, id) => {
           return (
-            <NumberSpinner key={id} {...tent} error={error}>
+            <NumberSpinner
+              key={id}
+              {...tent}
+              error={error}
+              single={partoutGuests.length + vipGuests.length === 1}
+            >
               {tent.label}
             </NumberSpinner>
           );
@@ -75,7 +80,7 @@ export function EnterPaymentInfo() {
         />
         <TextInput
           name="cardExp"
-          type="number"
+          type="text"
           placeholder="Expiration date ( MM / YY )"
           variant="twoSpan"
         />

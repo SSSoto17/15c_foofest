@@ -19,7 +19,7 @@ export default function BookingForm({ areaData }) {
     initState
   );
 
-  console.log(state?.orderDetails);
+  console.log(state?.errors);
 
   return (
     <>

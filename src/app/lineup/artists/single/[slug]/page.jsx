@@ -1,9 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { MdOutlineArrowBack } from "react-icons/md";
-import { getArtistBySlug } from "@/app/lib/lineup";
+import { getArtistBySlug } from "@/lib/lineup";
 
-import picture from "../../../assets/tester/terminalist.jpg";
+import picture from "@/assets/tester/terminalist.jpg";
+const endpoint = process.env.FOO_FEST_API_URL;
 
 export default async function ArtistSingle({ params }) {
   const slug = await params;
@@ -14,7 +15,7 @@ export default async function ArtistSingle({ params }) {
 
   return (
     <main>
-      <Link href="/lineup">
+      <Link href="/lineup/artists">
         <p className="flex gap-4 items-center mb-4 text-aztec-300">
           <span className="">
             <MdOutlineArrowBack />
@@ -57,7 +58,6 @@ export default async function ArtistSingle({ params }) {
           </article>
         </article>
       </section>
-      <section className="mt-10">OTHER RELATED ARTIST ???</section>
     </main>
   );
 }

@@ -71,7 +71,11 @@ export function TextInput({
       >
         {children}
       </Label>
-      <div className="grid gap-4 relative">
+      <div
+        className={`grid ${
+          variant !== "twoSpan" && "grid-cols-[1fr_auto]"
+        } gap-4 relative`}
+      >
         <Input
           name={name}
           type={type}

@@ -1,11 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import {
-  putReservation,
-  postReservation,
-  postOrder,
-} from "../../../../../lib/order";
+import { putReservation, postReservation, postOrder } from "@/lib/order";
+import { redirect } from "next/navigation";
 
 export async function submitTicketReservation(prev, formData) {
   const errors = {};
@@ -93,10 +90,6 @@ export async function submitTicketReservation(prev, formData) {
       }
     }
 
-    // COLLECT TENT ORDER
-    orderDetails.tentDouble = Number(formData.get("Double Person Tent")) * 2;
-    orderDetails.tentTriple = Number(formData.get("Triple Person Tent")) * 3;
-
     // FORM VALIDATION
     orderDetails.partoutGuests.map((guest) => {
       if (!guest.name || guest.name.length <= 1) {
@@ -120,19 +113,33 @@ export async function submitTicketReservation(prev, formData) {
       }
     });
 
-    if (orderDetails.partoutGuests.length + orderDetails.vipGuests.length > 1) {
-      if (
-        orderDetails.partoutGuests.length + orderDetails.vipGuests.length <
+    // COLLECT TENT ORDER
+    orderDetails.tentDouble = Number(formData.get("Double Person Tent")) * 2;
+    orderDetails.tentTriple = Number(formData.get("Triple Person Tent")) * 3;
+
+    console.log(orderDetails.tentDouble > 2);
+
+    if (
+      orderDetails.partoutGuests.length + orderDetails.vipGuests.length === 1 &&
+      orderDetails.tentDouble > 2
+    ) {
+      console.log("what?");
+      errors.tentSetup = "Please fill up all available tent space.";
+    }
+
+    if (
+      orderDetails.partoutGuests.length + orderDetails.vipGuests.length > 1 &&
+      orderDetails.partoutGuests.length + orderDetails.vipGuests.length <
         orderDetails.tentDouble + orderDetails.tentTriple
-      ) {
-        errors.tentSetup = "Please fill up all available tent space.";
-      }
-      if (
-        orderDetails.partoutGuests.length + orderDetails.vipGuests.length >
+    ) {
+      errors.tentSetup = "Please fill up all available tent space.";
+    }
+    if (
+      orderDetails.partoutGuests.length + orderDetails.vipGuests.length > 1 &&
+      orderDetails.partoutGuests.length + orderDetails.vipGuests.length >
         orderDetails.tentDouble + orderDetails.tentTriple
-      ) {
-        errors.tentSetup = "Please ensure room for all guests.";
-      }
+    ) {
+      errors.tentSetup = "Please ensure room for all guests.";
     }
 
     if (
@@ -153,30 +160,76 @@ export async function submitTicketReservation(prev, formData) {
 
   // BOOKING FLOW || STEP THREE
   if (prev.activeStep === 3) {
-    // COLLECT ORDER DETAILS
+    // REASSIGN VALUES FROM PREVIOUS STEP TO ORDER DETAILS
     Object.assign(orderDetails, prev.orderDetails);
-    // orderDetails.partoutGuests = orderDetails.ticketHolders.partoutGuests;
-    // orderDetails.vipGuests = orderDetails.ticketHolders.vipGuests;
-    // orderDetails.greenFee = Boolean(orderDetails.optionals?.greenFee);
 
-    // orderDetails.customerName = formData.get("name");
-    // orderDetails.customerEmail = formData.get("email");
+    // COLLECT CUSTOMER INFORMATION
+    orderDetails.customerName = formData.get("name");
+    orderDetails.customerEmail = formData.get("email");
 
-    // if (!orderDetails.customerName || orderDetails.customerName.length <= 1) {
-    //   errors.customerName = "Please provide your name.";
-    // }
-    // if (
-    //   !orderDetails.customerEmail ||
-    //   !orderDetails.customerEmail.includes(".")
-    // ) {
-    //   errors.customerEmail = "Please provide a valid email address.";
-    // }
+    // COLLECT FAKE PAYMENT DATA
+    const fakeCreditCard = {};
+    if (formData.get("cardNumber")) {
+      fakeCreditCard.cardNumber = "1234123412341234";
+    }
+    if (formData.get("cardExp")) {
+      fakeCreditCard.cardExp = "12/25";
+    }
+    if (formData.get("cardSecurityCode")) {
+      fakeCreditCard.cardSecurityCode = "123";
+    }
+    if (formData.get("cardHolder")) {
+      fakeCreditCard.cardHolder = "John Doe";
+    }
+
+    // UPDATE TENT QUANTITY
+    orderDetails.tentDouble = prev.orderDetails.tentDouble / 2;
+    orderDetails.tentTriple = prev.orderDetails.tentTriple / 3;
+
+    // FORM VALIDATION
+    if (!orderDetails.customerName || orderDetails.customerName.length <= 1) {
+      errors.customerName = "Please provide your name.";
+    }
+    if (
+      !orderDetails.customerEmail ||
+      !orderDetails.customerEmail.includes(".")
+    ) {
+      errors.customerEmail = "Please provide a valid email address.";
+    }
+    if (
+      !formData.get("cardNumber") ||
+      formData.get("cardNumber").length != 16 ||
+      !formData.get("cardExp") ||
+      formData.get("cardExp").cardExp.length > 5 ||
+      !formData.get("cardSecurityCode") ||
+      !formData.get("cardSecurityCode").length !== 3 ||
+      !formData.get("cardHolder") ||
+      !formData.get("cardHolder").length > 2
+    ) {
+      errors.payment = "Please check your card details.";
+    }
+
+    if (errors.customerName || errors.customerEmail || errors.payment) {
+      return {
+        activeStep: prev.activeStep,
+        success: false,
+        errors,
+        orderDetails,
+      };
+    }
 
     // PRICE SUMUP
     const pricePartout = orderDetails.partoutGuests.length * 799;
     const priceVip = orderDetails.vipGuests.length * 1299;
+    const priceTentsDouble = orderDetails.tentDouble * 299;
+    const priceTentsTriple = orderDetails.tentTriple * 399;
     orderDetails.priceTotal =
-      pricePartout + priceVip + (orderDetails.greenFee && 249) + 99;
+      pricePartout +
+      priceVip +
+      (orderDetails.tentDouble && priceTentsDouble) +
+      (orderDetails.tentTriple && priceTentsTriple) +
+      (orderDetails.greenFee && 249) +
+      99;
 
     // FULLFIL RESERVATION
     const data = {};
@@ -186,15 +239,13 @@ export async function submitTicketReservation(prev, formData) {
     const response = await postReservation(data);
     if (response) {
       delete orderDetails.reservationId;
-      // delete orderDetails.ticketHolders;
-      // delete orderDetails.optionals;
       revalidatePath("/");
       const orderCompleted = postOrder(orderDetails);
       if (orderCompleted) {
-        console.log(orderCompleted);
-        return { activeStep: 1, success: true, errors: {}, orderDetails };
+        console.log("thanks for your order!");
+        revalidatePath("/"), redirect("/");
+        // return { activeStep: 1, success: true, errors: {}, orderDetails };
       }
-      // return { activeStep: 1, success: true, errors: {} };
     } else {
       return {
         activeStep: prev.activeStep,
@@ -204,9 +255,4 @@ export async function submitTicketReservation(prev, formData) {
       };
     }
   }
-
-  // if (Object.keys(errors).length > 0) {
-  //   console.log(errors);
-  //   return { activeStep: prev.activeStep, success: false, errors };
-  // }
 }

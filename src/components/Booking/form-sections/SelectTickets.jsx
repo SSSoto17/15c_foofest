@@ -48,7 +48,7 @@ export default function SelectTickets({ partoutGuests, vipGuests, error }) {
   );
 }
 
-export function NumberSpinner({ label, price, error, children }) {
+export function NumberSpinner({ label, price, error, single, children }) {
   const { total, setTotal } = useQuantityStore(
     useShallow((state) => ({
       total: state.total,
@@ -105,10 +105,17 @@ export function NumberSpinner({ label, price, error, children }) {
           name={label}
           value={quantity}
           onChange={manualInput}
-          className="body-copy w-6 text-center data-focus:outline-none"
+          className="body-copy w-6 text-center data-focus:outline-none data-disabled:text-text-global/15"
+          disabled={label.includes("Triple") && single}
         />
         <Button
-          disabled={quantity >= 10}
+          disabled={
+            label.includes("Double") && single
+              ? quantity >= 1
+              : label.includes("Triple") && single
+              ? quantity >= 0
+              : quantity >= 10
+          }
           className="data-disabled:opacity-25 not-data-disabled:cursor-pointer"
           onClick={incrInput}
         >
