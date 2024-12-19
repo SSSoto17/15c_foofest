@@ -7,12 +7,8 @@ import picture from "../../../assets/tester/terminalist.jpg";
 
 export default async function ArtistSingle({ params }) {
   const slug = await params;
-
-  console.log(slug.slug);
-  // console.log("SLUG:", slug);
-
   const artist = await getArtistBySlug(slug.slug);
-  console.log("ARTIST:", artist);
+  const artistImg = artist.logo.startsWith("https://") ? artist.logo : `${endpoint}/logos/${artist.logo}`;
 
   return (
     <main>
