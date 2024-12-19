@@ -4,7 +4,7 @@ import Form from "next/form";
 import Button from "../Button";
 
 import { BookingStepOne, BookingStepTwo, BookingStepThree } from "./FormSteps";
-import { OrderSummary } from "./FormSections";
+import { OrderSummary } from "./FormSections2";
 
 import formSteps from "../../data/formsteps";
 

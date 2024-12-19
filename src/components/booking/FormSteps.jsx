@@ -3,7 +3,7 @@ import {
   TentSetup,
   EnterBuyerInfo,
   EnterPaymentInfo,
-} from "./FormSections";
+} from "./FormSections2";
 import EnterGuestInfo from "./form-sections/GuestInfo";
 import SelectTickets from "./form-sections/SelectTickets";
 import SelectCampingArea from "./form-sections/SelectCampingArea";
