@@ -15,13 +15,13 @@ const StageSchedule = ({ data }) => {
     <section className="grid grid-cols-[0.5fr_1fr_1fr_1fr] grid-rows-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr]">
       <HeaderSchedule text1="Thursday" dec1="08" text2="Friday" dec2="09" text3="Saturday" dec3="10"></HeaderSchedule>
       <ul className="row-start-2 row-span-full grid grid-cols-1 grid-rows-subgrid">
-        {aDay.map((time) => (
-          <TableCell>{time.start}</TableCell>
+        {aDay.map((time, i) => (
+          <TableCell key={i}>{time.start}</TableCell>
         ))}
       </ul>
       <ul className="col-start-2 col-span-full row-span-full grid grid-cols-subgrid grid-rows-subgrid">
-        {threeDays.map((day) => (
-          <ColSchedule data={day}></ColSchedule>
+        {threeDays.map((day, i) => (
+          <ColSchedule key={i} data={day}></ColSchedule>
         ))}
       </ul>
     </section>
