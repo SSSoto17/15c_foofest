@@ -1,5 +1,5 @@
 import BookingForm from "@/components/booking/Form";
-import { getCampingSpots } from "../../../../../lib/order";
+import { getCampingSpots } from "@/lib/order";
 
 export default async function Page() {
   const data = await getCampingSpots();
