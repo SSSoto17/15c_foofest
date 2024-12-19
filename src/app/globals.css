@@ -109,7 +109,7 @@
   }
 
   .heading-4 {
-    @apply text-res-2xl leading-tight	 font-bold uppercase text-text-heading;
+    @apply text-res-xl leading-tight tracking-wide	font-display font-bold uppercase;
   }
   .heading-5 {
     @apply text-res-xl leading-tight font-semibold;
