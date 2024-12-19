@@ -112,11 +112,11 @@
     @apply text-res-2xl leading-tight	 font-bold uppercase text-text-heading;
   }
   .heading-5 {
-    @apply text-res-xl leading-9 font-semibold;
+    @apply text-res-xl leading-tight font-semibold;
   }
 
   .heading-6 {
-    @apply text-res-lg leading-8 font-bold uppercase;
+    @apply text-res-lg leading-tight font-bold uppercase;
   }
 
   .heading-tagline {
