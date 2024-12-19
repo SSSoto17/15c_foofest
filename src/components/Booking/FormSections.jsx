@@ -9,7 +9,7 @@ import { useTickets } from "@/store/GlobalStore";
 
 import optionalsListing from "../../data/optionals";
 import buyerInfo from "../../data/buyerfields";
-import Accordion from "../lineup/Accordion";
+import Accordion from "../Accordion";
 
 export function TicketSelection({ partoutGuests, vipGuests, error }) {
   const ticketQuantity = partoutGuests?.length + vipGuests?.length;

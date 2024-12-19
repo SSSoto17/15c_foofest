@@ -1,4 +1,4 @@
-import Accordion from "@/components/lineup/Accordion";
+import Accordion from "@/components/Accordion";
 import StageSchedule from "@/components/lineup/schedule/StageSchedule";
 
 const ByStage = ({ data }) => {
