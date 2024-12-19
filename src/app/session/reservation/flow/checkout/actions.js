@@ -243,7 +243,7 @@ export async function submitTicketReservation(prev, formData) {
       const orderCompleted = postOrder(orderDetails);
       if (orderCompleted) {
         console.log("thanks for your order!");
-        revalidatePath("/"), redirect("/");
+        // revalidatePath("/"), redirect("/");
         // return { activeStep: 1, success: true, errors: {}, orderDetails };
       }
     } else {
