@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import Headers from "./Headers";
 
 import "@/app/globals.css";
 import { Anton } from "next/font/google";
@@ -16,7 +17,8 @@ export default function MainLayout({ page, children }) {
   return (
     <html lang="en" className={anton.variable}>
       <body className="text-forest-100 text-desk-base">
-        <Header linksActive={page != "booking"} />
+        <Headers linksActive={page != "booking"} />
+        {/* <Header linksActive={page != "booking"} /> */}
         {children}
         <Footer />
       </body>
@@ -34,18 +36,12 @@ export function Header({ linksActive }) {
         {linksActive && (
           <ul className="flex gap-2">
             <li>
-              <Link
-                href="/lineup/artists"
-                className="py-2 px-6 grid place-content-center uppercase font-semibold"
-              >
+              <Link href="/lineup/artists" className="py-2 px-6 grid place-content-center uppercase font-semibold">
                 Lineup 2025
               </Link>
             </li>
             <li>
-              <Link
-                href="/booking"
-                className="border-2 border-forest-600 bg-forest-600 py-2 px-6 grid place-content-center uppercase font-bold"
-              >
+              <Link href="/booking" className="border-2 border-forest-600 bg-forest-600 py-2 px-6 grid place-content-center uppercase font-bold">
                 Buy Tickets
               </Link>
             </li>
