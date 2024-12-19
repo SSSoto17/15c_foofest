@@ -14,23 +14,27 @@
 
   /* @link https://utopia.fyi/type/calculator?c=320,16,1.333,1240,18,1.618,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
 
-  --text-mob-xs: 0.4rem;
-  --text-mob-sm: 0.7rem;
-  --text-mob-base: 1rem;
-  --text-mob-lg: 1.3rem;
-  --text-mob-xl: 1.8rem;
-  --text-mob-2xl: 2.4rem;
-  --text-mob-3xl: 3.15rem;
-  --text-mob-4xl: 4.2rem;
+  --mob-xs: 0.625rem;
+  --mob-sm: 0.8rem;
+  --mob-base: 1rem;
+  --mob-lg: 1.25rem;
+  --mob-xl: 1.5rem;
+  --mob-2xl: 2rem;
+  --mob-3xl: 2.5rem;
+  --mob-4xl: 3rem;
+  --mob-5xl: 3.8rem;
+  --mob-6xl: 4.75rem;
 
-  --text-desk-xs: 0.55rem;
-  --text-desk-sm: 0.75rem;
-  --text-desk-base: 1.125rem;
-  --text-desk-lg: 1.825rem;
-  --text-desk-xl: 3rem;
-  --text-desk-2xl: 4.75rem;
-  --text-desk-3xl: 7.75rem;
-  --text-desk-4xl: 12.5rem;
+  --desk-xs: 0.625rem;
+  --desk-sm: 0.825rem;
+  --desk-base: 1.125rem;
+  --desk-lg: 1.5rem;
+  --desk-xl: 2rem;
+  --desk-2xl: 2.75rem;
+  --desk-3xl: 3.5rem;
+  --desk-4xl: 4.5rem;
+  --desk-5xl: 6.25rem;
+  --desk-6xl: 8.25rem;
 
   /* COLOR | PRIMARY */
   --color-forest-50: #effaf4;
@@ -85,8 +89,16 @@
   /* COLOR | SEMANTIC TOKENS | FORMS */
   --color-border-form: var(--color-border-global);
   --color-text-input: var(--color-text-global);
-  --color-surface-input: color-mix(in oklch, var(--color-aztec-900) 50%, transparent);
-  --color-surface-input--error: color-mix(in oklch, var(--color-aztec-900) 75%, transparent);
+  --color-surface-input: color-mix(
+    in oklch,
+    var(--color-aztec-900) 50%,
+    transparent
+  );
+  --color-surface-input--error: color-mix(
+    in oklch,
+    var(--color-aztec-900) 75%,
+    transparent
+  );
   --color-surface-input--focus: var(--color-aztec-900);
   --color-border-input: var(--color-aztec-900);
   --color-border-input--focus: var(--color-aztec-600);
@@ -103,32 +115,35 @@
   /* TEXT STYLES */
 
   .heading-title {
-    @apply text-desk-3xl leading-36 font-display font-normal uppercase;
+    @apply desk-6xl leading-36 font-display font-normal uppercase;
   }
   .heading-1 {
-    @apply text-desk-2xl leading-22 font-display font-normal;
+    @apply desk-5xl leading-22 font-display font-normal;
   }
   .heading-2 {
-    @apply text-desk-xl leading-16 font-display font-normal;
+    @apply desk-4xl leading-16 font-display font-normal;
   }
   .heading-3 {
-    @apply text-desk-lg leading-9 font-semibold;
+    @apply desk-3xl leading-9 font-semibold;
   }
 
   .heading-4 {
-    @apply text-desk-base leading-6 font-bold uppercase text-text-heading;
+    @apply desk-2xl leading-6 font-bold uppercase text-text-heading;
+  }
+  .heading-5 {
+    @apply desk-xl leading-6 font-bold uppercase text-text-heading;
   }
 
   .heading-tagline {
-    @apply text-desk-lg leading-9 uppercase text-text-heading;
+    @apply desk-lg leading-9 uppercase text-text-heading;
   }
 
   .body-copy {
-    @apply text-desk-base leading-7 font-normal max-w-prose;
+    @apply desk-base leading-7 font-normal max-w-prose;
   }
 
   .body-copy-small {
-    @apply text-desk-sm leading-5 font-normal;
+    @apply desk-sm leading-5 font-normal;
   }
 
   /* BASE COMPONENTS */
@@ -164,7 +179,8 @@ body {
   grid-template-columns: minmax(1rem, 1fr) minmax(0, 1200px) minmax(1rem, 1fr);
   grid-template-rows: auto 1fr auto;
   min-height: 100svh;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 
   > * {
     grid-column: 2;
