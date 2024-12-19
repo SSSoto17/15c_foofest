@@ -9,9 +9,6 @@ const anton = Anton({
   variable: "--font-anton",
 });
 
-import logo from "@/assets/svg/logo_bold.svg";
-import { WarningEscape } from "./Booking/FormFields";
-
 export default function MainLayout({ page, children }) {
   return (
     <html lang="en" className={anton.variable}>
