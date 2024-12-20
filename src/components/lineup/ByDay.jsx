@@ -30,7 +30,6 @@ const ByDay = ({ data }) => {
   const JotunFri = Jotunheim.fri;
   const JotunSat = Jotunheim.sat;
   const JotunSun = Jotunheim.sun;
-  // console.log("JotunSat", JotunSat);
 
   return (
     <section className="grid gap-4">

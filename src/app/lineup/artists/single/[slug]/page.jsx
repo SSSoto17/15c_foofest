@@ -49,7 +49,12 @@ export default async function ArtistSingle({ params }) {
             </article>
             <article>
               <h3 className="heading-4">Members</h3>
-              <p>{artist.members}</p>
+              <ul className="flex flex-wrap gap-x-3">
+                {artist.members.map((member) => (
+                  <li>{member}</li>
+                ))}
+              </ul>
+              {/* <p>{artist.members}</p> */}
             </article>
           </div>
           <article>
