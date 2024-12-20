@@ -93,7 +93,7 @@ export function TextInput({
           </div>
         )}
       </div>
-      {variant != "slim" && (
+      {(variant != "slim" || variant != "twoSpan") && (
         <ErrorText>{!error?.includes("ticket") && error}</ErrorText>
       )}
     </Field>
