@@ -239,15 +239,7 @@ export async function submitTicketReservation(prev, formData) {
       delete orderDetails.reservationId;
       await postOrder(orderDetails);
       revalidatePath("/");
-      redirect("/");
-    } else {
-      redirect("/session/timeout");
-      return {
-        activeStep: prev.activeStep,
-        success: false,
-        errors: {},
-        orderDetails,
-      };
+      redirect("/session/reservation/order-confirmation");
     }
   }
 }
