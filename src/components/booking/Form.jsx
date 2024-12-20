@@ -5,6 +5,7 @@ import Button from "../Button";
 
 import { BookingStepOne, BookingStepTwo, BookingStepThree } from "./FormSteps";
 import { OrderSummary } from "./FormSections";
+import { ReservationTimer } from "./FormFields";
 
 import formSteps from "../../data/formsteps";
 import { useActionState } from "react";
@@ -58,17 +59,23 @@ export default function BookingForm({ areaData }) {
 
 function FormHeader({ activeStep }) {
   return (
-    <header
-      className={`border-b border-border-form py-8 px-12 ${
-        activeStep === 3 ? "hidden md:block" : "block"
-      }`}
-    >
-      <ol className="sm:flex justify-center sm:justify-between items-center gap-4 font-semibold cursor-default">
-        {formSteps.map((step, id) => (
-          <FormStepIndicator activeStep={activeStep} {...step} key={id} />
-        ))}
-      </ol>
-    </header>
+    <>
+      <header
+        className={`border-b border-border-form py-8 px-12 ${
+          activeStep === 3 ? "hidden md:block" : "block"
+        }`}
+      >
+        <ol className="sm:flex justify-center sm:justify-between items-center gap-4 font-semibold cursor-default">
+          {formSteps.map((step, id) => (
+            <FormStepIndicator activeStep={activeStep} {...step} key={id} />
+          ))}
+        </ol>
+      </header>
+
+      <div className={activeStep === 3 ? "hidden md:block" : "block"}>
+        {activeStep !== 1 && <ReservationTimer />}
+      </div>
+    </>
   );
 }
 
