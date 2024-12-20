@@ -239,7 +239,7 @@ export async function submitTicketReservation(prev, formData) {
       delete orderDetails.reservationId;
       await postOrder(orderDetails);
       revalidatePath("/");
-      redirect("/session/reservation/order-confirmation");
+      redirect("/session/reservation/order-complete");
     }
   }
 }

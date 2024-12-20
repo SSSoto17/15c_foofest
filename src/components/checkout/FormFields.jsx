@@ -78,9 +78,6 @@ export function TextInput({
             "not-data-focus:border-border-global--error bg-surface-input--focus"
           }`}
         />
-        {name === "cardSecurityCode" && (
-          <FaRegQuestionCircle className="w-2.5 md:w-4 text-text-global--disabled hover:text-text-global absolute top-0.5 right-2" />
-        )}
         {variant !== "twoSpan" && (
           <div className="w-6 hidden md:block">
             {error && !defaultValue && variant !== "slim" && (
