@@ -190,20 +190,20 @@ export async function submitTicketReservation(prev, formData) {
     ) {
       errors.customerEmail = "Please provide a valid email address.";
     }
-    if (
-      !formData.get("cardNumber") ||
-      formData.get("cardNumber").length != 16 ||
-      !formData.get("cardExp") ||
-      formData.get("cardExp").length > 5 ||
-      !formData.get("cardSecurityCode") ||
-      !formData.get("cardSecurityCode").length !== 3 ||
-      !formData.get("cardHolder") ||
-      !formData.get("cardHolder").length > 2
-    ) {
-      errors.payment = "Please check your card details.";
-    }
+    // if (
+    //   !formData.get("cardNumber") ||
+    //   formData.get("cardNumber").length != 16 ||
+    //   !formData.get("cardExp") ||
+    //   formData.get("cardExp").length > 5 ||
+    //   !formData.get("cardSecurityCode") ||
+    //   !formData.get("cardSecurityCode").length !== 3 ||
+    //   !formData.get("cardHolder") ||
+    //   !formData.get("cardHolder").length > 2
+    // ) {
+    //   errors.payment = "Please check your card details.";
+    // }
 
-    if (errors.customerName || errors.customerEmail || errors.payment) {
+    if (errors.customerName || errors.customerEmail) {
       return {
         activeStep: prev.activeStep,
         success: false,
