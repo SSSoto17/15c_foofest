@@ -15,8 +15,12 @@ export default function Header({ linksActive }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="py-4 bg-main-background drop-shadow-main z-20 overflow-x-clip">
-      <nav className="flex w-full items-center justify-between">
+    <header
+      className={`col-span-full bg-main-background drop-shadow-main z-50 ${
+        isOpen && "fixed w-full px-4"
+      }`}
+    >
+      <nav className="py-4 flex w-full items-center justify-between">
         {linksActive ? (
           <Link href="/">
             <Image src={logo} alt="FooFest" className="h-16 w-fit" />
@@ -55,12 +59,12 @@ export default function Header({ linksActive }) {
 }
 
 function MobileNav({ setIsOpen, isOpen }) {
-  const classes = `col-start-1 col-span-3 w-screen h-screen absolute top-20 bg-[#171e1b] drop-shadow-main grid items-center justify-around transition-[left] duration-500 ease-in-out ${
+  const classes = `-z-10 overscroll-auto w-screen h-screen fixed inset-0 bg-[#171e1b] drop-shadow-main grid items-center justify-around transition-[left] duration-500 ease-in-out ${
     isOpen ? "left-0" : "left-full"
   }`;
   return (
     <nav className={classes}>
-      <menu className="text-2xl flow-space">
+      <menu className=" text-2xl flow-space">
         <li>
           <Link
             className="py-2 px-6 grid place-content-center uppercase font-semibold"

@@ -9,7 +9,7 @@ import ScrollToButton from "@/components/lineup/ScrollToButton";
 export default function Home() {
   return (
     <main className="full-bleed">
-      <section className="full-bleed mb-12 gap-y-4">
+      <section className="full-bleed gap-y-4">
         <article className="full-bleed row-start-1 row-span-4">
           <Image
             className="full-bleed h-svh object-cover row-start-1 md:h-full"
@@ -29,7 +29,7 @@ export default function Home() {
             </ScrollToButton> */}
           </div>
         </article>
-        <footer className="lg:col-start-2 lg:row-start-4 lg:row-span-2 lg:grid lg:grid-cols-3 lg:gap-6">
+        <footer className="py-4 lg:col-start-2 lg:row-start-4 lg:row-span-2 lg:grid lg:grid-cols-3 lg:gap-6">
           <div className="grid grid-cols-1 place-content-start gap-4 sm:grid-cols-2 lg:col-start-2 lg:col-span-full lg:grid-cols-subgrid ">
             <TicketCard
               type="Partout"
