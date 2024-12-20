@@ -63,7 +63,7 @@ export function TextInput({
       <div
         className={`grid ${
           variant !== "twoSpan" && "grid-cols-[1fr_auto]"
-        } gap-y-4 md:gap-4 relative`}
+        } gap-y-4 relative`}
       >
         <Input
           name={name}
@@ -86,7 +86,7 @@ export function TextInput({
             {error && !defaultValue && variant !== "slim" && (
               <MdOutlineError
                 aria-label="Attention!"
-                className="place-self-center text-text-global--error"
+                className="mr-4place-self-center text-text-global--error"
                 size="24"
               />
             )}
