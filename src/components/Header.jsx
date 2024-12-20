@@ -2,29 +2,45 @@
 
 import Link from "next/link";
 import Image from "next/image";
-
+import logo from "../assets/svg/logo_bold.svg";
+import {
+  Dialog,
+  DialogTitle,
+  DialogPanel,
+  Description,
+} from "@headlessui/react";
 import { useState } from "react";
-import logo from "@/assets/svg/logo_bold.svg";
 
-export default function Header(linksActive) {
+export default function Header({ linksActive }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="py-4 bg-main-background drop-shadow-main z-100 overflow-x-clip">
+    <header className="py-4 bg-main-background drop-shadow-main z-20 overflow-x-clip">
       <nav className="flex w-full items-center justify-between">
-        <Link href="/">
-          <Image src={logo} alt="FooFest" className="h-16 w-fit" />
-        </Link>
+        {linksActive ? (
+          <Link href="/">
+            <Image src={logo} alt="FooFest" className="h-16 w-fit" />
+          </Link>
+        ) : (
+          // <p>test</p>
+          <WarningEscape />
+        )}
         {linksActive && (
           <>
             <ul className="md:flex gap-2 hidden">
               <li>
-                <Link href="/lineup/artists" className="py-2 px-6 grid place-content-center uppercase font-semibold">
+                <Link
+                  href="/lineup/artists"
+                  className="py-2 px-6 grid place-content-center uppercase font-semibold"
+                >
                   Lineup 2025
                 </Link>
               </li>
               <li>
-                <Link href="/booking" className="border-2 border-forest-600 bg-forest-600 py-2 px-6 grid place-content-center uppercase font-bold">
+                <Link
+                  href="/session/reservation/flow/checkout"
+                  className="border-2 border-forest-600 bg-forest-600 py-2 px-6 grid place-content-center uppercase font-bold"
+                >
                   Buy Tickets
                 </Link>
               </li>
@@ -38,8 +54,10 @@ export default function Header(linksActive) {
   );
 }
 
-export const MobileNav = ({ setIsOpen, isOpen }) => {
-  const classes = `col-start-1 col-span-3 w-screen h-svh absolute top-20 bg-[#171e1b] drop-shadow-main grid items-center justify-around transition-[left] duration-500 ease-in-out ${isOpen ? "left-0" : "left-full"}`;
+function MobileNav({ setIsOpen, isOpen }) {
+  const classes = `col-start-1 col-span-3 w-screen h-screen absolute top-20 bg-[#171e1b] drop-shadow-main grid items-center justify-around transition-[left] duration-500 ease-in-out ${
+    isOpen ? "left-0" : "left-full"
+  }`;
   return (
     <nav className={classes}>
       <menu className="text-2xl flow-space">
@@ -68,17 +86,24 @@ export const MobileNav = ({ setIsOpen, isOpen }) => {
       </menu>
     </nav>
   );
-};
+}
 
-export const MobileNavIcon = ({ setIsOpen, isOpen }) => {
+function MobileNavIcon({ setIsOpen, isOpen }) {
   const role = {
-    top: `transition-[transform] ${isOpen ? "rotate-45 translate-y-1.5" : "-translate-y-0.5"}`,
+    top: `transition-[transform] ${
+      isOpen ? "rotate-45 translate-y-1.5" : "-translate-y-0.5"
+    }`,
     middle: `transition-[opacity] my-1 ${isOpen ? "opacity-0" : "opacity-100"}`,
-    bottom: `transition-[transform] ${isOpen ? "-rotate-45 -translate-y-1.5" : "translate-y-0.5"}`,
+    bottom: `transition-[transform] ${
+      isOpen ? "-rotate-45 -translate-y-1.5" : "translate-y-0.5"
+    }`,
   };
 
   function setClasses(role) {
-    return "bg-forest-100 block duration-300 ease-out h-0.5 w-6 rounded-sm z-100 " + role;
+    return (
+      "bg-forest-100 block duration-300 ease-out h-0.5 w-6 rounded-sm z-100 " +
+      role
+    );
   }
 
   return (
@@ -94,4 +119,51 @@ export const MobileNavIcon = ({ setIsOpen, isOpen }) => {
       <span className={setClasses(role.bottom)}></span>
     </button>
   );
-};
+}
+
+function WarningEscape() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setIsOpen(true)} className="cursor-pointer">
+        <Image src={logo} alt="FooFest" className="h-16 w-fit" />
+      </button>
+      <Dialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="fixed inset-0 flex items-center justify-center p-4"
+      >
+        <div className="bg-surface-global p-12 border border-border-global max-w-md">
+          <DialogPanel className="grid gap-8">
+            <DialogTitle className="heading-6 text-red-400">
+              Leave Booking Session
+            </DialogTitle>
+            <div className="grid gap-2">
+              <Description className="font-bold">
+                Are you sure you wish to leave?
+              </Description>
+              <p className="text-aztec-300">
+                If you exit the booking session you will lose your reservation.
+              </p>
+            </div>
+            <div className="flex gap-4">
+              <button
+                onClick={() => setIsOpen(false)}
+                className="grow cursor-pointer bg-aztec-300 p-2 rounded-sm font-semibold max-w-40"
+              >
+                Cancel
+              </button>
+              <Link
+                href="/"
+                className="grow flex place-content-center bg-rose-600 p-2 rounded-sm font-semibold max-w-40"
+              >
+                Exit
+              </Link>
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
+    </>
+  );
+}

@@ -4,7 +4,6 @@ import { MdOutlineArrowBack } from "react-icons/md";
 import { getArtistBySlug } from "@/lib/lineup";
 
 import picture from "@/assets/tester/terminalist.jpg";
-
 const endpoint = process.env.FOO_FEST_API_URL;
 
 export default async function ArtistSingle({ params }) {
@@ -30,9 +29,7 @@ export default async function ArtistSingle({ params }) {
           <Image
             src={picture}
             alt={`Image of ${artist.name}`}
-            // placeholder="blur"
-            width={600}
-            height={600}
+            placeholder="blur"
           ></Image>
           {artist.logoCredits && (
             <small className="mt-2 inline-block body-copy-small">
@@ -61,7 +58,6 @@ export default async function ArtistSingle({ params }) {
           </article>
         </article>
       </section>
-      <section className="mt-10">OTHER RELATED ARTIST ???</section>
     </main>
   );
 }
