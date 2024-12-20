@@ -13,7 +13,7 @@ import { submitTicketReservation } from "@/app/session/reservation/flow/checkout
 import { keyEnter } from "@/lib/utils";
 
 export default function BookingForm({ areaData }) {
-  const initState = { activeStep: 3, success: false, errors: {} };
+  const initState = { activeStep: 1, success: false, errors: {} };
   const [state, submitReservation, isPending] = useActionState(
     submitTicketReservation,
     initState
