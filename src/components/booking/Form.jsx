@@ -4,7 +4,7 @@ import Form from "next/form";
 import Button from "../Button";
 
 import { BookingStepOne, BookingStepTwo, BookingStepThree } from "./FormSteps";
-import { OrderSummary } from "./FormSections2";
+import { OrderSummary } from "./FormSections";
 
 import formSteps from "../../data/formsteps";
 
@@ -19,7 +19,7 @@ export default function BookingForm({ areaData }) {
     initState
   );
 
-  console.log(state?.errors);
+  console.log(state?.orderDetails);
 
   return (
     <>

@@ -6,7 +6,7 @@ import {
   TextInput,
   CheckField,
   ErrorText,
-} from "@/components/booking/FormFields2";
+} from "@/components/booking/FormFields";
 import { MdOutlineError } from "react-icons/md";
 
 export default function EnterGuestInfo({ partoutGuests, vipGuests, error }) {

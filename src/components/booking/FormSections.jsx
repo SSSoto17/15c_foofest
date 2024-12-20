@@ -4,7 +4,7 @@ import {
   TextInput,
   ReservationTimer,
   ErrorText,
-} from "@/components/booking/FormFields2";
+} from "@/components/booking/FormFields";
 import buyerInfo from "../../data/buyerfields";
 import { NumberSpinner } from "./form-sections/SelectTickets";
 import Accordion from "../Accordion";
@@ -71,7 +71,7 @@ export function EnterPaymentInfo() {
   return (
     <Fieldset className="grid gap-y-6">
       <Legend className="heading-5">Payment</Legend>
-      <div className="grid grid-cols-3 gap-x-4 max-w-md">
+      <div className="grid grid-cols-3 gap-x-4 max-w-lg">
         <TextInput
           name="cardNumber"
           type="tel"
@@ -125,7 +125,7 @@ export function OrderSummary({
           step !== 1 && "grid-rows-[auto_auto_1fr]"
         } gap-y-2`}
       >
-        <div>{step !== 1 && <ReservationTimer />}</div>
+        <div>{step !== 3 && <ReservationTimer />}</div>
         {!partoutGuests && !vipGuests && (
           <small className="body-copy-small p-6 text-center italic opacity-50">
             No tickets selected.

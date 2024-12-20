@@ -1,4 +1,4 @@
-import BookingForm from "@/components/booking/Form2";
+import BookingForm from "@/components/booking/Form";
 import { getCampingSpots } from "@/lib/order";
 
 export default async function Page() {

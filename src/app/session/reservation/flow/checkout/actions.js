@@ -1,8 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { putReservation, postReservation, postOrder } from "@/lib/order";
 import { redirect } from "next/navigation";
+import { putReservation, postReservation, postOrder } from "@/lib/order";
+// import { putReservation, postReservation, postOrder } from "@/lib/order";
 
 export async function submitTicketReservation(prev, formData) {
   const errors = {};
@@ -117,13 +118,10 @@ export async function submitTicketReservation(prev, formData) {
     orderDetails.tentDouble = Number(formData.get("Double Person Tent")) * 2;
     orderDetails.tentTriple = Number(formData.get("Triple Person Tent")) * 3;
 
-    console.log(orderDetails.tentDouble > 2);
-
     if (
       orderDetails.partoutGuests.length + orderDetails.vipGuests.length === 1 &&
       orderDetails.tentDouble > 2
     ) {
-      console.log("what?");
       errors.tentSetup = "Please fill up all available tent space.";
     }
 
@@ -155,6 +153,10 @@ export async function submitTicketReservation(prev, formData) {
       };
     }
 
+    // UPDATE TENT QUANTITY
+    orderDetails.tentDouble = prev.orderDetails.tentDouble / 2;
+    orderDetails.tentTriple = prev.orderDetails.tentTriple / 3;
+
     return { activeStep: 3, success: true, errors: {}, orderDetails };
   }
 
@@ -182,10 +184,6 @@ export async function submitTicketReservation(prev, formData) {
       fakeCreditCard.cardHolder = "John Doe";
     }
 
-    // UPDATE TENT QUANTITY
-    orderDetails.tentDouble = prev.orderDetails.tentDouble / 2;
-    orderDetails.tentTriple = prev.orderDetails.tentTriple / 3;
-
     // FORM VALIDATION
     if (!orderDetails.customerName || orderDetails.customerName.length <= 1) {
       errors.customerName = "Please provide your name.";
@@ -209,14 +207,14 @@ export async function submitTicketReservation(prev, formData) {
       errors.payment = "Please check your card details.";
     }
 
-    // if (errors.customerName || errors.customerEmail || errors.payment) {
-    //   return {
-    //     activeStep: prev.activeStep,
-    //     success: false,
-    //     errors,
-    //     orderDetails,
-    //   };
-    // }
+    if (errors.customerName || errors.customerEmail || errors.payment) {
+      return {
+        activeStep: prev.activeStep,
+        success: false,
+        errors,
+        orderDetails,
+      };
+    }
 
     // PRICE SUMUP
     const pricePartout = orderDetails.partoutGuests.length * 799;
@@ -239,15 +237,11 @@ export async function submitTicketReservation(prev, formData) {
     const response = await postReservation(data);
     if (response) {
       delete orderDetails.reservationId;
+      await postOrder(orderDetails);
       revalidatePath("/");
-      const orderCompleted = await postOrder(orderDetails);
-      if (orderCompleted) {
-        console.log("thanks for your order!");
-        revalidatePath("/");
-        redirect("/session/reservation/order-confirmation");
-        // return { activeStep: 1, success: true, errors: {}, orderDetails };
-      }
+      redirect("/");
     } else {
+      redirect("/session/timeout");
       return {
         activeStep: prev.activeStep,
         success: false,

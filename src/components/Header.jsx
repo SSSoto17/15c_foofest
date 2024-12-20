@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
-import logo from "@/assets/svg/logo_bold.svg";
+import logo from "../assets/svg/logo_bold.svg";
 import {
   Dialog,
-  DialogPanel,
   DialogTitle,
+  DialogPanel,
   Description,
 } from "@headlessui/react";
+import { useState } from "react";
 
 export default function Header({ linksActive }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,6 +22,7 @@ export default function Header({ linksActive }) {
             <Image src={logo} alt="FooFest" className="h-16 w-fit" />
           </Link>
         ) : (
+          // <p>test</p>
           <WarningEscape />
         )}
         {linksActive && (
@@ -53,7 +54,7 @@ export default function Header({ linksActive }) {
   );
 }
 
-export const MobileNav = ({ setIsOpen, isOpen }) => {
+function MobileNav({ setIsOpen, isOpen }) {
   const classes = `col-start-1 col-span-3 w-screen h-screen absolute top-20 bg-[#171e1b] drop-shadow-main grid items-center justify-around transition-[left] duration-500 ease-in-out ${
     isOpen ? "left-0" : "left-full"
   }`;
@@ -85,9 +86,9 @@ export const MobileNav = ({ setIsOpen, isOpen }) => {
       </menu>
     </nav>
   );
-};
+}
 
-export const MobileNavIcon = ({ setIsOpen, isOpen }) => {
+function MobileNavIcon({ setIsOpen, isOpen }) {
   const role = {
     top: `transition-[transform] ${
       isOpen ? "rotate-45 translate-y-1.5" : "-translate-y-0.5"
@@ -118,7 +119,7 @@ export const MobileNavIcon = ({ setIsOpen, isOpen }) => {
       <span className={setClasses(role.bottom)}></span>
     </button>
   );
-};
+}
 
 function WarningEscape() {
   const [isOpen, setIsOpen] = useState(false);

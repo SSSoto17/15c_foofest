@@ -19,7 +19,7 @@ import {
 import { useState } from "react";
 import { useQuantityStore } from "@/store/GlobalStore";
 import { useShallow } from "zustand/react/shallow";
-import { ErrorText } from "../FormFields2";
+import { ErrorText } from "../FormFields";
 
 export default function SelectTickets({ partoutGuests, vipGuests, error }) {
   const ticketQuantity = partoutGuests?.length + vipGuests?.length;

@@ -79,14 +79,18 @@ export function TextInput({
           }`}
         />
         {name === "cardSecurityCode" && (
-          <FaRegQuestionCircle className="text-text-global--disabled hover:text-text-global absolute top-2 right-2" />
+          <FaRegQuestionCircle className="text-text-global--disabled hover:text-text-global absolute top-2 right-4" />
         )}
-        {error && !defaultValue && variant != "slim" && (
-          <MdOutlineError
-            aria-label="Attention!"
-            className="place-self-center text-text-global--error"
-            size="24"
-          />
+        {variant !== "twoSpan" && (
+          <div className="w-6">
+            {error && !defaultValue && variant !== "slim" && (
+              <MdOutlineError
+                aria-label="Attention!"
+                className="place-self-center text-text-global--error"
+                size="24"
+              />
+            )}
+          </div>
         )}
       </div>
       {variant != "slim" && (
@@ -121,7 +125,7 @@ export function CountDown({ seconds }) {
   useEffect(() => {
     if (countdown <= 1) {
       clearInterval(timerID);
-      redirect("/");
+      redirect("/session/timeout");
     }
   }, [countdown]);
   // COUNTDOWN FUNCTION CREDIT: https://youtu.be/4_9yJXO4F2Y
