@@ -5,9 +5,9 @@ import {
   EnterPaymentInfo,
   OrderSummary,
 } from "./FormSections";
-import EnterGuestInfo from "./form-sections/GuestInfo";
-import SelectTickets from "./form-sections/SelectTickets";
-import SelectCampingArea from "./form-sections/SelectCampingArea";
+import EnterGuestInfo from "../booking/form-sections/GuestInfo";
+import SelectTickets from "../booking/form-sections/SelectTickets";
+import SelectCampingArea from "../booking/form-sections/SelectCampingArea";
 
 export function BookingStepOne({ ticketData, error, areaData }) {
   return (

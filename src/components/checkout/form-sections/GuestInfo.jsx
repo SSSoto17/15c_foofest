@@ -6,7 +6,7 @@ import {
   TextInput,
   CheckField,
   ErrorText,
-} from "@/components/booking/FormFields";
+} from "@/components/checkout/FormFields";
 
 export default function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
   const TicketGuestKeys = {
