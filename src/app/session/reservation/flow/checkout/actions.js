@@ -3,7 +3,6 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { putReservation, postReservation, postOrder } from "@/lib/order";
-// import { putReservation, postReservation, postOrder } from "@/lib/order";
 
 export async function submitTicketReservation(prev, formData) {
   const errors = {};
