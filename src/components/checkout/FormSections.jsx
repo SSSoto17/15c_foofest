@@ -134,7 +134,7 @@ export function OrderSummary({
         } gap-y-2`}
       >
         <div className={step === 3 && "hidden sm:block"}>
-          {step !== 3 && <ReservationTimer />}
+          {step !== 1 && <ReservationTimer />}
         </div>
         {!partoutGuests && !vipGuests && (
           <small className="body-copy-small p-6 text-center italic opacity-50">

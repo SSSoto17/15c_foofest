@@ -12,7 +12,7 @@ const ArtistCard = ({ name, slug, img }) => {
         className="grid aspect-square"
       >
         <Image
-          src={picture}
+          src={img}
           width="400"
           height="400"
           alt={`Image of ${name}`}

@@ -27,7 +27,7 @@ export default async function ArtistSingle({ params }) {
       <section className="grid md:grid-cols-2 gap-10">
         <div>
           <Image
-            src={picture}
+            src={artistImg}
             alt={`Image of ${artist.name}`}
             placeholder="blur"
           ></Image>
