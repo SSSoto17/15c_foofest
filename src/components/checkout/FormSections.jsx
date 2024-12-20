@@ -1,4 +1,4 @@
-import { Fieldset, Legend } from "@headlessui/react";
+import { Field, Fieldset, Legend, Label, Input } from "@headlessui/react";
 import {
   CheckField,
   TextInput,
@@ -8,6 +8,8 @@ import {
 import buyerInfo from "../../data/buyerfields";
 import { NumberSpinner } from "./form-sections/SelectTickets";
 import Accordion from "../Accordion";
+import { FaRegQuestionCircle } from "react-icons/fa";
+import { MdOutlineError } from "react-icons/md";
 
 export function GreenFee() {
   const data = { name: "greenFee", price: 249 };
@@ -67,36 +69,88 @@ export function EnterBuyerInfo({ customerName, customerEmail, error }) {
   );
 }
 
-export function EnterPaymentInfo() {
+export function EnterPaymentInfo({ error }) {
   return (
     <Fieldset className="grid gap-y-6">
       <Legend className="heading-5">Payment</Legend>
-      <div className="grid grid-cols-3 gap-x-4 max-w-lg">
+      <div className="grid grid-cols-4 gap-x-4 gap-y-4 max-w-lg">
         <TextInput
           name="cardNumber"
           type="tel"
           placeholder="Card number"
           variant="fullSpan"
+          error={error}
+          icon
         />
         <TextInput
           name="cardExp"
           type="text"
           placeholder="Expiration date ( MM / YY )"
           variant="twoSpan"
+          error={error}
         />
         <TextInput
           name="cardSecurityCode"
           type="number"
           placeholder="Security code"
+          error={error}
         />
         <TextInput
           name="cardHolder"
           type="text"
           placeholder="Name on card"
           variant="fullSpan"
+          error={error}
         />
       </div>
     </Fieldset>
+  );
+}
+
+export function CardDetailsField({
+  name,
+  type,
+  placeholder,
+  defaultValue,
+  variant,
+  error,
+  icon,
+}) {
+  const variants = {
+    fullSpan: "col-span-2",
+  };
+  return (
+    <Field
+      className={`grid grid-cols-subgrid gap-y-4 relative ${
+        variant && variants[variant]
+      }`}
+    >
+      <Input
+        name={name}
+        type={type}
+        placeholder={placeholder}
+        defaultValue={defaultValue}
+        className={`input-field input-field-text--focus body-copy placeholder:text-res-sm ${
+          variants[variant]
+        } ${
+          error &&
+          !defaultValue &&
+          "not-data-focus:border-border-global--error bg-surface-input--focus"
+        }`}
+      />
+      {/* {name === "cardSecurityCode" && (
+          <FaRegQuestionCircle className="w-2.5 md:w-4 text-text-global--disabled hover:text-text-global absolute top-0.5 right-2" />
+        )} */}
+      <div className="self-center col-start-3">
+        {error && icon && (
+          <MdOutlineError
+            aria-label="Attention!"
+            className="mr-4place-self-center text-text-global--error"
+            size="24"
+          />
+        )}
+      </div>
+    </Field>
   );
 }
 
@@ -113,7 +167,7 @@ export function OrderSummary({
   const vipPrice = vipGuests ? vipGuests.length * 1299 : 0;
   const totalPrice = partoutPrice + vipPrice + green + 99;
 
-  console.log(step);
+  console.log(tentDouble);
 
   return (
     <section
@@ -131,7 +185,9 @@ export function OrderSummary({
           step !== 1 && "grid-rows-[auto_auto_1fr]"
         } gap-y-2`}
       >
-        <div>{step !== 1 && <ReservationTimer />}</div>
+        <div className={step === 3 && "hidden sm:block"}>
+          {step !== 3 && <ReservationTimer />}
+        </div>
         {!partoutGuests && !vipGuests && (
           <small className="body-copy-small p-6 text-center italic opacity-50">
             No tickets selected.

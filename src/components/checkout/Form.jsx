@@ -13,7 +13,7 @@ import { submitTicketReservation } from "@/app/session/reservation/flow/checkout
 import { keyEnter } from "@/lib/utils";
 
 export default function BookingForm({ areaData }) {
-  const initState = { activeStep: 1, success: false, errors: {} };
+  const initState = { activeStep: 3, success: false, errors: {} };
   const [state, submitReservation, isPending] = useActionState(
     submitTicketReservation,
     initState
@@ -72,7 +72,7 @@ function FormHeader({ activeStep }) {
         </ol>
       </header>
 
-      <div className={activeStep === 1 ? "hidden" : "block md:hidden"}>
+      <div className={activeStep === 1 ? "hidden" : "block sm:hidden"}>
         {activeStep !== 1 && <ReservationTimer />}
       </div>
     </>

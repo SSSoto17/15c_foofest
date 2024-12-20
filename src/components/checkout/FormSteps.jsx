@@ -31,7 +31,7 @@ export function BookingStepThree({ orderData, error }) {
   return (
     <div className="grid gap-y-10 sm:gap-y-16 p-8 sm:p-12">
       <EnterBuyerInfo {...orderData} error={error} />
-      <EnterPaymentInfo />
+      <EnterPaymentInfo {...orderData} error={error.payment} />
     </div>
   );
 }

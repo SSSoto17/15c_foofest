@@ -153,10 +153,6 @@ export async function submitTicketReservation(prev, formData) {
       };
     }
 
-    // UPDATE TENT QUANTITY
-    orderDetails.tentDouble = prev.orderDetails.tentDouble / 2;
-    orderDetails.tentTriple = prev.orderDetails.tentTriple / 3;
-
     return { activeStep: 3, success: true, errors: {}, orderDetails };
   }
 
@@ -215,6 +211,10 @@ export async function submitTicketReservation(prev, formData) {
         orderDetails,
       };
     }
+
+    // UPDATE TENT QUANTITY
+    orderDetails.tentDouble = prev.orderDetails.tentDouble / 2;
+    orderDetails.tentTriple = prev.orderDetails.tentTriple / 3;
 
     // PRICE SUMUP
     const pricePartout = orderDetails.partoutGuests.length * 799;

@@ -79,7 +79,7 @@ function MobileNav({ setIsOpen, isOpen }) {
         <li>
           <Link
             className="border-2 border-forest-600 bg-forest-600 py-2 px-6 grid place-content-center uppercase font-bold"
-            href="/booking"
+            href="/session/reservation/flow/checkout"
             onClick={() => {
               setIsOpen(!isOpen);
             }}
