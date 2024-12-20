@@ -20,7 +20,7 @@ export default function SelectCampingArea({ data }) {
     (area) => area.available > 0 && area.available >= tickets
   );
   return (
-    <Fieldset className="grid gap-y-6">
+    <Fieldset className="grid gap-y-4 md:gap-y-6">
       <Legend className="heading-5">Camping Spot</Legend>
       <Select data={data} available={available} ticketQuantity={tickets} />
     </Fieldset>
@@ -35,7 +35,7 @@ function Select({ data, available, ticketQuantity }) {
         <Field
           key={id}
           disabled={area.available === 0 || area.available < ticketQuantity}
-          className="flex items-end justify-between max-w-xl gap-8 not-data-disabled:cursor-pointer"
+          className="flex items-end justify-between max-w-xl gap-6 md:gap-8 not-data-disabled:cursor-pointer"
         >
           <Radio
             value={area.area}

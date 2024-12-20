@@ -13,7 +13,7 @@ export function CheckField({ data, minor, children }) {
   const [checked, setChecked] = useState(false);
 
   return (
-    <Field className="flex items-center gap-3 max-w-xl group hover:cursor-pointer">
+    <Field className="flex items-center gap-2 md:gap-3 max-w-xl group hover:cursor-pointer">
       <Checkbox
         name={data?.name}
         checked={checked}
@@ -23,13 +23,13 @@ export function CheckField({ data, minor, children }) {
         <MdOutlineCheck className={`opacity-0 ${checked && "opacity-100"}`} />
       </Checkbox>
       <Label
-        className={`body-copy flex justify-between group-data-disabled:opacity-25 group-not-data-disabled:cursor-pointer ${
+        className={`body-copy text-res-sm md:text-res-base flex justify-between group-data-disabled:opacity-25 group-not-data-disabled:cursor-pointer ${
           minor && "body-copy-small text-aztec-300"
         }`}
       >
         {children}{" "}
         {data?.price && (
-          <span className="body-copy opacity-50 place-self-end mx-8">
+          <span className=" opacity-50 place-self-end mx-8">
             {data?.price} DKK
           </span>
         )}
@@ -63,7 +63,7 @@ export function TextInput({
       <div
         className={`grid ${
           variant !== "twoSpan" && "grid-cols-[1fr_auto]"
-        } gap-4 relative`}
+        } gap-y-4 md:gap-4 relative`}
       >
         <Input
           name={name}
@@ -79,10 +79,10 @@ export function TextInput({
           }`}
         />
         {name === "cardSecurityCode" && (
-          <FaRegQuestionCircle className="text-text-global--disabled hover:text-text-global absolute top-2 right-4" />
+          <FaRegQuestionCircle className="w-2.5 md:w-4 text-text-global--disabled hover:text-text-global absolute top-0.5 right-2" />
         )}
         {variant !== "twoSpan" && (
-          <div className="w-6">
+          <div className="w-6 hidden md:block">
             {error && !defaultValue && variant !== "slim" && (
               <MdOutlineError
                 aria-label="Attention!"

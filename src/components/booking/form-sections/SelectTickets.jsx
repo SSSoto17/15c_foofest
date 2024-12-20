@@ -79,7 +79,7 @@ export function NumberSpinner({ label, price, error, single, children }) {
   };
 
   return (
-    <Field className="peer grid grid-cols-[1fr_auto_1rem] items-end justify-between gap-4">
+    <Field className="peer grid grid-cols-1 sm:grid-cols-[1fr_auto_1rem] items-end justify-between gap-2 sm:gap-4">
       <Label className="body-copy flex justify-between">
         {children}{" "}
         <span className="body-copy opacity-50 place-self-end mx-8">
@@ -87,7 +87,7 @@ export function NumberSpinner({ label, price, error, single, children }) {
         </span>
       </Label>
       <div
-        className={`input-field input-field-number--focus gap-4 w-fit ${
+        className={`input-field input-field-number--focus flex justify-between gap-4 w-fit ${
           ((error.tickets && total === 0) || error.tentSetup) &&
           "not-has-data-focus:border-border-global--error bg-surface-input--focus"
         }`}
@@ -128,7 +128,7 @@ export function NumberSpinner({ label, price, error, single, children }) {
           onClick={clearInput}
         >
           <MdOutlineDelete
-            className="hover:opacity-50 opacity-25 place-self-center"
+            className="hover:opacity-50 opacity-25 place-self-center hidden md:block"
             size="24"
           />
         </Button>

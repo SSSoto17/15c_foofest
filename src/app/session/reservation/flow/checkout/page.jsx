@@ -6,7 +6,7 @@ export default async function Page() {
 
   return (
     <main>
-      <section className="grid grid-cols-4 grid-rows-[auto_auto_auto] gap-x-4">
+      <section className="grid gap-x-4 grid-rows-[auto_auto_auto] md:grid-cols-4">
         <BookingForm areaData={data} />
       </section>
     </main>

@@ -7,7 +7,6 @@ import { BookingStepOne, BookingStepTwo, BookingStepThree } from "./FormSteps";
 import { OrderSummary } from "./FormSections";
 
 import formSteps from "../../data/formsteps";
-
 import { useActionState } from "react";
 import { submitTicketReservation } from "@/app/session/reservation/flow/checkout/actions";
 import { keyEnter } from "@/lib/utils";
@@ -26,7 +25,7 @@ export default function BookingForm({ areaData }) {
       <Form
         onKeyDown={keyEnter}
         action={submitReservation}
-        className="col-span-3 row-span-full border border-border-form grid grid-rows-subgrid"
+        className="grid md:grid-rows-subgrid md:col-span-3 md:row-span-full border border-border-form"
       >
         <FormHeader {...state} />
         {state?.activeStep === 2 ? (
@@ -46,7 +45,11 @@ export default function BookingForm({ areaData }) {
             error={state?.errors}
           />
         )}
-        <FormFooter nextStep={submitReservation} isPending={isPending} />
+        <FormFooter
+          activeStep={state?.activeStep}
+          nextStep={submitReservation}
+          isPending={isPending}
+        />
       </Form>
       <OrderSummary step={state?.activeStep} {...state?.orderDetails} />
     </>
@@ -55,8 +58,12 @@ export default function BookingForm({ areaData }) {
 
 function FormHeader({ activeStep }) {
   return (
-    <header className="border-b border-border-form py-8 px-12">
-      <ol className="flex justify-between items-center gap-4 font-semibold cursor-default">
+    <header
+      className={`border-b border-border-form py-8 px-12 ${
+        activeStep === 3 ? "hidden md:block" : "block"
+      }`}
+    >
+      <ol className="sm:flex justify-center sm:justify-between items-center gap-4 font-semibold cursor-default">
         {formSteps.map((step, id) => (
           <FormStepIndicator activeStep={activeStep} {...step} key={id} />
         ))}
@@ -70,19 +77,19 @@ function FormStepIndicator({ activeStep, step, title }) {
     <>
       <li
         key={crypto.randomUUID()}
-        className="first-of-type:hidden w-10 h-0.5 bg-aztec-800"
+        className="hidden first-of-type:hidden sm:block w-10 h-0.5 bg-aztec-800"
       />
       <li
         {...(activeStep >= step && {
           "data-active": true,
         })}
-        className={`group body-copy font-semibold flex items-center gap-3 justify-between ${
+        className={`group body-copy font-semibold flex items-center gap-4 place-content-center sm:justify-between ${
           activeStep === step
             ? "text-text-global"
-            : "text-text-global--disabled"
+            : "text-text-global--disabled hidden sm:flex"
         }`}
       >
-        <span className="grid place-content-center w-8 rounded-full aspect-square text-text-global bg-surface-action--disabled group-data-active:bg-surface-action">
+        <span className="body-copy-small grid place-content-center w-6 sm:w-8 rounded-full aspect-square text-text-global bg-surface-action--disabled group-data-active:bg-surface-action">
           {step}
         </span>{" "}
         {title}
@@ -91,16 +98,16 @@ function FormStepIndicator({ activeStep, step, title }) {
   );
 }
 
-function FormFooter({ nextStep, isPending }) {
+function FormFooter({ activeStep, nextStep, isPending }) {
   return (
-    <footer className="flex justify-end gap-4 items-end p-12 pt-0">
+    <footer className="flex justify-center sm:justify-end gap-4 items-end p-10 sm:p-12 pt-0">
       <Button
         variant="primary"
         size="base"
         formAction={nextStep}
         isDisabled={isPending}
       >
-        Next
+        {activeStep === 3 ? "Purchase" : "Next"}
       </Button>
     </footer>
   );

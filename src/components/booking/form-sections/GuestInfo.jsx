@@ -7,7 +7,6 @@ import {
   CheckField,
   ErrorText,
 } from "@/components/booking/FormFields";
-import { MdOutlineError } from "react-icons/md";
 
 export default function EnterGuestInfo({ partoutGuests, vipGuests, error }) {
   const TicketGuestKeys = {
@@ -77,7 +76,7 @@ export function TicketGuestCard({
           Ticket #{number}
         </Legend>
         <div
-          className={`grid gap-y-4 border p-8 pt-4 relative ${
+          className={`grid gap-y-4 border p-6 md:p-8 pt-4 relative ${
             (error.ticketGuestsName && !data?.name) ||
             (error.ticketGuestsEmail && !data?.email)
               ? "border-border-global--error/35"

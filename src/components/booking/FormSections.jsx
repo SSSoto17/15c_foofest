@@ -113,8 +113,14 @@ export function OrderSummary({
   const vipPrice = vipGuests ? vipGuests.length * 1299 : 0;
   const totalPrice = partoutPrice + vipPrice + green + 99;
 
+  console.log(step);
+
   return (
-    <section className="border border-border-form self-start grid grid-rows-subgrid row-span-full">
+    <section
+      className={`md:grid border border-border-form self-start grid-rows-subgrid row-span-full ${
+        step === 3 ? "grid" : "hidden"
+      }`}
+    >
       <header className="border-b border-border-form grid place-items-end p-8">
         <h3 className="body-copy font-semibold w-full text-center">
           Order Summary

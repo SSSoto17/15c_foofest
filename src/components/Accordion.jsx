@@ -9,7 +9,7 @@ export default function Accordion({ label, variant, name, children }) {
   return (
     <details
       name={name}
-      className="group border-2 border-border-global px-6 py-6"
+      className="group border-2 border-border-global px-4 py-6 md:p-6"
     >
       <summary
         className={`cursor-pointer list-none flex items-center gap-4 ${variants[variant]}`}
