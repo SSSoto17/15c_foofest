@@ -72,7 +72,7 @@ function FormHeader({ activeStep }) {
         </ol>
       </header>
 
-      <div className={activeStep === 3 ? "hidden md:block" : "block"}>
+      <div className={activeStep === 1 ? "hidden" : "block md:hidden"}>
         {activeStep !== 1 && <ReservationTimer />}
       </div>
     </>
